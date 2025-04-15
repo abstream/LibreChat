@@ -21,6 +21,7 @@ import NavToggle from './NavToggle';
 import NewChat from './NewChat';
 import { cn } from '~/utils';
 import store from '~/store';
+import PricingNav from '~/components/Nav/PrincingPlans/PricingNav';
 
 const Nav = ({
   navVisible,
@@ -177,6 +178,12 @@ const Nav = ({
                           )}
                         </>
                       }
+                    />
+
+                    <PricingNav
+                      tags={tags}
+                      setTags={setTags}
+                      isSmallScreen={isSmallScreen}
                     />
 
                     <Conversations
