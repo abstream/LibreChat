@@ -1378,6 +1378,7 @@ ${convo}
         const params = {
           ...modelOptions,
           stream: true,
+          conversation_id: 999
         };
         if (
           this.options.endpoint === EModelEndpoint.openAI ||
