@@ -640,6 +640,7 @@ class OpenAIClient extends BaseClient {
       modelName: modelName ?? model,
       temperature,
       user: this.user,
+      conversation_id: conversationId
     };
 
     if (max_tokens) {
@@ -1378,7 +1379,6 @@ ${convo}
         const params = {
           ...modelOptions,
           stream: true,
-          conversation_id: 999
         };
         if (
           this.options.endpoint === EModelEndpoint.openAI ||
