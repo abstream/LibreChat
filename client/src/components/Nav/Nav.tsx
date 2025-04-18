@@ -156,6 +156,13 @@ const Nav = memo(
       () => (
         <>
           {search.enabled === true && <SearchBar isSmallScreen={isSmallScreen} />}
+
+          <PricingNav
+            tags={tags}
+            setTags={setTags}
+            isSmallScreen={isSmallScreen}
+          />
+
           {hasAccessToBookmarks && (
             <>
               <div className="mt-1.5" />
