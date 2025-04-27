@@ -114,7 +114,7 @@ export default function HoverButtons({
           )}
         />
       )}
-      {isEditableEndpoint && (
+      {false && (
         <button
           id={`edit-${message.messageId}`}
           className={cn(
@@ -151,7 +151,7 @@ export default function HoverButtons({
         isLast={isLast}
         messageId={message.messageId}
         conversationId={conversation.conversationId}
-        forkingSupported={forkingSupported}
+        forkingSupported={false}
         latestMessageId={latestMessage?.messageId}
       />
       {continueSupported === true ? (
