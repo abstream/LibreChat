@@ -7,11 +7,11 @@ async function omnexioSubscriptionCheckoutController(req, res) {
 
     const payload = {
       username: req.user.id,
-      subscription_plan_id: req.data.subscription_plan_id,
+      subscription_plan_id: req.body.subscription_plan_id,
     };
 
     const url = `${OMNEXIO_BASE_URL}/v1/subscriptions/checkout`;
-    const response = await axios.post(url,{
+    const response = await axios.post(url,payload, {
       headers: {
         'Authorization': `Bearer ${OMNEXIO_API_KEY}`,
       },
