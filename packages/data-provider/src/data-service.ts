@@ -105,7 +105,7 @@ export function createOmnexioSubscription(subscriptionPlanId: number): Promise<s
   const payload = {
     subscription_plan_id: subscriptionPlanId,
   };
-  return request.post(endpoints.omnexioSubscriptions(subscriptionPlanId),payload);
+  return request.post(endpoints.omnexioSubscriptions(),payload);
 }
 
 export const updateTokenCount = (text: string) => {
