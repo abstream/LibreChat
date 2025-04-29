@@ -101,6 +101,10 @@ export function getOmnexioUserBalance(): Promise<string> {
   return request.get(endpoints.omnexioBalance());
 }
 
+export function createOmnexioSubscription(): Promise<string> {
+  return request.post(endpoints.omnexioSubscriptions());
+}
+
 export const updateTokenCount = (text: string) => {
   return request.post(endpoints.tokenizer(), { arg: text });
 };
