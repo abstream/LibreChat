@@ -55,7 +55,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       name: 'Starter',
       price: '$4.95/month',
       features: [
-        '1,000 credits per month',
+        '500 credits per month',
         'Access to standard features',
         localize('com_subscription_rolling_credits'),
         localize('com_subscription_no_daily_limits'),
