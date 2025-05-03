@@ -16,7 +16,7 @@ const PricingNav: FC<PricingNavProps> = ({ isSmallScreen }: PricingNavProps) => 
     <>
       <div
         className={cn(
-          'group relative mt-1 flex h-10 cursor-pointer items-center gap-3 rounded-lg border-border-medium px-3 py-2 text-text-primary transition-colors duration-200 focus-within:bg-surface-hover hover:bg-surface-hover',
+          'group relative mt-1 flex h-10 cursor-pointer items-center gap-3 rounded-lg border-border-medium px-3 py-2 text-text-primary transition-colors duration-200 bg-[#2f7ff7]',
           isSmallScreen ? 'mb-2 h-14 rounded-2xl' : '',
         )}
         onClick={() => setIsModalOpen(true)}
