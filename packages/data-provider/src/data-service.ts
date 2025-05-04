@@ -9,7 +9,6 @@ import * as config from './config';
 import request from './request';
 import * as s from './schemas';
 import * as r from './roles';
-import { omnexioSubscriptionChange } from './api-endpoints';
 
 export function abortRequestWithMessage(
   endpoint: string,

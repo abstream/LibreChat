@@ -9,7 +9,7 @@ async function omnexioSubscriptionChangeController(req, res) {
       id: req.body.subscription_plan_id,
     };
 
-    const url = `${OMNEXIO_BASE_URL}/v1/chat-users/${req.user.id}/subscription-pla`;
+    const url = `${OMNEXIO_BASE_URL}/v1/chat-users/${req.user.id}/subscription-plan`;
     const response = await axios.post(url, payload, {
       headers: {
         Authorization: `Bearer ${OMNEXIO_API_KEY}`,
