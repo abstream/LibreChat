@@ -9,6 +9,7 @@ import * as config from './config';
 import request from './request';
 import * as s from './schemas';
 import * as r from './roles';
+import { omnexioSubscriptionChange } from './api-endpoints';
 
 export function abortRequestWithMessage(
   endpoint: string,
@@ -110,6 +111,13 @@ export function createOmnexioSubscription(subscriptionPlanId: number): Promise<s
 
 export function getOmnexioSubscriptionPlans(): Promise<string> {
   return request.get(endpoints.omnexioSubscriptionPlans());
+}
+
+export function changeOmnexioSubscription(subscriptionPlanId: number): Promise<void> {
+  const payload = {
+    subscription_plan_id: subscriptionPlanId,
+  };
+  return request.post(endpoints.omnexioSubscriptionChange(), payload);
 }
 
 export const updateTokenCount = (text: string) => {
