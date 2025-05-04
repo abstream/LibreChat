@@ -7,6 +7,7 @@
   "com_subscription_no_daily_limits": "No daily limits",
   "com_subscription_credits_rolling_note": "* Credits are rolling, every renewal resets them, no daily limits",
   "com_subscription_upgrade": "Upgrade Now",
+  "com_subscription_downgrade": "Downgrade Now",
   "com_subscription_recommended": "Recommended",
   "com_subscription_monthly": "Monthly Subscriptions",
   "com_subscription_pay_as_you_go": "Pay As You Go (All models and agents, no daily limits)",

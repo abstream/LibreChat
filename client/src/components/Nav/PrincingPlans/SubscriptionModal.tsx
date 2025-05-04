@@ -108,7 +108,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
                       className={`mt-4 w-full ${
                         plan.recommended
                           ? 'bg-primary text-primary-foreground hover:bg-primary/90 dark:text-black'
-                          : 'bg-[#2f7ff7] bg-surface-secondary text-primary-foreground hover:bg-[#2f7ff7]/90'
+                          : 'bg-[#2f7ff7] text-primary-foreground hover:bg-[#2f7ff7]/90'
                       }`}
                       onClick={plan.onClick}
                       disabled={processingId !== null}
