@@ -102,7 +102,6 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       {
         onSettled: () => {
           setProcessingId(null);
-          setShowConfirmation(false);
         },
       },
     );
@@ -110,6 +109,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
 
   function confirmPlanChange() {
     if (confirmationPlan !== null) {
+      setShowConfirmation(false);
       processPlanChange(confirmationPlan);
     }
   }
