@@ -94,6 +94,17 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     createSubscription.mutate(
       { subscriptionId: planId },
       {
+        onSuccess: (data) => {
+          // Handle successful subscription creation
+          if (data) {
+            // Close modal before redirecting
+            onOpenChange(false);
+            // Redirect to payment URL
+            window.location.href = data.trim();
+          } else {
+            console.error('No payment URL received from the server');
+          }
+        },
         onSettled: () => {
           setProcessingId(null);
           setShowConfirmation(false);
