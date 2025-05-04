@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CheckIcon, Loader2 } from 'lucide-react';
 import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle, Button } from '~/components/ui';
 import { useLocalize } from '~/hooks';
@@ -32,6 +32,13 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
   const createSubscription = useCreateOmnexioSubscription();
   const changeSubscription = useChangeOmnexioSubscription();
   const subscriptionPlansQuery = useGetOmnexioSubscriptionPlans();
+
+  // Refetch subscription plans when the modal is opened
+  useEffect(() => {
+    if (open) {
+      subscriptionPlansQuery.refetch();
+    }
+  }, [open, subscriptionPlansQuery]);
 
   // Transform API subscription plans to the format expected by the component
   const subscriptionPlans = useMemo(() => {
@@ -102,6 +109,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       {
         onSettled: () => {
           setProcessingId(null);
+          subscriptionPlansQuery.refetch();
         },
       },
     );
@@ -109,6 +117,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
 
   function confirmPlanChange() {
     if (confirmationPlan !== null) {
+      setProcessingId(confirmationPlan);
       setShowConfirmation(false);
       processPlanChange(confirmationPlan);
     }
