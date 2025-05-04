@@ -12,6 +12,7 @@ interface SubscriptionPlan {
   buttonText: string;
   recommended?: boolean;
   onClick: () => void;
+  isDisabled?: boolean;
 }
 
 interface SubscriptionModalProps {
@@ -31,17 +32,28 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       return []; // Return empty array if no plans are available
     }
 
-    return subscriptionPlansQuery.data.map((plan) => ({
-      id: parseInt(plan.id),
-      name: plan.name,
-      price: plan.label,
-      features: plan.features,
-      buttonText: plan.isCurrent
+    // Find the current plan for reference
+    const currentPlanIndex = subscriptionPlansQuery.data.findIndex((plan) => plan.isCurrent);
+
+    return subscriptionPlansQuery.data.map((plan, index) => {
+      // Determine the appropriate button text based on position relative to current plan
+      const buttonText = plan.isCurrent
         ? localize('com_subscription_current_plan')
-        : localize('com_subscription_upgrade'),
-      recommended: plan.isRecommended,
-      onClick: () => handlePlanSelection(parseInt(plan.id)),
-    }));
+        : index < currentPlanIndex
+          ? localize('com_subscription_downgrade')
+          : localize('com_subscription_upgrade');
+
+      return {
+        id: parseInt(plan.id),
+        name: plan.name,
+        price: plan.label,
+        features: plan.features,
+        buttonText,
+        recommended: plan.isRecommended,
+        onClick: () => handlePlanSelection(parseInt(plan.id)),
+        isDisabled: plan.isCurrent, // Set disabled flag for current plan
+      };
+    });
   }, [subscriptionPlansQuery.data, localize]);
 
   // Handle plan selection
@@ -111,7 +123,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
                           : 'bg-[#2f7ff7] text-primary-foreground hover:bg-[#2f7ff7]/90'
                       }`}
                       onClick={plan.onClick}
-                      disabled={processingId !== null}
+                      disabled={processingId !== null || plan.isDisabled}
                       size="sm"
                     >
                       {processingId === plan.id ? (
