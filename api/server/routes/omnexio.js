@@ -3,7 +3,7 @@ const router = express.Router();
 const { requireJwtAuth } = require('../middleware/');
 const omnexioBalanceController = require('../controllers/omnexio/OmnexioBalance');
 const omnexioSubscriptionCheckoutController = require('../controllers/omnexio/OmnexioSubscriptionCheckout');
-const omnexioSubscriptionPlans = require('~/server/controllers/omnexio/omnexioSubscriptionPlans');
+const omnexioSubscriptionPlans = require('~/server/controllers/omnexio/OmnexioSubscriptionPlans');
 const omnexioSubscriptionChangeController = require('~/server/controllers/omnexio/OmnexioSubscriptionChange');
 
 router.get('/balance', requireJwtAuth, omnexioBalanceController);
