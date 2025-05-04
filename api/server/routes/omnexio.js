@@ -9,6 +9,6 @@ const omnexioSubscriptionChangeController = require('~/server/controllers/omnexi
 router.get('/balance', requireJwtAuth, omnexioBalanceController);
 router.post('/subscriptions', requireJwtAuth, omnexioSubscriptionCheckoutController);
 router.get('/subscription-plans', requireJwtAuth, omnexioSubscriptionPlans);
-router.get('/subscription/change', requireJwtAuth, omnexioSubscriptionChangeController);
+router.post('/subscription/change', requireJwtAuth, omnexioSubscriptionChangeController);
 
 module.exports = router;
