@@ -39,3 +39,23 @@ export const useCreateOmnexioSubscription = (): UseMutationResult<
     },
   );
 };
+
+/**
+ * Hook for changing an existing Omnexio subscription
+ */
+export const useChangeOmnexioSubscription = (): UseMutationResult<
+  void, // response type
+  unknown, // error type
+  CreateOmnexioSubscriptionParams, // variables type (reusing the same interface)
+  unknown // context type
+> => {
+  return useMutation(
+    (params: CreateOmnexioSubscriptionParams) =>
+      dataService.changeOmnexioSubscription(params.subscriptionId),
+    {
+      onError: (error) => {
+        console.error('Error changing subscription:', error);
+      },
+    },
+  );
+};
