@@ -71,7 +71,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     const currentPlan = subscriptionPlansQuery.data?.find((plan) => plan.isCurrent);
     const currentPlanId = currentPlan ? parseInt(currentPlan.id) : 0;
 
-    if (currentPlanId > 0) {
+    if (currentPlanId > 1) {
       // Show confirmation dialog for existing subscribers
       setConfirmationPlan(planId);
       setShowConfirmation(true);
