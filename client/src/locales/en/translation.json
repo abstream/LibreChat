@@ -1,33 +1,7 @@
 {
   "com_ui_pricing_plans": "Pricing Plans",
   "com_subscription_plans": "Subscription Plans",
-  "com_subscription_free": "Free",
-  "com_subscription_free_price": "$0",
-  "com_subscription_free_feature_1": "10 credits per day",
-  "com_subscription_free_feature_2": "Omnexio AI Search",
-  "com_subscription_free_feature_3": "Gemini Flash Lite",
-  "com_subscription_free_feature_4": "OpenAI Mini Models",
   "com_subscription_current_plan": "Current Plan",
-
-  "com_subscription_basic": "Basic",
-  "com_subscription_basic_price": "$9.95/month",
-  "com_subscription_basic_feature_1": "3,000 credits per month",
-  "com_subscription_basic_feature_2": "All models and agent",
-
-  "com_subscription_standard": "Standard",
-  "com_subscription_standard_price": "$19.95/month",
-  "com_subscription_standard_feature_1": "10,000 credits per month",
-  "com_subscription_standard_feature_2": "All models and agent",
-
-  "com_subscription_pro": "Pro",
-  "com_subscription_pro_price": "$39.95/month",
-  "com_subscription_pro_feature_1": "30,000 credits per month",
-  "com_subscription_pro_feature_2": "All models and agents",
-
-  "com_subscription_enterprise": "Enterprise",
-  "com_subscription_enterprise_price": "$79.95/month",
-  "com_subscription_enterprise_feature_1": "100,000 credits per month",
-  "com_subscription_enterprise_feature_2": "All models and agents",
 
   "com_subscription_rolling_credits": "Credits are rolling",
   "com_subscription_no_daily_limits": "No daily limits",
