@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import React, { memo, useMemo, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import { SearchIcon } from 'lucide-react';
+import { GlobeIcon } from 'lucide-react';
 import { Tools, Constants, LocalStorageKeys } from 'librechat-data-provider';
 import { useLocalize, useCodeApiKeyForm } from '~/hooks';
 import CheckboxButton from '~/components/ui/CheckboxButton';
@@ -89,7 +89,7 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }) {
         setValue={debouncedChange}
         label={localize('com_omnexio_search')}
         isCheckedClassName="border-purple-600/40 bg-purple-500/10 hover:bg-purple-700/10"
-        icon={<SearchIcon className="icon-md" />}
+        icon={<GlobeIcon className="icon-md" />}
       />
     </>
   );
