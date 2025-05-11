@@ -224,7 +224,7 @@ export default function useChatFunctions({
       messageId: isContinued && messageId != null && messageId ? messageId : intermediateId,
       thread_id,
       error: false,
-      omnexio_search: omnexioSearch,
+      omnexioSearch: omnexioSearch,
     };
 
     const submissionFiles = overrideFiles ?? targetParentMessage?.files;
