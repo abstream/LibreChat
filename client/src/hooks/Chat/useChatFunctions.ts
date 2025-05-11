@@ -210,8 +210,9 @@ export default function useChatFunctions({
     }
     const responseSender = getSender({ model: conversation?.model, ...endpointOption });
 
-    //TODO FIX this
-    const omnexioSearch = ${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${conversationId}
+    const storageKey = `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${conversationId ?? Constants.NEW_CONVO}`;
+    const omnexioSearchValue = localStorage.getItem(storageKey);
+    const omnexioSearch = omnexioSearchValue === 'true';
 
     const currentMsg: TMessage = {
       text,
