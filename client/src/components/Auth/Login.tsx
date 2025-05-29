@@ -1,5 +1,5 @@
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuthContext } from '~/hooks/AuthContext';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';
@@ -9,17 +9,44 @@ import LoginForm from './LoginForm';
 import SocialButton from '~/components/Auth/SocialButton';
 import { OpenIDIcon } from '~/components';
 
+const GUEST_CREDENTIALS = {
+  email: 'guest@omnexio.ai',
+  password: 'guest123',
+};
+
+const VISITED_STORAGE_KEY = 'appTitle';
+
 function Login() {
   const localize = useLocalize();
   const { error, setError, login } = useAuthContext();
   const { startupConfig } = useOutletContext<TLoginLayoutContext>();
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const [hasAutoLoginAttempted, setHasAutoLoginAttempted] = useState(false);
+
   // Determine if auto-redirect should be disabled based on the URL parameter
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
 
   // Persist the disable flag locally so that once detected, auto-redirect stays disabled.
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
+
+  // Check if user has visited before
+  const hasVisitedBefore = useCallback(() => {
+    try {
+      return !!localStorage.getItem(VISITED_STORAGE_KEY);
+    } catch (error) {
+      console.warn('Unable to access localStorage:', error);
+      return true; // Default to true if localStorage is not available
+    }
+  }, []);
+
+  // Auto guest login for first-time visitors
+  const attemptAutoGuestLogin = useCallback(() => {
+    if (!hasVisitedBefore() && !hasAutoLoginAttempted && startupConfig?.emailLoginEnabled) {
+      setHasAutoLoginAttempted(true);
+      login(GUEST_CREDENTIALS);
+    }
+  }, [hasVisitedBefore, hasAutoLoginAttempted, startupConfig?.emailLoginEnabled, login]);
 
   // Once the disable flag is detected, update local state and remove the parameter from the URL.
   useEffect(() => {
@@ -31,12 +58,18 @@ function Login() {
     }
   }, [disableAutoRedirect, searchParams, setSearchParams]);
 
+  // Attempt auto guest login when component mounts and conditions are met
+  useEffect(() => {
+    attemptAutoGuestLogin();
+  }, [attemptAutoGuestLogin]);
+
   // Determine whether we should auto-redirect to OpenID.
   const shouldAutoRedirect =
     startupConfig?.openidLoginEnabled &&
     startupConfig?.openidAutoRedirect &&
     startupConfig?.serverDomain &&
-    !isAutoRedirectDisabled;
+    !isAutoRedirectDisabled &&
+    hasVisitedBefore(); // Only auto-redirect for returning visitors
 
   useEffect(() => {
     if (shouldAutoRedirect) {
