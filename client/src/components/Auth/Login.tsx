@@ -20,11 +20,9 @@ function Login() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [hasAutoLoginAttempted, setHasAutoLoginAttempted] = useState(false);
+  const [captchaValidated, setCaptchaValidated] = useState(false);
 
-  // Determine if auto-redirect should be disabled based on the URL parameter
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
-
-  // Persist the disable flag locally so that once detected, auto-redirect stays disabled.
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
 
   // Check if user has visited before
@@ -33,43 +31,64 @@ function Login() {
       return !!localStorage.getItem(VISITED_STORAGE_KEY);
     } catch (error) {
       console.warn('Unable to access localStorage:', error);
-      return true; // Default to true if localStorage is not available
+      return true;
     }
   }, []);
 
-  // Auto guest login for first-time visitors
-  const attemptAutoGuestLogin = useCallback(() => {
-    if (!hasVisitedBefore() && !hasAutoLoginAttempted && startupConfig?.emailLoginEnabled) {
-      setHasAutoLoginAttempted(true);
-      // Create new subscription
-      createGuest.mutate(
-        {},
-        {
-          onSuccess: (guest: { username: string; password: string }) => {
-            // Handle successful subscription creation
-            if (guest) {
-              const guestCredentials = {
-                email: guest.username,
-                password: guest.password,
-              };
-              console.log(guestCredentials);
-              login(guestCredentials);
-            } else {
-              console.error('No guest user');
-            }
-          },
-        },
-      );
-    }
-  }, [
-    hasVisitedBefore,
-    hasAutoLoginAttempted,
-    startupConfig?.emailLoginEnabled,
-    createGuest,
-    login,
-  ]);
+  // Check if captcha is required
+  const requiresCaptcha = () => {
+    return Boolean(startupConfig?.turnstile?.siteKey);
+  };
 
-  // Once the disable flag is detected, update local state and remove the parameter from the URL.
+  // Create guest user with proper credentials handling
+  const createGuestUser = useCallback(() => {
+    createGuest.mutate(
+      {},
+      {
+        onSuccess: (guest: { username: string; password: string }) => {
+          if (guest) {
+            const guestCredentials = {
+              email: guest.username,
+              password: guest.password,
+            };
+            login(guestCredentials);
+          } else {
+            console.error('No guest user');
+          }
+        },
+      },
+    );
+  }, [createGuest, login]);
+
+  // Auto guest login logic with captcha validation
+  const attemptAutoGuestLogin = useCallback(() => {
+    const shouldAttemptLogin =
+      !hasVisitedBefore() && !hasAutoLoginAttempted && startupConfig?.emailLoginEnabled;
+
+    if (!shouldAttemptLogin) return;
+
+    setHasAutoLoginAttempted(true);
+
+    // If captcha is required, wait for validation
+    if (requiresCaptcha()) {
+      return; // Will be handled by handleCaptchaSuccess
+    }
+
+    // No captcha required, proceed with guest creation
+    createGuestUser();
+  }, [hasVisitedBefore, hasAutoLoginAttempted, startupConfig?.emailLoginEnabled, createGuestUser]);
+
+  // Handle successful captcha validation
+  const handleCaptchaSuccess = useCallback(() => {
+    setCaptchaValidated(true);
+
+    // Create guest if auto-login was attempted but waiting for captcha
+    if (hasAutoLoginAttempted && !hasVisitedBefore()) {
+      createGuestUser();
+    }
+  }, [hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
+
+  // Handle URL parameter cleanup
   useEffect(() => {
     if (disableAutoRedirect) {
       setIsAutoRedirectDisabled(true);
@@ -79,18 +98,18 @@ function Login() {
     }
   }, [disableAutoRedirect, searchParams, setSearchParams]);
 
-  // Attempt auto guest login when component mounts and conditions are met
+  // Attempt auto guest login when component mounts
   useEffect(() => {
     attemptAutoGuestLogin();
   }, [attemptAutoGuestLogin]);
 
-  // Determine whether we should auto-redirect to OpenID.
+  // Auto-redirect logic for OpenID
   const shouldAutoRedirect =
     startupConfig?.openidLoginEnabled &&
     startupConfig?.openidAutoRedirect &&
     startupConfig?.serverDomain &&
     !isAutoRedirectDisabled &&
-    hasVisitedBefore(); // Only auto-redirect for returning visitors
+    hasVisitedBefore();
 
   useEffect(() => {
     if (shouldAutoRedirect) {
@@ -99,7 +118,7 @@ function Login() {
     }
   }, [shouldAutoRedirect, startupConfig]);
 
-  // Render fallback UI if auto-redirect is active.
+  // Render auto-redirect UI
   if (shouldAutoRedirect) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -136,6 +155,7 @@ function Login() {
           startupConfig={startupConfig}
           error={error}
           setError={setError}
+          onCaptchaSuccess={handleCaptchaSuccess}
         />
       )}
       {startupConfig?.registrationEnabled === true && (
