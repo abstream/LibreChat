@@ -62,18 +62,21 @@ function Login() {
 
   // Auto guest login logic with captcha validation
   const attemptAutoGuestLogin = useCallback(() => {
+    console.log('attemptAutoGuestLogin1');
     const shouldAttemptLogin =
       !hasVisitedBefore() && !hasAutoLoginAttempted && startupConfig?.emailLoginEnabled;
-
+    console.log('attemptAutoGuestLogin2');
     if (!shouldAttemptLogin) return;
 
     setHasAutoLoginAttempted(true);
 
     // If captcha is required, wait for validation
     if (requiresCaptcha()) {
+      console.log('attemptAutoGuestLogin3');
       return; // Will be handled by handleCaptchaSuccess
     }
 
+    console.log('attemptAutoGuestLogin4');
     // No captcha required, proceed with guest creation
     createGuestUser();
   }, [hasVisitedBefore, hasAutoLoginAttempted, startupConfig?.emailLoginEnabled, createGuestUser]);
@@ -81,7 +84,7 @@ function Login() {
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
     setCaptchaValidated(true);
-
+    console.log('handleCaptchaSuccess');
     // Create guest if auto-login was attempted but waiting for captcha
     if (hasAutoLoginAttempted && !hasVisitedBefore()) {
       createGuestUser();
