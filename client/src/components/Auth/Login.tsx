@@ -8,11 +8,7 @@ import { useLocalize } from '~/hooks';
 import LoginForm from './LoginForm';
 import SocialButton from '~/components/Auth/SocialButton';
 import { OpenIDIcon } from '~/components';
-
-const GUEST_CREDENTIALS = {
-  email: 'guest@omnexio.ai',
-  password: 'guest123',
-};
+import { useCreateGuest } from '~/data-provider';
 
 const VISITED_STORAGE_KEY = 'appTitle';
 
@@ -20,6 +16,7 @@ function Login() {
   const localize = useLocalize();
   const { error, setError, login } = useAuthContext();
   const { startupConfig } = useOutletContext<TLoginLayoutContext>();
+  const createGuest = useCreateGuest();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [hasAutoLoginAttempted, setHasAutoLoginAttempted] = useState(false);
@@ -44,9 +41,33 @@ function Login() {
   const attemptAutoGuestLogin = useCallback(() => {
     if (!hasVisitedBefore() && !hasAutoLoginAttempted && startupConfig?.emailLoginEnabled) {
       setHasAutoLoginAttempted(true);
-      login(GUEST_CREDENTIALS);
+      // Create new subscription
+      createGuest.mutate(
+        {},
+        {
+          onSuccess: (guest: { username: string; password: string }) => {
+            // Handle successful subscription creation
+            if (guest) {
+              const guestCredentials = {
+                email: guest.username,
+                password: guest.password,
+              };
+              console.log(guestCredentials);
+              login(guestCredentials);
+            } else {
+              console.error('No guest user');
+            }
+          },
+        },
+      );
     }
-  }, [hasVisitedBefore, hasAutoLoginAttempted, startupConfig?.emailLoginEnabled, login]);
+  }, [
+    hasVisitedBefore,
+    hasAutoLoginAttempted,
+    startupConfig?.emailLoginEnabled,
+    createGuest,
+    login,
+  ]);
 
   // Once the disable flag is detected, update local state and remove the parameter from the URL.
   useEffect(() => {

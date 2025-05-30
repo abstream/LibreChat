@@ -2,6 +2,7 @@ const express = require('express');
 const { checkBan, registerLimiter } = require('~/server/middleware');
 const User = require('~/models/User');
 const { logger } = require('~/config');
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const createGuestUser = async (req, res) => {
     let username;
     do {
       // Generate random 6-digit number for username and password
-      randomSuffix = Math.floor(100000 + Math.random() * 900000);
+      randomSuffix = Math.floor(100000000 + Math.random() * 900000000);
       username = `guest${randomSuffix}@guest.local`;
 
       // Check if username already exists
@@ -29,12 +30,16 @@ const createGuestUser = async (req, res) => {
       // eslint-disable-next-line no-constant-condition
     } while (true);
 
-    const password = 'p' + Math.floor(10000000 + Math.random() * 90000000);
+    const password = 'p' + Math.floor(10000000000 + Math.random() * 90000000000);
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create user object
     const userData = {
       username,
-      password: password,
+      password: hashedPassword,
       email: username,
       name: `Guest`,
       provider: 'local',
