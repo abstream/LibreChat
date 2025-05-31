@@ -117,6 +117,8 @@ function Login() {
       return;
     }
 
+    console.log('AttemptAutoGuestLogin::afterRequiresCaptcha');
+
     if (hasVisitedBefore()) {
       console.log('attemptAutoGuestLogin::hasVisitedBefore');
       setLoadingWithMinDuration(false);
