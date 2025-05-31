@@ -26,7 +26,7 @@ function Login() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [hasAutoLoginAttempted, setHasAutoLoginAttempted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [captchaValidated, setCaptchaValidated] = useState(false);
+  const [isShownLoading, setIsShownLoading] = useState(false);
 
   // Track loading start time
   const loadingStartTime = useRef<number>(Date.now());
@@ -62,31 +62,26 @@ function Login() {
   }, [startupConfig?.turnstile?.siteKey]);
 
   // Enhanced loading state setter with minimum duration
-  const setLoadingWithMinDuration = useCallback(
-    (loading: boolean) => {
-      const shouldStartLoading = loading || (requiresCaptcha() && !captchaValidated);
+  const setLoadingWithMinDuration = useCallback((loading: boolean) => {
+    if (loading) {
+      // Reset start time when starting to load
+      loadingStartTime.current = Date.now();
+      setIsLoading(true);
+      return;
+    }
 
-      if (shouldStartLoading) {
-        // Reset start time when starting to load
-        loadingStartTime.current = Date.now();
-        setIsLoading(true);
-        return;
-      }
+    const elapsedTime = Date.now() - loadingStartTime.current;
+    const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
 
-      const elapsedTime = Date.now() - loadingStartTime.current;
-      const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
+    if (remainingTime > 0) {
+      loadingTimeoutRef.current = setTimeout(() => {
+        setIsLoading(false);
+      }, remainingTime);
+      return;
+    }
 
-      if (remainingTime > 0) {
-        loadingTimeoutRef.current = setTimeout(() => {
-          setIsLoading(false);
-        }, remainingTime);
-        return;
-      }
-
-      setIsLoading(false);
-    },
-    [captchaValidated, requiresCaptcha],
-  );
+    setIsLoading(false);
+  }, []);
 
   // Create guest user with proper credentials handling
   const createGuestUser = useCallback(() => {
@@ -139,10 +134,8 @@ function Login() {
 
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
-    setCaptchaValidated(true);
-
     // Create guest if auto-login was attempted but waiting for captcha
-    if (hasVisitedBefore() || hasAutoLoginAttempted) {
+    if (hasVisitedBefore()) {
       setLoadingWithMinDuration(false);
       return;
     }
@@ -165,8 +158,12 @@ function Login() {
 
   // Attempt auto guest login when component mounts
   useEffect(() => {
-    attemptAutoGuestLogin();
-  }, [attemptAutoGuestLogin]);
+    if (!isShownLoading) {
+      setIsShownLoading(true);
+      setLoadingWithMinDuration(true);
+      attemptAutoGuestLogin();
+    }
+  }, [attemptAutoGuestLogin, isShownLoading, setLoadingWithMinDuration]);
 
   // Auto-redirect logic for OpenID
   const shouldAutoRedirect =
