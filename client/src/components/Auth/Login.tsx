@@ -215,7 +215,7 @@ function Login() {
       <p className="mb-8 text-lg font-semibold text-text-primary">
         {localize('com_ui_loading') || 'Loading...'}
       </p>
-      {requiresCaptcha() && !hasVisitedBefore() && renderCaptcha()}
+      {requiresCaptcha() && renderCaptcha()}
     </div>
   );
 
