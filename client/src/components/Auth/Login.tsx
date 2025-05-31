@@ -139,9 +139,6 @@ function Login() {
 
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
-    if (captchaValidated) {
-      return;
-    }
     setCaptchaValidated(true);
 
     // Create guest if auto-login was attempted but waiting for captcha
@@ -150,8 +147,10 @@ function Login() {
       return;
     }
 
-    setHasAutoLoginAttempted(true);
-    createGuestUser();
+    if (!hasAutoLoginAttempted) {
+      setHasAutoLoginAttempted(true);
+      createGuestUser();
+    }
   }, [
     captchaValidated,
     hasAutoLoginAttempted,
