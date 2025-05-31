@@ -9,21 +9,28 @@ import LoginForm from './LoginForm';
 import SocialButton from '~/components/Auth/SocialButton';
 import { OpenIDIcon } from '~/components';
 import { useCreateGuest } from '~/data-provider';
+import { Turnstile } from '@marsidev/react-turnstile';
+import { ThemeContext } from '~/hooks';
+import { useContext } from 'react';
 
 const VISITED_STORAGE_KEY = 'appTitle';
 
 function Login() {
   const localize = useLocalize();
+  const { theme } = useContext(ThemeContext);
   const { error, setError, login } = useAuthContext();
   const { startupConfig } = useOutletContext<TLoginLayoutContext>();
   const createGuest = useCreateGuest();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [hasAutoLoginAttempted, setHasAutoLoginAttempted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [captchaValidated, setCaptchaValidated] = useState(false);
 
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
-  const [captchaValidated, setCaptchaValidated] = useState(false);
+
+  const validTheme = theme === 'dark' ? 'dark' : 'light';
 
   // Check if user has visited before
   const hasVisitedBefore = useCallback(() => {
@@ -55,6 +62,10 @@ function Login() {
           } else {
             console.error('No guest user');
           }
+          setIsLoading(false);
+        },
+        onError: () => {
+          setIsLoading(false);
         },
       },
     );
@@ -62,17 +73,20 @@ function Login() {
 
   // Auto guest login logic with captcha validation
   const attemptAutoGuestLogin = useCallback(() => {
-    if (hasVisitedBefore() || hasAutoLoginAttempted) return;
+    if (hasVisitedBefore() || hasAutoLoginAttempted) {
+      setIsLoading(false);
+      return;
+    }
 
     // If captcha is required, wait for validation
     if (requiresCaptcha()) {
-      return; // Will be handled by handleCaptchaSuccess
+      // Don't hide loading yet, wait for captcha
+      return;
     }
 
     setHasAutoLoginAttempted(true);
-    // No captcha required, proceed with guest creation
     createGuestUser();
-  }, [hasVisitedBefore, requiresCaptcha, createGuestUser]);
+  }, [hasVisitedBefore, requiresCaptcha, createGuestUser, hasAutoLoginAttempted]);
 
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
@@ -83,12 +97,21 @@ function Login() {
 
     // Create guest if auto-login was attempted but waiting for captcha
     if (hasVisitedBefore() || hasAutoLoginAttempted) {
+      setIsLoading(false);
       return;
     }
 
     setHasAutoLoginAttempted(true);
     createGuestUser();
   }, [captchaValidated, hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
+
+  // Handle captcha error/expiry
+  const handleCaptchaError = useCallback(() => {
+    setCaptchaValidated(false);
+    if (!hasVisitedBefore() && !hasAutoLoginAttempted) {
+      setIsLoading(false);
+    }
+  }, [hasVisitedBefore, hasAutoLoginAttempted]);
 
   // Handle URL parameter cleanup
   useEffect(() => {
@@ -118,6 +141,35 @@ function Login() {
       window.location.href = `${startupConfig.serverDomain}/oauth/openid`;
     }
   }, [shouldAutoRedirect, startupConfig]);
+
+  // Loading screen component
+  const LoadingScreen = () => (
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-surface-primary">
+      <img src="/omnexio-logo.png" alt="Omnexio Logo" className="mb-8 h-24 w-auto animate-pulse" />
+      <p className="mb-8 text-lg font-semibold text-text-primary">
+        {localize('com_ui_loading') || 'Loading...'}
+      </p>
+      {requiresCaptcha() && !hasVisitedBefore() && (
+        <div className="flex justify-center">
+          <Turnstile
+            siteKey={startupConfig.turnstile!.siteKey}
+            options={{
+              ...startupConfig.turnstile!.options,
+              theme: validTheme,
+            }}
+            onSuccess={handleCaptchaSuccess}
+            onError={handleCaptchaError}
+            onExpire={handleCaptchaError}
+          />
+        </div>
+      )}
+    </div>
+  );
+
+  // Show loading screen
+  if (isLoading && !hasVisitedBefore() && !shouldAutoRedirect) {
+    return <LoadingScreen />;
+  }
 
   // Render auto-redirect UI
   if (shouldAutoRedirect) {
