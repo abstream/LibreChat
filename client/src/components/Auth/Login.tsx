@@ -97,12 +97,10 @@ function Login() {
             login(guestCredentials);
           } else {
             console.error('No guest user');
+            setLoadingWithMinDuration(false);
           }
-          console.log('createGuestUser::onSuccess');
-          setLoadingWithMinDuration(false);
         },
         onError: () => {
-          console.log('createGuestUser::onError');
           setLoadingWithMinDuration(false);
         },
       },
@@ -117,10 +115,7 @@ function Login() {
       return;
     }
 
-    console.log('AttemptAutoGuestLogin::afterRequiresCaptcha');
-
     if (hasVisitedBefore()) {
-      console.log('attemptAutoGuestLogin::hasVisitedBefore');
       setLoadingWithMinDuration(false);
       return;
     }
@@ -145,7 +140,6 @@ function Login() {
   const handleCaptchaSuccess = useCallback(() => {
     // Create guest if auto-login was attempted but waiting for captcha
     if (hasVisitedBefore()) {
-      console.log('handleCaptchaSuccess::hasVisitedBefore');
       setLoadingWithMinDuration(false);
       return;
     }
