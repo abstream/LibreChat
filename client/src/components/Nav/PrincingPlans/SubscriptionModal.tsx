@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { CheckIcon, Loader2 } from 'lucide-react';
 import { OGDialog, OGDialogContent, OGDialogHeader, OGDialogTitle, Button } from '~/components/ui';
-import { useLocalize, useMediaQuery } from '~/hooks';
+import { useLocalize, useMediaQuery, useAuthContext } from '~/hooks';
 import {
   useCreateOmnexioSubscription,
   useChangeOmnexioSubscription,
@@ -27,6 +27,7 @@ interface SubscriptionModalProps {
 
 const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChange }) => {
   const localize = useLocalize();
+  const { user, logout } = useAuthContext();
   const [processingId, setProcessingId] = useState<number | null>(null);
   const [confirmationPlan, setConfirmationPlan] = useState<number | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -35,12 +36,27 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
   const subscriptionPlansQuery = useGetOmnexioSubscriptionPlans();
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
+  const isGuestUser = (email?: string): boolean => {
+    return email?.endsWith('@guest.local') ?? false;
+  };
+
+  const isGuest = isGuestUser(user?.email);
+
   useEffect(() => {
     if (!open) return;
     subscriptionPlansQuery.refetch();
   }, [open, subscriptionPlansQuery]);
 
-  const getButtonText = (plan: any, index: number, currentPlanIndex: number): string => {
+  const handleGuestSignIn = (): void => {
+    logout();
+    onOpenChange(false);
+  };
+
+  const getButtonTextForGuest = (): string => {
+    return localize('com_auth_sign_in');
+  };
+
+  const getButtonTextForUser = (plan: any, index: number, currentPlanIndex: number): string => {
     if (plan.isCurrent) return localize('com_subscription_current_plan');
     if (index < currentPlanIndex) return localize('com_subscription_downgrade');
     return localize('com_subscription_upgrade');
@@ -50,7 +66,21 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     return plan.name.toLowerCase().includes('free') || parseInt(plan.id) === 1;
   };
 
-  const createPlanObject = (
+  const createPlanObjectForGuest = (plan: any): SubscriptionPlan => {
+    return {
+      id: parseInt(plan.id),
+      name: plan.name,
+      price: plan.label,
+      features: plan.features,
+      buttonText: getButtonTextForGuest(),
+      recommended: plan.isRecommended,
+      onClick: handleGuestSignIn,
+      isDisabled: false,
+      isFree: isPlanFree(plan),
+    };
+  };
+
+  const createPlanObjectForUser = (
     plan: any,
     index: number,
     currentPlanIndex: number,
@@ -60,7 +90,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       name: plan.name,
       price: plan.label,
       features: plan.features,
-      buttonText: getButtonText(plan, index, currentPlanIndex),
+      buttonText: getButtonTextForUser(plan, index, currentPlanIndex),
       recommended: plan.isRecommended,
       onClick: () => handlePlanSelection(parseInt(plan.id)),
       isDisabled: plan.isCurrent,
@@ -74,20 +104,37 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     return [...paidPlans, ...freePlans];
   };
 
-  const transformPlansData = (): SubscriptionPlan[] => {
+  const transformPlansDataForGuest = (): SubscriptionPlan[] => {
     if (!subscriptionPlansQuery.data?.length) return [];
 
-    const currentPlanIndex = subscriptionPlansQuery.data.findIndex((plan) => plan.isCurrent) ?? -1;
-    const transformedPlans = subscriptionPlansQuery.data.map((plan, index) =>
-      createPlanObject(plan, index, currentPlanIndex),
+    const transformedPlans = subscriptionPlansQuery.data.map((plan) =>
+      createPlanObjectForGuest(plan),
     );
 
     return sortPlansWithFreeLast(transformedPlans);
   };
 
+  const transformPlansDataForUser = (): SubscriptionPlan[] => {
+    if (!subscriptionPlansQuery.data?.length) return [];
+
+    const currentPlanIndex = subscriptionPlansQuery.data.findIndex((plan) => plan.isCurrent) ?? -1;
+    const transformedPlans = subscriptionPlansQuery.data.map((plan, index) =>
+      createPlanObjectForUser(plan, index, currentPlanIndex),
+    );
+
+    return sortPlansWithFreeLast(transformedPlans);
+  };
+
+  const transformPlansData = (): SubscriptionPlan[] => {
+    if (isGuest) {
+      return transformPlansDataForGuest();
+    }
+    return transformPlansDataForUser();
+  };
+
   const subscriptionPlans = useMemo(
     () => transformPlansData(),
-    [subscriptionPlansQuery.data, localize],
+    [subscriptionPlansQuery.data, localize, isGuest],
   );
 
   const handleNewUserSubscription = (planId: number): void => {
