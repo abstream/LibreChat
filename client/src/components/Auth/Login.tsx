@@ -1,5 +1,5 @@
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuthContext } from '~/hooks/AuthContext';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';
@@ -142,32 +142,40 @@ function Login() {
     }
   }, [shouldAutoRedirect, startupConfig]);
 
-  // Loading screen component
-  const LoadingScreen = () => (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-surface-primary">
-      <img src="/omnexio-logo.png" alt="Omnexio Logo" className="mb-8 h-24 w-auto animate-pulse" />
-      <p className="mb-8 text-lg font-semibold text-text-primary">
-        {localize('com_ui_loading') || 'Loading...'}
-      </p>
-      {requiresCaptcha() && !hasVisitedBefore() && (
-        <div className="flex justify-center">
-          <Turnstile
-            siteKey={startupConfig.turnstile!.siteKey}
-            options={{
-              ...startupConfig.turnstile!.options,
-              theme: validTheme,
-            }}
-            onSuccess={handleCaptchaSuccess}
-            onError={handleCaptchaError}
-            onExpire={handleCaptchaError}
-          />
-        </div>
+  const renderCaptcha = () => (
+    <div className="my-4 flex justify-center">
+      {startupConfig?.turnstile!.siteKey && (
+        <Turnstile
+          siteKey={startupConfig.turnstile!.siteKey}
+          options={{
+            ...startupConfig.turnstile!.options,
+            theme: validTheme,
+          }}
+          onSuccess={handleCaptchaSuccess}
+          onError={handleCaptchaError}
+          onExpire={handleCaptchaError}
+        />
       )}
     </div>
   );
 
+  // Loading screen component
+  const LoadingScreen = () => (
+    <div className="fixed inset-0 z-50 ml-2 mr-2 flex flex-col items-center justify-center bg-surface-primary">
+      <img
+        src="/assets/omnexio-logo.png"
+        alt="Omnexio Logo"
+        className="mb-8 h-24 w-auto animate-pulse"
+      />
+      <p className="mb-8 text-lg font-semibold text-text-primary">
+        {localize('com_ui_loading') || 'Loading...'}
+      </p>
+      {requiresCaptcha() && !hasVisitedBefore() && renderCaptcha()}
+    </div>
+  );
+
   // Show loading screen
-  if (isLoading && !hasVisitedBefore() && !shouldAutoRedirect) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
