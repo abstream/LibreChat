@@ -39,22 +39,26 @@ function Login() {
 
   // Enhanced loading state setter with minimum duration
   const setLoadingWithMinDuration = useCallback((loading: boolean) => {
-    if (!loading) {
-      const elapsedTime = Date.now() - loadingStartTime.current;
-      const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
+    const shouldStartLoading = loading || (requiresCaptcha() && !captchaValidated);
 
-      if (remainingTime > 0 || (requiresCaptcha() && !captchaValidated)) {
-        loadingTimeoutRef.current = setTimeout(() => {
-          setIsLoading(false);
-        }, remainingTime);
-      } else {
-        setIsLoading(false);
-      }
-    } else {
+    if (shouldStartLoading) {
       // Reset start time when starting to load
       loadingStartTime.current = Date.now();
       setIsLoading(true);
+      return;
     }
+
+    const elapsedTime = Date.now() - loadingStartTime.current;
+    const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
+
+    if (remainingTime > 0) {
+      loadingTimeoutRef.current = setTimeout(() => {
+        setIsLoading(false);
+      }, remainingTime);
+      return;
+    }
+
+    setIsLoading(false);
   }, []);
 
   // Clean up timeout on unmount
