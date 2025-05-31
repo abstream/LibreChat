@@ -1,5 +1,5 @@
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuthContext } from '~/hooks/AuthContext';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';
@@ -14,6 +14,7 @@ import { ThemeContext } from '~/hooks';
 import { useContext } from 'react';
 
 const VISITED_STORAGE_KEY = 'appTitle';
+const MINIMUM_LOADING_DURATION = 500; // 500ms = 0.5 seconds
 
 function Login() {
   const localize = useLocalize();
@@ -27,10 +28,43 @@ function Login() {
   const [isLoading, setIsLoading] = useState(true);
   const [captchaValidated, setCaptchaValidated] = useState(false);
 
+  // Track loading start time
+  const loadingStartTime = useRef<number>(Date.now());
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
 
   const validTheme = theme === 'dark' ? 'dark' : 'light';
+
+  // Enhanced loading state setter with minimum duration
+  const setLoadingWithMinDuration = useCallback((loading: boolean) => {
+    if (!loading) {
+      const elapsedTime = Date.now() - loadingStartTime.current;
+      const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
+
+      if (remainingTime > 0) {
+        loadingTimeoutRef.current = setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      // Reset start time when starting to load
+      loadingStartTime.current = Date.now();
+      setIsLoading(true);
+    }
+  }, []);
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Check if user has visited before
   const hasVisitedBefore = useCallback(() => {
@@ -62,19 +96,19 @@ function Login() {
           } else {
             console.error('No guest user');
           }
-          setIsLoading(false);
+          setLoadingWithMinDuration(false);
         },
         onError: () => {
-          setIsLoading(false);
+          setLoadingWithMinDuration(false);
         },
       },
     );
-  }, [createGuest, login]);
+  }, [createGuest, login, setLoadingWithMinDuration]);
 
   // Auto guest login logic with captcha validation
   const attemptAutoGuestLogin = useCallback(() => {
     if (hasVisitedBefore() || hasAutoLoginAttempted) {
-      setIsLoading(false);
+      setLoadingWithMinDuration(false);
       return;
     }
 
@@ -86,7 +120,13 @@ function Login() {
 
     setHasAutoLoginAttempted(true);
     createGuestUser();
-  }, [hasVisitedBefore, requiresCaptcha, createGuestUser, hasAutoLoginAttempted]);
+  }, [
+    hasVisitedBefore,
+    requiresCaptcha,
+    createGuestUser,
+    hasAutoLoginAttempted,
+    setLoadingWithMinDuration,
+  ]);
 
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
@@ -97,21 +137,27 @@ function Login() {
 
     // Create guest if auto-login was attempted but waiting for captcha
     if (hasVisitedBefore() || hasAutoLoginAttempted) {
-      setIsLoading(false);
+      setLoadingWithMinDuration(false);
       return;
     }
 
     setHasAutoLoginAttempted(true);
     createGuestUser();
-  }, [captchaValidated, hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
+  }, [
+    captchaValidated,
+    hasAutoLoginAttempted,
+    hasVisitedBefore,
+    createGuestUser,
+    setLoadingWithMinDuration,
+  ]);
 
   // Handle captcha error/expiry
   const handleCaptchaError = useCallback(() => {
     setCaptchaValidated(false);
     if (!hasVisitedBefore() && !hasAutoLoginAttempted) {
-      setIsLoading(false);
+      setLoadingWithMinDuration(false);
     }
-  }, [hasVisitedBefore, hasAutoLoginAttempted]);
+  }, [hasVisitedBefore, hasAutoLoginAttempted, setLoadingWithMinDuration]);
 
   // Handle URL parameter cleanup
   useEffect(() => {
