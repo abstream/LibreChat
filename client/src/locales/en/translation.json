@@ -1,4 +1,8 @@
 {
+  "com_nav_guest_messages_limit_title": "You have insufficient funds.",
+  "com_nav_guest_messages_limit_header": "You've Used All Your Free Messages",
+  "com_nav_guest_messages_limit_message": "To continue chatting and unlock the full experience, please sign up for an account. Enjoy unlimited messages and access to all premium features.",
+
   "com_omnexio_search": "Web Search",
 
   "com_ui_pricing_plans": "Pricing Plans",
