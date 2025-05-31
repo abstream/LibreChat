@@ -76,19 +76,16 @@ function Login() {
 
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
-    console.log('handleCaptchaSuccess');
     if (captchaValidated) {
-      console.log('captchaValidated');
       return;
     }
     setCaptchaValidated(true);
 
-    console.log('handleCaptchaSuccess');
     // Create guest if auto-login was attempted but waiting for captcha
     if (hasVisitedBefore() || hasAutoLoginAttempted) {
       return;
     }
-    console.log('createGuestUser');
+
     setHasAutoLoginAttempted(true);
     createGuestUser();
   }, [captchaValidated, hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
@@ -118,7 +115,6 @@ function Login() {
 
   useEffect(() => {
     if (shouldAutoRedirect) {
-      console.log('Auto-redirecting to OpenID provider...');
       window.location.href = `${startupConfig.serverDomain}/oauth/openid`;
     }
   }, [shouldAutoRedirect, startupConfig]);
