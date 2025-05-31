@@ -137,6 +137,10 @@ function Login() {
     setLoadingWithMinDuration,
   ]);
 
+  const handleCaptchaError = useCallback(() => {
+    setLoadingWithMinDuration(false);
+  }, [setLoadingWithMinDuration]);
+
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
     // Create guest if auto-login was attempted but waiting for captcha
@@ -167,9 +171,14 @@ function Login() {
     if (!isShownLoading) {
       setIsShownLoading(true);
       setLoadingWithMinDuration(true);
+    }
+  }, [isShownLoading, setLoadingWithMinDuration]);
+
+  useEffect(() => {
+    if (startupConfig) {
       attemptAutoGuestLogin();
     }
-  }, [attemptAutoGuestLogin, isShownLoading, setLoadingWithMinDuration]);
+  }, [attemptAutoGuestLogin, startupConfig]);
 
   // Auto-redirect logic for OpenID
   const shouldAutoRedirect =
@@ -195,6 +204,7 @@ function Login() {
             theme: validTheme,
           }}
           onSuccess={handleCaptchaSuccess}
+          onError={handleCaptchaError}
         />
       )}
     </div>
