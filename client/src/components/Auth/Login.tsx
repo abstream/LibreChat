@@ -151,13 +151,7 @@ function Login() {
       setHasAutoLoginAttempted(true);
       createGuestUser();
     }
-  }, [
-    captchaValidated,
-    hasAutoLoginAttempted,
-    hasVisitedBefore,
-    createGuestUser,
-    setLoadingWithMinDuration,
-  ]);
+  }, [hasAutoLoginAttempted, hasVisitedBefore, createGuestUser, setLoadingWithMinDuration]);
 
   // Handle URL parameter cleanup
   useEffect(() => {
