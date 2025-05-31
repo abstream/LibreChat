@@ -43,7 +43,7 @@ function Login() {
       const elapsedTime = Date.now() - loadingStartTime.current;
       const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
 
-      if (remainingTime > 0) {
+      if (remainingTime > 0 || (requiresCaptcha() && !captchaValidated)) {
         loadingTimeoutRef.current = setTimeout(() => {
           setIsLoading(false);
         }, remainingTime);
