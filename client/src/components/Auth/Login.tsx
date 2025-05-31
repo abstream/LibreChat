@@ -23,6 +23,7 @@ function Login() {
 
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
+  const [captchaValidated, setCaptchaValidated] = useState(false);
 
   // Check if user has visited before
   const hasVisitedBefore = useCallback(() => {
@@ -35,9 +36,9 @@ function Login() {
   }, []);
 
   // Check if captcha is required
-  const requiresCaptcha = () => {
+  const requiresCaptcha = useCallback(() => {
     return Boolean(startupConfig?.turnstile?.siteKey);
-  };
+  }, [startupConfig?.turnstile?.siteKey]);
 
   // Create guest user with proper credentials handling
   const createGuestUser = useCallback(() => {
@@ -61,13 +62,14 @@ function Login() {
 
   // Auto guest login logic with captcha validation
   const attemptAutoGuestLogin = useCallback(() => {
-    if (hasVisitedBefore()) return;
+    if (hasVisitedBefore() || hasAutoLoginAttempted) return;
 
     // If captcha is required, wait for validation
     if (requiresCaptcha()) {
       return; // Will be handled by handleCaptchaSuccess
     }
 
+    setHasAutoLoginAttempted(true);
     // No captcha required, proceed with guest creation
     createGuestUser();
   }, [hasVisitedBefore, requiresCaptcha, createGuestUser]);
@@ -75,11 +77,21 @@ function Login() {
   // Handle successful captcha validation
   const handleCaptchaSuccess = useCallback(() => {
     console.log('handleCaptchaSuccess');
-    // Create guest if auto-login was attempted but waiting for captcha
-    if (hasAutoLoginAttempted && !hasVisitedBefore()) {
-      createGuestUser();
+    if (captchaValidated) {
+      console.log('captchaValidated');
+      return;
     }
-  }, [hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
+    setCaptchaValidated(true);
+
+    console.log('handleCaptchaSuccess');
+    // Create guest if auto-login was attempted but waiting for captcha
+    if (hasVisitedBefore() || hasAutoLoginAttempted) {
+      return;
+    }
+    console.log('createGuestUser');
+    setHasAutoLoginAttempted(true);
+    createGuestUser();
+  }, [captchaValidated, hasAutoLoginAttempted, hasVisitedBefore, createGuestUser]);
 
   // Handle URL parameter cleanup
   useEffect(() => {
