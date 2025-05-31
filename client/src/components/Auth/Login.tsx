@@ -14,7 +14,7 @@ import { ThemeContext } from '~/hooks';
 import { useContext } from 'react';
 
 const VISITED_STORAGE_KEY = 'appTitle';
-const MINIMUM_LOADING_DURATION = 500; // 500ms = 0.5 seconds
+const MINIMUM_LOADING_DURATION = 1000; // 1000ms = 1 second
 
 function Login() {
   const localize = useLocalize();
