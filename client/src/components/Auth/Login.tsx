@@ -37,30 +37,6 @@ function Login() {
 
   const validTheme = theme === 'dark' ? 'dark' : 'light';
 
-  // Enhanced loading state setter with minimum duration
-  const setLoadingWithMinDuration = useCallback((loading: boolean) => {
-    const shouldStartLoading = loading || (requiresCaptcha() && !captchaValidated);
-
-    if (shouldStartLoading) {
-      // Reset start time when starting to load
-      loadingStartTime.current = Date.now();
-      setIsLoading(true);
-      return;
-    }
-
-    const elapsedTime = Date.now() - loadingStartTime.current;
-    const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
-
-    if (remainingTime > 0) {
-      loadingTimeoutRef.current = setTimeout(() => {
-        setIsLoading(false);
-      }, remainingTime);
-      return;
-    }
-
-    setIsLoading(false);
-  }, []);
-
   // Clean up timeout on unmount
   useEffect(() => {
     return () => {
@@ -84,6 +60,33 @@ function Login() {
   const requiresCaptcha = useCallback(() => {
     return Boolean(startupConfig?.turnstile?.siteKey);
   }, [startupConfig?.turnstile?.siteKey]);
+
+  // Enhanced loading state setter with minimum duration
+  const setLoadingWithMinDuration = useCallback(
+    (loading: boolean) => {
+      const shouldStartLoading = loading || (requiresCaptcha() && !captchaValidated);
+
+      if (shouldStartLoading) {
+        // Reset start time when starting to load
+        loadingStartTime.current = Date.now();
+        setIsLoading(true);
+        return;
+      }
+
+      const elapsedTime = Date.now() - loadingStartTime.current;
+      const remainingTime = Math.max(0, MINIMUM_LOADING_DURATION - elapsedTime);
+
+      if (remainingTime > 0) {
+        loadingTimeoutRef.current = setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+        return;
+      }
+
+      setIsLoading(false);
+    },
+    [captchaValidated, requiresCaptcha],
+  );
 
   // Create guest user with proper credentials handling
   const createGuestUser = useCallback(() => {
@@ -111,19 +114,21 @@ function Login() {
 
   // Auto guest login logic with captcha validation
   const attemptAutoGuestLogin = useCallback(() => {
-    if (hasVisitedBefore() || hasAutoLoginAttempted) {
-      setLoadingWithMinDuration(false);
-      return;
-    }
-
     // If captcha is required, wait for validation
     if (requiresCaptcha()) {
       // Don't hide loading yet, wait for captcha
       return;
     }
 
-    setHasAutoLoginAttempted(true);
-    createGuestUser();
+    if (hasVisitedBefore()) {
+      setLoadingWithMinDuration(false);
+      return;
+    }
+
+    if (!hasAutoLoginAttempted) {
+      setHasAutoLoginAttempted(true);
+      createGuestUser();
+    }
   }, [
     hasVisitedBefore,
     requiresCaptcha,
@@ -154,14 +159,6 @@ function Login() {
     createGuestUser,
     setLoadingWithMinDuration,
   ]);
-
-  // Handle captcha error/expiry
-  const handleCaptchaError = useCallback(() => {
-    setCaptchaValidated(false);
-    if (!hasVisitedBefore() && !hasAutoLoginAttempted) {
-      setLoadingWithMinDuration(false);
-    }
-  }, [hasVisitedBefore, hasAutoLoginAttempted, setLoadingWithMinDuration]);
 
   // Handle URL parameter cleanup
   useEffect(() => {
@@ -202,8 +199,6 @@ function Login() {
             theme: validTheme,
           }}
           onSuccess={handleCaptchaSuccess}
-          onError={handleCaptchaError}
-          onExpire={handleCaptchaError}
         />
       )}
     </div>
