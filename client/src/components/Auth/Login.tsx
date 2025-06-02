@@ -207,11 +207,7 @@ function Login() {
   // Loading screen component
   const LoadingScreen = () => (
     <div className="fixed inset-0 z-50 ml-2 mr-2 flex flex-col items-center justify-center bg-surface-primary">
-      <img
-        src="/assets/omnexio-logo.png"
-        alt="Omnexio Logo"
-        className="mb-8 h-24 w-auto animate-pulse"
-      />
+      <img src="/assets/omnexio-logo.png" alt="Omnexio Logo" className="mb-8 animate-pulse" />
       <p className="mb-8 text-lg font-semibold text-text-primary">
         {localize('com_ui_loading') || 'Loading...'}
       </p>
