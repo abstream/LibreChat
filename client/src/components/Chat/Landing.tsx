@@ -219,7 +219,7 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
             variant="outline"
             className="rounded-xl border border-border-light bg-surface-secondary px-6 py-3 text-sm font-medium text-text-primary transition-colors hover:bg-surface-hover"
           >
-            {localize('com_ui_view_models') || 'View Models'}
+            {localize('com_ui_view_models')}
           </Button>
         </div>
       </div>

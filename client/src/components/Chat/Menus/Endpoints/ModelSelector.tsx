@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef, useState } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import type { ModelSelectorProps } from '~/common';
 import { ModelSelectorProvider, useModelSelectorContext } from './ModelSelectorContext';
 import { renderModelSpecs, renderEndpoints, renderSearchResults } from './components';
@@ -9,8 +9,7 @@ import { useLocalize } from '~/hooks';
 
 function ModelSelectorContent() {
   const localize = useLocalize();
-  const [forceOpen, setForceOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const {
     // LibreChat
@@ -34,14 +33,8 @@ function ModelSelectorContent() {
   // Listen for custom event to open menu
   useEffect(() => {
     const handleOpenModelSelector = () => {
-      setForceOpen(true);
-      // Programmatically trigger menu open
-      if (menuRef.current) {
-        const menuButton = menuRef.current.querySelector('[role="button"]') as HTMLElement;
-        if (menuButton) {
-          menuButton.click();
-        }
-      }
+      console.log('open model selector');
+      triggerRef.current?.click();
     };
 
     window.addEventListener('openModelSelector', handleOpenModelSelector);
@@ -75,6 +68,7 @@ function ModelSelectorContent() {
 
   const trigger = (
     <button
+      ref={triggerRef}
       className="my-1 flex h-10 w-full max-w-[70vw] items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-secondary px-3 py-2 text-sm text-text-primary hover:bg-surface-tertiary"
       aria-label={localize('com_ui_select_model')}
     >
@@ -89,7 +83,7 @@ function ModelSelectorContent() {
   );
 
   return (
-    <div ref={menuRef} className="relative flex w-full max-w-md flex-col items-center gap-2">
+    <div className="relative flex w-full max-w-md flex-col items-center gap-2">
       <Menu
         values={selectedValues}
         onValuesChange={(values: Record<string, any>) => {
@@ -102,7 +96,6 @@ function ModelSelectorContent() {
         onSearch={(value) => setSearchValue(value)}
         combobox={<input placeholder={localize('com_endpoint_search_models')} />}
         trigger={trigger}
-        defaultOpen={forceOpen}
       >
         {searchResults ? (
           renderSearchResults(searchResults, localize, searchValue)
