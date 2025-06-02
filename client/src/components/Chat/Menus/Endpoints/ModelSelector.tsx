@@ -61,6 +61,7 @@ function ModelSelectorContent() {
         </div>
       )}
       <span className="flex-grow truncate text-left">{selectedDisplayValue}</span>
+      <span className="ml-2 text-gray-500">▼</span>
     </button>
   );
 
