@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import type { ModelSelectorProps } from '~/common';
 import { ModelSelectorProvider, useModelSelectorContext } from './ModelSelectorContext';
 import { renderModelSpecs, renderEndpoints, renderSearchResults } from './components';
@@ -9,6 +9,8 @@ import { useLocalize } from '~/hooks';
 
 function ModelSelectorContent() {
   const localize = useLocalize();
+  const [forceOpen, setForceOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const {
     // LibreChat
@@ -29,6 +31,26 @@ function ModelSelectorContent() {
     keyDialogEndpoint,
   } = useModelSelectorContext();
 
+  // Listen for custom event to open menu
+  useEffect(() => {
+    const handleOpenModelSelector = () => {
+      setForceOpen(true);
+      // Programmatically trigger menu open
+      if (menuRef.current) {
+        const menuButton = menuRef.current.querySelector('[role="button"]') as HTMLElement;
+        if (menuButton) {
+          menuButton.click();
+        }
+      }
+    };
+
+    window.addEventListener('openModelSelector', handleOpenModelSelector);
+
+    return () => {
+      window.removeEventListener('openModelSelector', handleOpenModelSelector);
+    };
+  }, []);
+
   const selectedIcon = useMemo(
     () =>
       getSelectedIcon({
@@ -39,6 +61,7 @@ function ModelSelectorContent() {
       }),
     [mappedEndpoints, selectedValues, modelSpecs, endpointsConfig],
   );
+
   const selectedDisplayValue = useMemo(
     () =>
       getDisplayValue({
@@ -66,7 +89,7 @@ function ModelSelectorContent() {
   );
 
   return (
-    <div className="relative flex w-full max-w-md flex-col items-center gap-2">
+    <div ref={menuRef} className="relative flex w-full max-w-md flex-col items-center gap-2">
       <Menu
         values={selectedValues}
         onValuesChange={(values: Record<string, any>) => {
@@ -79,6 +102,7 @@ function ModelSelectorContent() {
         onSearch={(value) => setSearchValue(value)}
         combobox={<input placeholder={localize('com_endpoint_search_models')} />}
         trigger={trigger}
+        defaultOpen={forceOpen}
       >
         {searchResults ? (
           renderSearchResults(searchResults, localize, searchValue)
