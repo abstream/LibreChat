@@ -5,6 +5,7 @@ import { useRequestPasswordResetMutation } from 'librechat-data-provider/react-q
 import type { TRequestPasswordReset, TRequestPasswordResetResponse } from 'librechat-data-provider';
 import type { FC } from 'react';
 import type { TLoginLayoutContext } from '~/common';
+import { Spinner, Button } from '~/components';
 import { useLocalize } from '~/hooks';
 
 const BodyTextWrapper: FC<{ children: ReactNode }> = ({ children }) => {
@@ -44,6 +45,7 @@ function RequestPasswordReset() {
   const { startupConfig, setHeaderText } = useOutletContext<TLoginLayoutContext>();
 
   const requestPasswordReset = useRequestPasswordResetMutation();
+  const { isLoading } = requestPasswordReset;
 
   const onSubmit = (data: TRequestPasswordReset) => {
     requestPasswordReset.mutate(data, {
@@ -133,18 +135,15 @@ function RequestPasswordReset() {
         )}
       </div>
       <div className="space-y-4">
-        <button
+        <Button
+          aria-label="Continue with password reset"
           type="submit"
-          disabled={!!errors.email}
-          className="
-            w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-medium text-white
-            transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2
-            focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50
-            disabled:hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700
-          "
+          disabled={!!errors.email || isLoading}
+          variant="submit"
+          className="h-12 w-full rounded-2xl"
         >
-          {localize('com_auth_continue')}
-        </button>
+          {isLoading ? <Spinner /> : localize('com_auth_continue')}
+        </Button>
         <a
           href="/login"
           className="block text-center text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"

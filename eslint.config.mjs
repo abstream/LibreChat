@@ -290,7 +290,6 @@ export default [
       // General
       'no-constant-binary-expression': 'off',
       'import/no-cycle': 'off',
-      'no-nested-ternary': 'off',
     },
   },
   {

@@ -3,11 +3,11 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuthContext } from '~/hooks/AuthContext';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from '~/components/Auth/ErrorMessage';
+import SocialButton from '~/components/Auth/SocialButton';
+import { OpenIDIcon } from '~/components';
 import { getLoginError } from '~/utils';
 import { useLocalize } from '~/hooks';
 import LoginForm from './LoginForm';
-import SocialButton from '~/components/Auth/SocialButton';
-import { OpenIDIcon } from '~/components';
 import { useCreateGuest } from '~/data-provider';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { ThemeContext } from '~/hooks';
@@ -33,6 +33,8 @@ function Login() {
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const disableAutoRedirect = searchParams.get('redirect') === 'false';
+
+  // Persist the disable flag locally so that once detected, auto-redirect stays disabled.
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
 
   const validTheme = theme === 'dark' ? 'dark' : 'light';
@@ -184,6 +186,7 @@ function Login() {
 
   useEffect(() => {
     if (shouldAutoRedirect) {
+      console.log('Auto-redirecting to OpenID provider...');
       window.location.href = `${startupConfig.serverDomain}/oauth/openid`;
     }
   }, [shouldAutoRedirect, startupConfig]);
