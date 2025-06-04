@@ -1,6 +1,6 @@
 const express = require('express');
 const { checkBan, registerLimiter } = require('~/server/middleware');
-const User = require('~/models/User');
+const { User } = require('~/db/models');
 const { logger } = require('~/config');
 const bcrypt = require('bcryptjs');
 

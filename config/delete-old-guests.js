@@ -1,26 +1,23 @@
 const path = require('path');
 require('module-alias')({ base: path.resolve(__dirname, '..', 'api') });
-const { askQuestion, silentExit } = require('./helpers');
-const User = require('~/models/User');
+const { silentExit } = require('./helpers');
+const { Transaction, Balance, User } = require('~/db/models');
 const connect = require('./connect');
 
 async function findOldGuestUsers(beforeDate) {
   try {
-    const guestUsers = await User.find({
+    return await User.find({
       email: { $regex: /@guest\.local$/ },
       createdAt: { $lt: beforeDate },
     });
-
-    return guestUsers;
   } catch (error) {
-    console.red('Error finding guest users: ' + error.message);
+    console.warn('Error finding guest users: ' + error.message);
     silentExit(1);
   }
 }
 
 async function deleteGuestUserCompletely(user) {
   const {
-    Balance,
     deleteFiles,
     deleteConvos,
     deletePresets,
@@ -32,7 +29,6 @@ async function deleteGuestUserCompletely(user) {
   const { deleteUserKey } = require('~/server/services/UserService');
   const { deleteAllSharedLinks } = require('~/models/Share');
   const { deleteToolCalls } = require('~/models/ToolCall');
-  const { Transaction } = require('~/models/Transaction');
 
   await deleteMessages({ user: user.id });
   await deleteAllUserSessions({ userId: user.id });
