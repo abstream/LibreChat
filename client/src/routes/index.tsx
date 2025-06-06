@@ -19,6 +19,7 @@ import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
 import TermsOfService from '~/routes/Pages/TermsOfService';
+import LandingAgents from '~/routes/Pages/LandingAgents';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -28,6 +29,10 @@ const AuthLayout = () => (
 );
 
 export const router = createBrowserRouter([
+  {
+    path: 'pages/landing',
+    element: <LandingAgents />,
+  },
   {
     path: 'pages/privacy-policy',
     element: <PrivacyPolicy />,
