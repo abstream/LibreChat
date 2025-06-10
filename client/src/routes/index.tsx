@@ -20,6 +20,7 @@ import Search from './Search';
 import Root from './Root';
 import TermsOfService from '~/routes/Pages/TermsOfService';
 import LandingAgents from '~/routes/Pages/LandingAgents';
+import TaskMasterProfile from '~/routes/Pages/TaskMasterProfile';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -29,6 +30,10 @@ const AuthLayout = () => (
 );
 
 export const router = createBrowserRouter([
+  {
+    path: 'pages/agents/taskmaster',
+    element: <TaskMasterProfile />,
+  },
   {
     path: 'pages/landing',
     element: <LandingAgents />,
