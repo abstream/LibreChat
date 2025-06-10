@@ -208,20 +208,6 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
             {description}
           </div>
         )}
-        {/* View Models Button */}
-        <div className="mt-6 flex items-center justify-center">
-          <Button
-            onClick={() => {
-              // Dispatch custom event to open ModelSelector menu
-              const event = new CustomEvent('openModelSelector');
-              window.dispatchEvent(event);
-            }}
-            variant="outline"
-            className="rounded-xl border border-border-light bg-surface-secondary px-6 py-3 text-sm font-medium text-text-primary transition-colors hover:bg-surface-hover"
-          >
-            {localize('com_ui_view_models')}
-          </Button>
-        </div>
       </div>
     </div>
   );

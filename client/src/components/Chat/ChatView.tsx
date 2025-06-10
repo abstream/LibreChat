@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Constants } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import type { ChatFormValues } from '~/common';
@@ -14,10 +14,11 @@ import { Spinner } from '~/components/svg';
 import Presentation from './Presentation';
 import { buildTree, cn } from '~/utils';
 import ChatForm from './Input/ChatForm';
-import Landing from './Landing';
+import LandingAgents from './LandingAgents';
 import Header from './Header';
 import Footer from './Footer';
 import store from '~/store';
+import Landing from '~/components/Chat/Landing';
 
 function LoadingSpinner() {
   return (
@@ -30,6 +31,8 @@ function LoadingSpinner() {
 }
 
 function ChatView({ index = 0 }: { index?: number }) {
+  const [searchParams] = useSearchParams();
+  const model = searchParams.get('model');
   const { conversationId } = useParams();
   const rootSubmission = useRecoilValue(store.submissionByIndex(index));
   const addedSubmission = useRecoilValue(store.submissionByIndex(index + 1));
@@ -51,6 +54,8 @@ function ChatView({ index = 0 }: { index?: number }) {
   const chatHelpers = useChatHelpers(index, conversationId);
   const addedChatHelpers = useAddedResponse({ rootIndex: index });
 
+  console.log(chatHelpers);
+
   useSSE(rootSubmission, chatHelpers, false);
   useSSE(addedSubmission, addedChatHelpers, true);
 
@@ -71,7 +76,11 @@ function ChatView({ index = 0 }: { index?: number }) {
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
   } else {
-    content = <Landing centerFormOnLanding={centerFormOnLanding} />;
+    if (model) {
+      content = <Landing centerFormOnLanding={centerFormOnLanding} />;
+    } else {
+      content = <LandingAgents centerFormOnLanding={centerFormOnLanding} />;
+    }
   }
 
   return (
