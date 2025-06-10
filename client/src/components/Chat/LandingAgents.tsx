@@ -1,6 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const studios = [
+interface Studio {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  tags: string[];
+  className: string;
+  forYou: boolean;
+  url: string;
+}
+
+const studios: Studio[] = [
   {
     id: 'trailblazer',
     title: 'TaskMaster AI',
@@ -10,6 +22,7 @@ const studios = [
     tags: [],
     className: 'ai-trailblazer',
     forYou: true,
+    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=taskmaster',
   },
   {
     id: 'small-business',
@@ -20,6 +33,7 @@ const studios = [
     tags: [],
     className: 'small-business',
     forYou: false,
+    url: '/c/new?endpoint=OpenAI&model=gpt-4o-mini&agent=salespitch',
   },
   {
     id: 'marketer',
@@ -29,6 +43,7 @@ const studios = [
     tags: [],
     className: 'marketer',
     forYou: false,
+    url: '/c/new?endpoint=Google&model=Gemini+2.0+Flash+Lite&agent=lifecoach',
   },
   {
     id: 'content-creator',
@@ -38,6 +53,7 @@ const studios = [
     tags: [],
     className: 'content-creator',
     forYou: false,
+    url: '/c/new?endpoint=Omnexio&model=Omnexio+Search&agent=contentcreator',
   },
   {
     id: 'copywriter',
@@ -47,6 +63,7 @@ const studios = [
     tags: [],
     className: 'copywriter',
     forYou: false,
+    url: '/c/new?endpoint=Meta&model=Llama+4+Maverick&agent=copywriter',
   },
   {
     id: 'artist',
@@ -56,6 +73,7 @@ const studios = [
     tags: [],
     className: 'artist',
     forYou: false,
+    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=artist',
   },
   {
     id: 'designer',
@@ -65,6 +83,7 @@ const studios = [
     tags: [],
     className: 'designer',
     forYou: false,
+    url: '/c/new?endpoint=Alibaba&model=Qwen+3&agent=designer',
   },
   {
     id: 'photographer',
@@ -74,10 +93,11 @@ const studios = [
     tags: [],
     className: 'photographer',
     forYou: false,
+    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=photographer',
   },
 ];
 
-const getTagClassName = (tag: string) => {
+const getTagClassName = (tag: string): string => {
   const tagMap: Record<string, string> = {
     Chat: 'tag-chat',
     Writing: 'tag-writing',
@@ -89,7 +109,59 @@ const getTagClassName = (tag: string) => {
   return `tag ${tagMap[tag] || 'tag-default'}`;
 };
 
+const handleStudioClick = (studio: Studio, navigate: (path: string) => void): void => {
+  console.log('Selected agent:', studio.title);
+  navigate(studio.url);
+};
+
+const renderForYouBadge = (forYou: boolean) => {
+  if (!forYou) return null;
+  return <div className="for-you-badge">For You</div>;
+};
+
+const renderTags = (tags: string[]) => {
+  if (tags.length === 0) return null;
+
+  return (
+    <div className="tags">
+      {tags.map((tag, index) => (
+        <span key={index} className={getTagClassName(tag)}>
+          {tag}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+const renderStudioCard = (studio: Studio, navigate: (path: string) => void) => {
+  return (
+    <div
+      key={studio.id}
+      className={`studio-card ${studio.className}`}
+      onClick={() => handleStudioClick(studio, navigate)}
+    >
+      {renderForYouBadge(studio.forYou)}
+      <div className="card-header">
+        <div className="card-icon">{studio.icon}</div>
+        <div>
+          <div className="card-title">{studio.title}</div>
+          <div className="card-description">{studio.description}</div>
+        </div>
+      </div>
+      {renderTags(studio.tags)}
+    </div>
+  );
+};
+
+const renderStudioGrid = (navigate: (path: string) => void) => {
+  return (
+    <div className="container">{studios.map((studio) => renderStudioCard(studio, navigate))}</div>
+  );
+};
+
 export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
+  const navigate = useNavigate();
+
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-8 dark:bg-gray-900">
       <style jsx>{`
@@ -282,38 +354,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         }
       `}</style>
 
-      <div className="w-full max-w-6xl">
-        <div className="container">
-          {studios.map((studio) => (
-            <div
-              key={studio.id}
-              className={`studio-card ${studio.className}`}
-              onClick={() => {
-                // Handle agent selection - you can dispatch an action or navigate
-                console.log('Selected agent:', studio.title);
-              }}
-            >
-              {studio.forYou && <div className="for-you-badge">For You</div>}
-              <div className="card-header">
-                <div className="card-icon">{studio.icon}</div>
-                <div>
-                  <div className="card-title">{studio.title}</div>
-                  <div className="card-description">{studio.description}</div>
-                </div>
-              </div>
-              {studio.tags.length > 0 && (
-                <div className="tags">
-                  {studio.tags.map((tag, index) => (
-                    <span key={index} className={getTagClassName(tag)}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <div className="w-full max-w-6xl">{renderStudioGrid(navigate)}</div>
     </div>
   );
 }
