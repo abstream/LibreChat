@@ -70,7 +70,7 @@ export default function MobileNav({
       <button
         type="button"
         aria-label={localize('com_ui_new_chat')}
-        className="m-1 inline-flex size-10 items-center justify-center rounded-full hover:bg-surface-hover"
+        className="m-1 inline-flex size-10 items-center justify-center rounded-full"
         onClick={() => {
           queryClient.setQueryData<TMessage[]>(
             [QueryKeys.messages, conversation?.conversationId ?? Constants.NEW_CONVO],
@@ -87,6 +87,7 @@ export default function MobileNav({
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="icon-md"
           >
             <path
               d="M19 12H5M12 19L5 12L12 5"
