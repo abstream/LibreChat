@@ -21,7 +21,7 @@ const studios: Studio[] = [
     icon: '🚀',
     tags: [],
     className: 'ai-trailblazer',
-    forYou: true,
+    forYou: false,
     url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=taskmaster',
   },
   {
@@ -168,7 +168,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .header {
           display: flex;
           align-items: center;
-          margin-bottom: 30px;
+          margin-bottom: 5px;
           font-size: 18px;
           font-weight: 500;
           color: #333;
@@ -183,7 +183,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .container {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: 20px;
+          gap: 10px;
           max-width: 1200px;
           width: 100%;
         }
@@ -191,7 +191,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .studio-card {
           background: white;
           border-radius: 12px;
-          padding: 24px;
+          padding: 5px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           border: 1px solid #e1e5e9;
           position: relative;
@@ -212,7 +212,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .card-header {
           display: flex;
           align-items: center;
-          margin-bottom: 12px;
+          margin-bottom: 0px;
         }
 
         .card-icon {
@@ -230,7 +230,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           font-size: 20px;
           font-weight: 600;
           color: #1a1a1a;
-          margin-bottom: 4px;
+          margin-bottom: 0px;
         }
 
         .dark .card-title {
@@ -240,8 +240,9 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .card-description {
           color: #666;
           font-size: 14px;
-          margin-bottom: 16px;
+          margin-bottom: 0px;
           line-height: 1.5;
+          max-width: 350px;
         }
 
         .dark .card-description {
