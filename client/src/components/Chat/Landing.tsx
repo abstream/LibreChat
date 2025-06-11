@@ -7,6 +7,7 @@ import { BirthdayIcon, TooltipAnchor, SplitText, Button } from '~/components';
 import ConvoIcon from '~/components/Endpoints/ConvoIcon';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { getIconEndpoint, getEntity } from '~/utils';
+import { useSearchParams } from 'react-router-dom';
 
 const containerClassName =
   'shadow-stroke relative flex h-full items-center justify-center rounded-full bg-white dark:bg-presentation dark:text-white text-black dark:after:shadow-none ';
@@ -28,6 +29,8 @@ function getTextSizeClass(text: string | undefined | null) {
 }
 
 export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
+  const [searchParams] = useSearchParams();
+  const model = searchParams.get('model');
   const { conversation } = useChatContext();
   const agentsMap = useAgentsMapContext();
   const assistantMap = useAssistantsMapContext();
@@ -68,9 +71,19 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   });
 
   const name = entity?.name ?? '';
-  const description = (entity?.description || conversation?.greeting) ?? '';
+  // const description = (entity?.description || conversation?.greeting) ?? '';
+  const description =
+    'Our smart productivity assistant takes the hassle out of planning your day by automating every step of' +
+    ' your to-do workflow. Rather than manually juggling sticky notes or scattered reminder apps, you simply tell ' +
+    'it what needs doing. It automatically captures each task, reads any deadlines you set ' +
+    '(or even detects dates and times in your descriptions), then assigns a priority score based on urgency,' +
+    'importance and how much time you’ve already spent on similar items. In seconds, you get a dynamically ' +
+    'organized to-do list that highlights “must-do” tasks at the top, gently defers lower-priority items to ' +
+    'later slots, and alerts you if something is at risk of slipping through the cracks.';
 
   const getGreeting = useCallback(() => {
+    return model;
+
     if (typeof startupConfig?.interface?.customWelcome === 'string') {
       const customWelcome = startupConfig.interface.customWelcome;
       // Replace {{user.name}} with actual user name if available
