@@ -307,7 +307,7 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
           className={`flex ${textHasMultipleLines ? 'flex-col' : 'flex-col md:flex-row'} items-center justify-center gap-2`}
         >
           {imageUrl ? (
-            <img src={imageUrl} width={40} height={40} alt={model} />
+            <img src={imageUrl} width={40} height={40} alt={model || ''} />
           ) : (
             renderIcon(
               conversation,
