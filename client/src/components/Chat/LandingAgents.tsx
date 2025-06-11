@@ -138,7 +138,7 @@ const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
       {renderForYouBadge(agent.forYou)}
       <div className="card-header">
         <div className="card-icon">
-          <img src={agent.icon} alt={agent.title} />
+          <img src={agent.icon} alt={agent.title} width={40} height={40} />
         </div>
         <div>
           <div className="card-title">{agent.title}</div>
