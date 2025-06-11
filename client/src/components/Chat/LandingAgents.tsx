@@ -184,7 +184,6 @@ const renderAgentGrid = (agents: Agent[], navigate: (path: string) => void) => {
 const renderTabButton = (
   tabKey: TabKey,
   label: string,
-  icon: string,
   activeTab: TabKey,
   onTabChange: (tab: TabKey) => void,
 ) => {
@@ -193,7 +192,6 @@ const renderTabButton = (
 
   return (
     <button key={tabKey} className={className} onClick={() => onTabChange(tabKey)} type="button">
-      <span className="tab-icon">{icon}</span>
       <span className="tab-label">{label}</span>
     </button>
   );
@@ -201,15 +199,15 @@ const renderTabButton = (
 
 const renderTabNavigation = (activeTab: TabKey, onTabChange: (tab: TabKey) => void) => {
   const tabs = [
-    { key: 'Chat' as TabKey, label: 'Chat', icon: '💬' },
-    { key: 'Image' as TabKey, label: 'Image', icon: '🖼️' },
-    { key: 'Video' as TabKey, label: 'Video', icon: '🎥' },
-    { key: 'Models' as TabKey, label: 'Models', icon: '🤖' },
+    { key: 'Chat' as TabKey, label: 'Chat' },
+    { key: 'Image' as TabKey, label: 'Image' },
+    { key: 'Video' as TabKey, label: 'Video' },
+    { key: 'Models' as TabKey, label: 'Models' },
   ];
 
   return (
     <div className="tab-navigation">
-      {tabs.map((tab) => renderTabButton(tab.key, tab.label, tab.icon, activeTab, onTabChange))}
+      {tabs.map((tab) => renderTabButton(tab.key, tab.label, activeTab, onTabChange))}
     </div>
   );
 };
@@ -228,44 +226,48 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
       <style jsx>{`
         .tab-navigation {
           display: flex;
-          gap: 0px;
-          margin-bottom: 10px;
-          background: white;
-          border-radius: 12px;
-          padding: 4px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          border: 1px solid #e1e5e9;
+          gap: 32px;
+          margin-bottom: 24px;
+          border-bottom: 1px solid #e1e5e9;
+          padding-bottom: 0;
         }
 
         .dark .tab-navigation {
-          background: #1f2937;
-          border-color: #374151;
+          border-bottom-color: #374151;
         }
 
         .tab-button {
           display: flex;
           align-items: center;
-          gap: 2px;
-          padding: 12px 20px;
-          border-radius: 8px;
+          padding: 12px 0;
           border: none;
           background: transparent;
           color: #666;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
           white-space: nowrap;
+          position: relative;
         }
 
         .tab-button:hover {
-          background: #f8f9fa;
-          color: #333;
+          color: #1976d2;
         }
 
         .tab-button.active {
+          color: #1976d2;
+        }
+
+        .tab-button.active::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 0;
+          height: 2px;
           background: #1976d2;
-          color: white;
+          border-radius: 2px 2px 0 0;
         }
 
         .dark .tab-button {
@@ -273,17 +275,15 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         }
 
         .dark .tab-button:hover {
-          background: #374151;
-          color: #f3f4f6;
+          color: #3b82f6;
         }
 
         .dark .tab-button.active {
-          background: #3b82f6;
-          color: white;
+          color: #3b82f6;
         }
 
-        .tab-icon {
-          font-size: 16px;
+        .dark .tab-button.active::after {
+          background: #3b82f6;
         }
 
         .tab-label {
@@ -353,7 +353,8 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .card-icon {
           width: 48px;
           height: 48px;
-          margin-right: 16px;
+          margin-right: 8px;
+          margin-left: 5px;
           border-radius: 8px;
           display: flex;
           align-items: center;
