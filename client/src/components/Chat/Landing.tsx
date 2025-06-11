@@ -2,7 +2,11 @@ import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { easings } from '@react-spring/web';
 import { EModelEndpoint } from 'librechat-data-provider';
 import { useChatContext, useAgentsMapContext, useAssistantsMapContext } from '~/Providers';
-import { useGetEndpointsQuery, useGetStartupConfig } from '~/data-provider';
+import {
+  useGetEndpointsQuery,
+  useGetStartupConfig,
+  useGetOmnexioChatModels,
+} from '~/data-provider';
 import { BirthdayIcon, TooltipAnchor, SplitText, Button } from '~/components';
 import ConvoIcon from '~/components/Endpoints/ConvoIcon';
 import { useLocalize, useAuthContext } from '~/hooks';
@@ -28,6 +32,200 @@ function getTextSizeClass(text: string | undefined | null) {
   return 'text-lg sm:text-md';
 }
 
+function getEndpointType(conversation: any, endpointsConfig: any) {
+  let ep = conversation?.endpoint ?? '';
+
+  if (
+    [EModelEndpoint.chatGPTBrowser, EModelEndpoint.azureOpenAI, EModelEndpoint.gptPlugins].includes(
+      ep as EModelEndpoint,
+    )
+  ) {
+    ep = EModelEndpoint.openAI;
+  }
+
+  return getIconEndpoint({
+    endpointsConfig,
+    iconURL: conversation?.iconURL,
+    endpoint: ep,
+  });
+}
+
+function getEntityInfo(endpointType: string, agentsMap: any, assistantMap: any, conversation: any) {
+  return getEntity({
+    endpoint: endpointType,
+    agentsMap,
+    assistantMap,
+    agent_id: conversation?.agent_id,
+    assistant_id: conversation?.assistant_id,
+  });
+}
+
+function findModelByName(models: any[], modelName: string) {
+  if (!models || !modelName) {
+    return null;
+  }
+
+  return models.find(
+    (model) => model.label === modelName || model.name === modelName || model.id === modelName,
+  );
+}
+
+function getModelDescription(selectedModel: any) {
+  if (!selectedModel) {
+    return '';
+  }
+
+  return selectedModel.description || selectedModel.shortDescription || '';
+}
+
+function getModelImageUrl(selectedModel: any) {
+  if (!selectedModel) {
+    return '';
+  }
+
+  return selectedModel.imageUrl || '';
+}
+
+function getTimeBasedGreeting(localize: any) {
+  const now = new Date();
+  const hours = now.getHours();
+  const dayOfWeek = now.getDay();
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+  if (hours >= 0 && hours < 5) {
+    return localize('com_ui_late_night');
+  }
+
+  if (hours < 12) {
+    return isWeekend ? localize('com_ui_weekend_morning') : localize('com_ui_good_morning');
+  }
+
+  if (hours < 17) {
+    return localize('com_ui_good_afternoon');
+  }
+
+  return localize('com_ui_good_evening');
+}
+
+function getCustomWelcome(startupConfig: any, user: any) {
+  const customWelcome = startupConfig?.interface?.customWelcome;
+
+  if (typeof customWelcome !== 'string') {
+    return null;
+  }
+
+  if (user?.name && customWelcome.includes('{{user.name}}')) {
+    return customWelcome.replace(/{{user.name}}/g, user.name);
+  }
+
+  return customWelcome;
+}
+
+function calculateDynamicMargin(
+  lineCount: number,
+  description: string,
+  textHasMultipleLines: boolean,
+  contentHeight: number,
+) {
+  if (contentHeight > 200) {
+    return 'mb-16';
+  }
+
+  if (contentHeight > 150) {
+    return 'mb-12';
+  }
+
+  if (lineCount > 2 || (description && description.length > 100)) {
+    return 'mb-10';
+  }
+
+  if (lineCount > 1 || (description && description.length > 0)) {
+    return 'mb-6';
+  }
+
+  if (textHasMultipleLines) {
+    return 'mb-4';
+  }
+
+  return 'mb-0';
+}
+
+function renderIcon(
+  conversation: any,
+  agentsMap: any,
+  assistantMap: any,
+  endpointsConfig: any,
+  startupConfig: any,
+  localize: any,
+  textHasMultipleLines: boolean,
+) {
+  return (
+    <div className={`relative size-10 justify-center ${textHasMultipleLines ? 'mb-2' : ''}`}>
+      <ConvoIcon
+        agentsMap={agentsMap}
+        assistantMap={assistantMap}
+        conversation={conversation}
+        endpointsConfig={endpointsConfig}
+        containerClassName={containerClassName}
+        context="landing"
+        className="h-2/3 w-2/3 text-black dark:text-white"
+        size={41}
+      />
+      {startupConfig?.showBirthdayIcon && (
+        <TooltipAnchor
+          className="absolute bottom-[27px] right-2"
+          description={localize('com_ui_happy_birthday')}
+        >
+          <BirthdayIcon />
+        </TooltipAnchor>
+      )}
+    </div>
+  );
+}
+
+function renderTitle(
+  name: string,
+  greetingText: string,
+  user: any,
+  handleLineCountChange: (count: number) => void,
+) {
+  if (name) {
+    return (
+      <div className="flex flex-col items-center gap-0 p-2">
+        <SplitText
+          key={`split-text-${name}`}
+          text={name}
+          className={`${getTextSizeClass(name)} font-medium text-text-primary`}
+          delay={50}
+          textAlign="center"
+          animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
+          animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+          easing={easings.easeOutCubic}
+          threshold={0}
+          rootMargin="0px"
+          onLineCountChange={handleLineCountChange}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <SplitText
+      key={`split-text-${greetingText}${user?.name ? '-user' : ''}`}
+      text={greetingText}
+      className={`${getTextSizeClass(greetingText)} font-medium text-text-primary`}
+      delay={50}
+      textAlign="center"
+      animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
+      animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+      easing={easings.easeOutCubic}
+      threshold={0}
+      rootMargin="0px"
+      onLineCountChange={handleLineCountChange}
+    />
+  );
+}
+
 export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
   const [searchParams] = useSearchParams();
   const model = searchParams.get('model');
@@ -36,6 +234,7 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   const assistantMap = useAssistantsMapContext();
   const { data: startupConfig } = useGetStartupConfig();
   const { data: endpointsConfig } = useGetEndpointsQuery();
+  const { data: omnexioModels } = useGetOmnexioChatModels();
   const { user } = useAuthContext();
   const localize = useLocalize();
 
@@ -45,80 +244,33 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   const contentRef = useRef<HTMLDivElement>(null);
 
   const endpointType = useMemo(() => {
-    let ep = conversation?.endpoint ?? '';
-    if (
-      [
-        EModelEndpoint.chatGPTBrowser,
-        EModelEndpoint.azureOpenAI,
-        EModelEndpoint.gptPlugins,
-      ].includes(ep as EModelEndpoint)
-    ) {
-      ep = EModelEndpoint.openAI;
-    }
-    return getIconEndpoint({
-      endpointsConfig,
-      iconURL: conversation?.iconURL,
-      endpoint: ep,
-    });
+    return getEndpointType(conversation, endpointsConfig);
   }, [conversation?.endpoint, conversation?.iconURL, endpointsConfig]);
 
-  const { entity, isAgent, isAssistant } = getEntity({
-    endpoint: endpointType,
-    agentsMap,
-    assistantMap,
-    agent_id: conversation?.agent_id,
-    assistant_id: conversation?.assistant_id,
-  });
+  const { entity, isAgent, isAssistant } = useMemo(() => {
+    return getEntityInfo(endpointType, agentsMap, assistantMap, conversation);
+  }, [endpointType, agentsMap, assistantMap, conversation?.agent_id, conversation?.assistant_id]);
+
+  const selectedModel = useMemo(() => {
+    return findModelByName(omnexioModels, model || '');
+  }, [omnexioModels, model]);
 
   const name = entity?.name ?? '';
-  // const description = (entity?.description || conversation?.greeting) ?? '';
-  const description =
-    'Our smart productivity assistant takes the hassle out of planning your day by automating every step of' +
-    ' your to-do workflow. Rather than manually juggling sticky notes or scattered reminder apps, you simply tell ' +
-    'it what needs doing. It automatically captures each task, reads any deadlines you set ' +
-    '(or even detects dates and times in your descriptions), then assigns a priority score based on urgency,' +
-    'importance and how much time you’ve already spent on similar items. In seconds, you get a dynamically ' +
-    'organized to-do list that highlights “must-do” tasks at the top, gently defers lower-priority items to ' +
-    'later slots, and alerts you if something is at risk of slipping through the cracks.';
+  const description = getModelDescription(selectedModel);
+  const imageUrl = getModelImageUrl(selectedModel);
 
   const getGreeting = useCallback(() => {
-    return model;
+    if (model) {
+      return model;
+    }
 
-    if (typeof startupConfig?.interface?.customWelcome === 'string') {
-      const customWelcome = startupConfig.interface.customWelcome;
-      // Replace {{user.name}} with actual user name if available
-      if (user?.name && customWelcome.includes('{{user.name}}')) {
-        return customWelcome.replace(/{{user.name}}/g, user.name);
-      }
+    const customWelcome = getCustomWelcome(startupConfig, user);
+    if (customWelcome) {
       return customWelcome;
     }
 
-    const now = new Date();
-    const hours = now.getHours();
-
-    const dayOfWeek = now.getDay();
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
-    // Early morning (midnight to 4:59 AM)
-    if (hours >= 0 && hours < 5) {
-      return localize('com_ui_late_night');
-    }
-    // Morning (6 AM to 11:59 AM)
-    else if (hours < 12) {
-      if (isWeekend) {
-        return localize('com_ui_weekend_morning');
-      }
-      return localize('com_ui_good_morning');
-    }
-    // Afternoon (12 PM to 4:59 PM)
-    else if (hours < 17) {
-      return localize('com_ui_good_afternoon');
-    }
-    // Evening (5 PM to 8:59 PM)
-    else {
-      return localize('com_ui_good_evening');
-    }
-  }, [localize, startupConfig?.interface?.customWelcome, user?.name]);
+    return getTimeBasedGreeting(localize);
+  }, [localize, startupConfig?.interface?.customWelcome, user?.name, model]);
 
   const handleLineCountChange = useCallback((count: number) => {
     setTextHasMultipleLines(count > 1);
@@ -132,29 +284,19 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   }, [lineCount, description]);
 
   const getDynamicMargin = useMemo(() => {
-    let margin = 'mb-0';
-
-    if (lineCount > 2 || (description && description.length > 100)) {
-      margin = 'mb-10';
-    } else if (lineCount > 1 || (description && description.length > 0)) {
-      margin = 'mb-6';
-    } else if (textHasMultipleLines) {
-      margin = 'mb-4';
-    }
-
-    if (contentHeight > 200) {
-      margin = 'mb-16';
-    } else if (contentHeight > 150) {
-      margin = 'mb-12';
-    }
-
-    return margin;
+    return calculateDynamicMargin(lineCount, description, textHasMultipleLines, contentHeight);
   }, [lineCount, description, textHasMultipleLines, contentHeight]);
 
-  const greetingText =
-    typeof startupConfig?.interface?.customWelcome === 'string'
-      ? getGreeting()
-      : getGreeting() + (user?.name ? ', ' + user.name : '');
+  const greetingText = useMemo(() => {
+    const greeting = getGreeting();
+    const isCustomWelcome = typeof startupConfig?.interface?.customWelcome === 'string';
+
+    if (isCustomWelcome) {
+      return greeting;
+    }
+
+    return greeting + (user?.name ? ', ' + user.name : '');
+  }, [getGreeting, startupConfig?.interface?.customWelcome, user?.name]);
 
   return (
     <div
@@ -164,56 +306,24 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
         <div
           className={`flex ${textHasMultipleLines ? 'flex-col' : 'flex-col md:flex-row'} items-center justify-center gap-2`}
         >
-          <div className={`relative size-10 justify-center ${textHasMultipleLines ? 'mb-2' : ''}`}>
-            <ConvoIcon
-              agentsMap={agentsMap}
-              assistantMap={assistantMap}
-              conversation={conversation}
-              endpointsConfig={endpointsConfig}
-              containerClassName={containerClassName}
-              context="landing"
-              className="h-2/3 w-2/3 text-black dark:text-white"
-              size={41}
-            />
-            {startupConfig?.showBirthdayIcon && (
-              <TooltipAnchor
-                className="absolute bottom-[27px] right-2"
-                description={localize('com_ui_happy_birthday')}
-              >
-                <BirthdayIcon />
-              </TooltipAnchor>
-            )}
-          </div>
-          {((isAgent || isAssistant) && name) || name ? (
-            <div className="flex flex-col items-center gap-0 p-2">
-              <SplitText
-                key={`split-text-${name}`}
-                text={name}
-                className={`${getTextSizeClass(name)} font-medium text-text-primary`}
-                delay={50}
-                textAlign="center"
-                animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
-                animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
-                easing={easings.easeOutCubic}
-                threshold={0}
-                rootMargin="0px"
-                onLineCountChange={handleLineCountChange}
-              />
-            </div>
+          {imageUrl ? (
+            <img src={imageUrl} width={40} height={40} alt={model} />
           ) : (
-            <SplitText
-              key={`split-text-${greetingText}${user?.name ? '-user' : ''}`}
-              text={greetingText}
-              className={`${getTextSizeClass(greetingText)} font-medium text-text-primary`}
-              delay={50}
-              textAlign="center"
-              animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
-              animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
-              easing={easings.easeOutCubic}
-              threshold={0}
-              rootMargin="0px"
-              onLineCountChange={handleLineCountChange}
-            />
+            renderIcon(
+              conversation,
+              agentsMap,
+              assistantMap,
+              endpointsConfig,
+              startupConfig,
+              localize,
+              textHasMultipleLines,
+            )
+          )}
+          {renderTitle(
+            (isAgent || isAssistant) && name ? name : '',
+            greetingText,
+            user,
+            handleLineCountChange,
           )}
         </div>
         {description && (

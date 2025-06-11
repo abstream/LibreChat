@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
-import { Image } from 'lucide-react';
 
 interface Agent {
   id: string;
