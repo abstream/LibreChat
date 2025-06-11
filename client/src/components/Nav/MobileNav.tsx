@@ -49,8 +49,18 @@ export default function MobileNav({
           />
         </svg>
       </button>
+
       <h1 className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-normal">
-        {title ?? localize('com_ui_new_chat')}
+        {title !== 'New Chat' ? (
+          (title ?? localize('com_ui_new_chat'))
+        ) : (
+          <img
+            src="/assets/omnexio-logo.png"
+            alt="Omnexio Logo"
+            className="mx-auto w-[120px]"
+            width={120}
+          />
+        )}
       </h1>
       <button
         type="button"
