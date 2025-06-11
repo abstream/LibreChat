@@ -73,10 +73,8 @@ const capitalizeCategory = (category: string): string => {
 
 const buildAgentUrl = (model: ChatModel): string => {
   const encodedModelName = encodeURIComponent(model.label);
-  const platformLabel = model.platform?.label || 'Default';
-  const encodedPlatform = encodeURIComponent(platformLabel);
 
-  return `/c/new?endpoint=${encodedPlatform}&model=${encodedModelName}&agent=${model.name}`;
+  return `/c/new?endpoint=Omnexio&model=${encodedModelName}`;
 };
 
 const mapCategoryToTabKey = (category: string): TabKey => {
