@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
+import { Image } from 'lucide-react';
 
 interface Agent {
   id: string;
@@ -38,7 +39,7 @@ const mapChatModelToAgent = (model: ChatModel): Agent => {
     id: model.id,
     title: model.label,
     description: model.shortDescription || model.description,
-    icon: getIconForModel(model),
+    icon: model.imageUrl,
     tags: [],
     className: getClassNameForModel(model),
     forYou: false,
@@ -136,7 +137,9 @@ const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
     >
       {renderForYouBadge(agent.forYou)}
       <div className="card-header">
-        <div className="card-icon">{agent.icon}</div>
+        <div className="card-icon">
+          <img src={agent.icon} alt={agent.title} />
+        </div>
         <div>
           <div className="card-title">{agent.title}</div>
           <div className="card-description">{agent.description}</div>
