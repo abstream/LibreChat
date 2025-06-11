@@ -224,7 +224,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
   const [activeTab, setActiveTab] = useState<TabKey>('Chat');
 
   return (
-    <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-8 dark:bg-gray-900">
+    <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-3 dark:bg-gray-900">
       <style jsx>{`
         .tab-navigation {
           display: flex;
