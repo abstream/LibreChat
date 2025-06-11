@@ -43,15 +43,11 @@ export const useGetOmnexioSubscriptionPlans = (
 export const useGetOmnexioChatModels = (
   config?: UseQueryOptions<string>,
 ): QueryObserverResult<any> => {
-  return useQuery<string>(
-    [QueryKeys.omnexioSubscriptionPlans],
-    () => dataService.getOmnexioChatModels(),
-    {
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-      refetchOnMount: true,
-      ...config,
-      enabled: true,
-    },
-  );
+  return useQuery<string>([QueryKeys.omnexioChatModels], () => dataService.getOmnexioChatModels(), {
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMount: true,
+    ...config,
+    enabled: true,
+  });
 };

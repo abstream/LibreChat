@@ -9,7 +9,6 @@ import * as config from './config';
 import request from './request';
 import * as s from './schemas';
 import * as r from './roles';
-import { omnexioChatModels } from './api-endpoints';
 
 export function abortRequestWithMessage(
   endpoint: string,
@@ -766,6 +765,7 @@ export function updateConversationTag(
 ): Promise<t.TConversationTagResponse> {
   return request.put(endpoints.conversationTags(tag), payload);
 }
+
 export function deleteConversationTag(tag: string): Promise<t.TConversationTagResponse> {
   return request.delete(endpoints.conversationTags(tag));
 }
@@ -776,6 +776,7 @@ export function addTagToConversation(
 ): Promise<t.TTagConversationResponse> {
   return request.put(endpoints.addTagToConversation(conversationId), payload);
 }
+
 export function rebuildConversationTags(): Promise<t.TConversationTagsResponse> {
   return request.post(endpoints.conversationTags('rebuild'));
 }

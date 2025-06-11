@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetOmnexioChatModels } from '~/data-provider';
 
 interface Agent {
   id: string;
@@ -13,100 +14,81 @@ interface Agent {
   category: 'Chat' | 'Image' | 'Video' | 'Models';
 }
 
+interface ChatModel {
+  id: string;
+  name: string;
+  label: string;
+  cost: number;
+  platformId: string;
+  imageUrl: string;
+  shortDescription: string;
+  description: string;
+  category: string;
+  platform: {
+    id: string;
+    name: string;
+    label: string;
+  };
+}
+
 type TabKey = 'Chat' | 'Image' | 'Video' | 'Models';
 
-const agents: Agent[] = [
-  {
-    id: 'trailblazer',
-    title: 'TaskMaster AI',
-    description:
-      'Automates your to-do list, prioritizes tasks based on deadlines, and helps you stay organized throughout the day.',
-    icon: '🚀',
-    tags: ['Chat'],
-    className: 'ai-trailblazer',
+const mapChatModelToAgent = (model: ChatModel): Agent => {
+  return {
+    id: model.id,
+    title: model.label,
+    description: model.shortDescription || model.description,
+    icon: getIconForModel(model),
+    tags: [],
+    className: getClassNameForModel(model),
     forYou: false,
-    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=taskmaster',
-    category: 'Chat',
-  },
-  {
-    id: 'small-business',
-    title: 'SalesPitch Bot',
-    description:
-      'Crafts persuasive sales emails and pitches tailored to your audience and product type.',
-    icon: '🏪',
-    tags: ['Chat'],
-    className: 'small-business',
-    forYou: false,
-    url: '/c/new?endpoint=OpenAI&model=gpt-4o-mini&agent=salespitch',
-    category: 'Chat',
-  },
-  {
-    id: 'marketer',
-    title: 'LifeCoach AI',
-    description: 'Provides motivational coaching, habit tracking, and personalized growth plans.',
-    icon: '📊',
-    tags: ['Chat'],
-    className: 'marketer',
-    forYou: false,
-    url: '/c/new?endpoint=Google&model=Gemini+2.0+Flash+Lite&agent=lifecoach',
-    category: 'Chat',
-  },
-  {
-    id: 'content-creator',
-    title: 'Content Creator',
-    description: 'Multimedia tools for your content',
-    icon: '🎬',
-    tags: ['Video'],
-    className: 'content-creator',
-    forYou: false,
-    url: '/c/new?endpoint=Omnexio&model=Omnexio+Search&agent=contentcreator',
-    category: 'Video',
-  },
-  {
-    id: 'copywriter',
-    title: 'Copywriter',
-    description: 'Multimedia content creation with better SEO',
-    icon: '✍️',
-    tags: ['Image'],
-    className: 'copywriter',
-    forYou: false,
-    url: '/c/new?endpoint=Meta&model=Llama+4+Maverick&agent=copywriter',
-    category: 'Image',
-  },
-  {
-    id: 'artist',
-    title: 'Artist',
-    description: 'Innovation unbounded for artistic creations',
-    icon: '🎨',
-    tags: ['Image'],
-    className: 'artist',
-    forYou: false,
-    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=artist',
-    category: 'Image',
-  },
-  {
-    id: 'designer',
-    title: 'Designer Studio',
-    description: 'Be more creative in visual',
-    icon: '🎯',
-    tags: ['Models'],
-    className: 'designer',
-    forYou: false,
-    url: '/c/new?endpoint=Alibaba&model=Qwen+3&agent=designer',
-    category: 'Models',
-  },
-  {
-    id: 'photographer',
-    title: 'Photographer',
-    description: 'Edit your photo faster',
-    icon: '📷',
-    tags: ['Image'],
-    className: 'photographer',
-    forYou: false,
-    url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=photographer',
-    category: 'Image',
-  },
-];
+    url: buildAgentUrl(model),
+    category: mapCategoryToTabKey(model.category),
+  };
+};
+
+const getIconForModel = (model: ChatModel): string => {
+  const platformIconMap: Record<string, string> = {
+    anthropic: '🤖',
+    openai: '🧠',
+    google: '🔍',
+    meta: '📱',
+    alibaba: '🏢',
+    omnexio: '⚡',
+  };
+
+  const platformName = model.platform?.name?.toLowerCase() || '';
+  return platformIconMap[platformName] || '🎯';
+};
+
+const getClassNameForModel = (model: ChatModel): string => {
+  const platformName = model.platform?.name?.toLowerCase() || '';
+  return `model-${platformName}-${model.id}`;
+};
+
+const capitalizeCategory = (category: string): string => {
+  return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+};
+
+const buildAgentUrl = (model: ChatModel): string => {
+  const encodedModelName = encodeURIComponent(model.label);
+  const platformLabel = model.platform?.label || 'Default';
+  const encodedPlatform = encodeURIComponent(platformLabel);
+
+  return `/c/new?endpoint=${encodedPlatform}&model=${encodedModelName}&agent=${model.name}`;
+};
+
+const mapCategoryToTabKey = (category: string): TabKey => {
+  const categoryMap: Record<string, TabKey> = {
+    chat: 'Chat',
+    image: 'Image',
+    video: 'Video',
+    models: 'Models',
+  };
+
+  const normalizedCategory = category.toLowerCase();
+  return categoryMap[normalizedCategory] || 'Chat';
+};
 
 const getTagClassName = (tag: string): string => {
   const tagMap: Record<string, string> = {
@@ -164,18 +146,31 @@ const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
   );
 };
 
-const getAgentsByCategory = (category: TabKey): Agent[] => {
+const filterAgentsByCategory = (agents: Agent[], category: TabKey): Agent[] => {
   return agents.filter((agent) => agent.category === category);
+};
+
+const renderEmptyState = () => {
+  return (
+    <div className="empty-state">
+      <div className="empty-icon">🔍</div>
+      <div className="empty-text">No agents found in this category</div>
+    </div>
+  );
+};
+
+const renderLoadingState = () => {
+  return (
+    <div className="empty-state">
+      <div className="empty-icon">⏳</div>
+      <div className="empty-text">Loading agents...</div>
+    </div>
+  );
 };
 
 const renderAgentGrid = (agents: Agent[], navigate: (path: string) => void) => {
   if (agents.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="empty-icon">🔍</div>
-        <div className="empty-text">No agents found in this category</div>
-      </div>
-    );
+    return renderEmptyState();
   }
 
   return <div className="container">{agents.map((agent) => renderAgentCard(agent, navigate))}</div>;
@@ -212,14 +207,29 @@ const renderTabNavigation = (activeTab: TabKey, onTabChange: (tab: TabKey) => vo
   );
 };
 
-const renderContent = (activeTab: TabKey, navigate: (path: string) => void) => {
-  const filteredAgents = getAgentsByCategory(activeTab);
+const renderContent = (
+  activeTab: TabKey,
+  agents: Agent[],
+  navigate: (path: string) => void,
+  isLoading: boolean,
+) => {
+  if (isLoading) {
+    return renderLoadingState();
+  }
+
+  const filteredAgents = filterAgentsByCategory(agents, activeTab);
   return renderAgentGrid(filteredAgents, navigate);
 };
 
 export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>('Chat');
+  const chatModelsQuery = useGetOmnexioChatModels();
+
+  const agents = useMemo(() => {
+    if (!chatModelsQuery.data?.length) return [];
+    return chatModelsQuery.data.map(mapChatModelToAgent);
+  }, [chatModelsQuery.data]);
 
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-3 dark:bg-gray-900">
@@ -445,51 +455,11 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           top: -8px;
           right: 12px;
         }
-
-        .ai-trailblazer .card-icon {
-          background: #e3f2fd;
-          color: #1976d2;
-        }
-
-        .small-business .card-icon {
-          background: #fff3e0;
-          color: #f57c00;
-        }
-
-        .marketer .card-icon {
-          background: #e8f5e8;
-          color: #388e3c;
-        }
-
-        .content-creator .card-icon {
-          background: #fce4ec;
-          color: #c2185b;
-        }
-
-        .copywriter .card-icon {
-          background: #f3e5f5;
-          color: #7b1fa2;
-        }
-
-        .artist .card-icon {
-          background: #ffebee;
-          color: #d32f2f;
-        }
-
-        .designer .card-icon {
-          background: #e0f2f1;
-          color: #00796b;
-        }
-
-        .photographer .card-icon {
-          background: #e8eaf6;
-          color: #3f51b5;
-        }
       `}</style>
 
       <div className="w-full max-w-6xl">
         {renderTabNavigation(activeTab, setActiveTab)}
-        {renderContent(activeTab, navigate)}
+        {renderContent(activeTab, agents, navigate, chatModelsQuery.isLoading)}
       </div>
     </div>
   );
