@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Agent {
@@ -10,7 +10,10 @@ interface Agent {
   className: string;
   forYou: boolean;
   url: string;
+  category: 'Chat' | 'Image' | 'Video' | 'Models';
 }
+
+type TabKey = 'Chat' | 'Image' | 'Video' | 'Models';
 
 const agents: Agent[] = [
   {
@@ -19,10 +22,11 @@ const agents: Agent[] = [
     description:
       'Automates your to-do list, prioritizes tasks based on deadlines, and helps you stay organized throughout the day.',
     icon: '🚀',
-    tags: [],
+    tags: ['Chat'],
     className: 'ai-trailblazer',
     forYou: false,
     url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=taskmaster',
+    category: 'Chat',
   },
   {
     id: 'small-business',
@@ -30,70 +34,77 @@ const agents: Agent[] = [
     description:
       'Crafts persuasive sales emails and pitches tailored to your audience and product type.',
     icon: '🏪',
-    tags: [],
+    tags: ['Chat'],
     className: 'small-business',
     forYou: false,
     url: '/c/new?endpoint=OpenAI&model=gpt-4o-mini&agent=salespitch',
+    category: 'Chat',
   },
   {
     id: 'marketer',
     title: 'LifeCoach AI',
     description: 'Provides motivational coaching, habit tracking, and personalized growth plans.',
     icon: '📊',
-    tags: [],
+    tags: ['Chat'],
     className: 'marketer',
     forYou: false,
     url: '/c/new?endpoint=Google&model=Gemini+2.0+Flash+Lite&agent=lifecoach',
+    category: 'Chat',
   },
   {
     id: 'content-creator',
     title: 'Content Creator',
     description: 'Multimedia tools for your content',
     icon: '🎬',
-    tags: [],
+    tags: ['Video'],
     className: 'content-creator',
     forYou: false,
     url: '/c/new?endpoint=Omnexio&model=Omnexio+Search&agent=contentcreator',
+    category: 'Video',
   },
   {
     id: 'copywriter',
     title: 'Copywriter',
     description: 'Multimedia content creation with better SEO',
     icon: '✍️',
-    tags: [],
+    tags: ['Image'],
     className: 'copywriter',
     forYou: false,
     url: '/c/new?endpoint=Meta&model=Llama+4+Maverick&agent=copywriter',
+    category: 'Image',
   },
   {
     id: 'artist',
     title: 'Artist',
     description: 'Innovation unbounded for artistic creations',
     icon: '🎨',
-    tags: [],
+    tags: ['Image'],
     className: 'artist',
     forYou: false,
     url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=artist',
+    category: 'Image',
   },
   {
     id: 'designer',
     title: 'Designer Studio',
     description: 'Be more creative in visual',
     icon: '🎯',
-    tags: [],
+    tags: ['Models'],
     className: 'designer',
     forYou: false,
     url: '/c/new?endpoint=Alibaba&model=Qwen+3&agent=designer',
+    category: 'Models',
   },
   {
     id: 'photographer',
     title: 'Photographer',
     description: 'Edit your photo faster',
     icon: '📷',
-    tags: [],
+    tags: ['Image'],
     className: 'photographer',
     forYou: false,
     url: '/c/new?endpoint=Anthropic&model=Claude+3.7+Sonnet&agent=photographer',
+    category: 'Image',
   },
 ];
 
@@ -105,6 +116,7 @@ const getTagClassName = (tag: string): string => {
     Image: 'tag-image',
     Video: 'tag-video',
     Audio: 'tag-audio',
+    Models: 'tag-models',
   };
   return `tag ${tagMap[tag] || 'tag-default'}`;
 };
@@ -148,36 +160,134 @@ const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
           <div className="card-description">{agent.description}</div>
         </div>
       </div>
-      {renderTags(agent.tags)}
     </div>
   );
 };
 
-const renderAgentGrid = (navigate: (path: string) => void) => {
+const getAgentsByCategory = (category: TabKey): Agent[] => {
+  return agents.filter((agent) => agent.category === category);
+};
+
+const renderAgentGrid = (agents: Agent[], navigate: (path: string) => void) => {
+  if (agents.length === 0) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">🔍</div>
+        <div className="empty-text">No agents found in this category</div>
+      </div>
+    );
+  }
+
+  return <div className="container">{agents.map((agent) => renderAgentCard(agent, navigate))}</div>;
+};
+
+const renderTabButton = (
+  tabKey: TabKey,
+  label: string,
+  icon: string,
+  activeTab: TabKey,
+  onTabChange: (tab: TabKey) => void,
+) => {
+  const isActive = activeTab === tabKey;
+  const className = `tab-button ${isActive ? 'active' : ''}`;
+
   return (
-    <div className="container">{agents.map((agent) => renderAgentCard(agent, navigate))}</div>
+    <button key={tabKey} className={className} onClick={() => onTabChange(tabKey)} type="button">
+      <span className="tab-icon">{icon}</span>
+      <span className="tab-label">{label}</span>
+    </button>
   );
+};
+
+const renderTabNavigation = (activeTab: TabKey, onTabChange: (tab: TabKey) => void) => {
+  const tabs = [
+    { key: 'Chat' as TabKey, label: 'Chat', icon: '💬' },
+    { key: 'Image' as TabKey, label: 'Image', icon: '🖼️' },
+    { key: 'Video' as TabKey, label: 'Video', icon: '🎥' },
+    { key: 'Models' as TabKey, label: 'Models', icon: '🤖' },
+  ];
+
+  return (
+    <div className="tab-navigation">
+      {tabs.map((tab) => renderTabButton(tab.key, tab.label, tab.icon, activeTab, onTabChange))}
+    </div>
+  );
+};
+
+const renderContent = (activeTab: TabKey, navigate: (path: string) => void) => {
+  const filteredAgents = getAgentsByCategory(activeTab);
+  return renderAgentGrid(filteredAgents, navigate);
 };
 
 export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabKey>('Chat');
 
   return (
     <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-8 dark:bg-gray-900">
       <style jsx>{`
-        .header {
+        .tab-navigation {
+          display: flex;
+          gap: 0px;
+          margin-bottom: 10px;
+          background: white;
+          border-radius: 12px;
+          padding: 4px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e1e5e9;
+        }
+
+        .dark .tab-navigation {
+          background: #1f2937;
+          border-color: #374151;
+        }
+
+        .tab-button {
           display: flex;
           align-items: center;
-          margin-bottom: 5px;
-          font-size: 18px;
+          gap: 2px;
+          padding: 12px 20px;
+          border-radius: 8px;
+          border: none;
+          background: transparent;
+          color: #666;
+          font-size: 14px;
           font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          white-space: nowrap;
+        }
+
+        .tab-button:hover {
+          background: #f8f9fa;
           color: #333;
         }
 
-        .header::before {
-          content: '✎';
-          margin-right: 10px;
-          color: #666;
+        .tab-button.active {
+          background: #1976d2;
+          color: white;
+        }
+
+        .dark .tab-button {
+          color: #9ca3af;
+        }
+
+        .dark .tab-button:hover {
+          background: #374151;
+          color: #f3f4f6;
+        }
+
+        .dark .tab-button.active {
+          background: #3b82f6;
+          color: white;
+        }
+
+        .tab-icon {
+          font-size: 16px;
+        }
+
+        .tab-label {
+          font-weight: 500;
         }
 
         .container {
@@ -186,6 +296,31 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           gap: 10px;
           max-width: 1200px;
           width: 100%;
+        }
+
+        .empty-state {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 64px 32px;
+          text-align: center;
+          grid-column: 1 / -1;
+        }
+
+        .empty-icon {
+          font-size: 48px;
+          margin-bottom: 16px;
+          opacity: 0.5;
+        }
+
+        .empty-text {
+          color: #666;
+          font-size: 16px;
+        }
+
+        .dark .empty-text {
+          color: #9ca3af;
         }
 
         .agent-card {
@@ -212,7 +347,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .card-header {
           display: flex;
           align-items: center;
-          margin-bottom: 0px;
+          margin-bottom: 5px;
         }
 
         .card-icon {
@@ -230,7 +365,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           font-size: 20px;
           font-weight: 600;
           color: #1a1a1a;
-          margin-bottom: 0px;
+          margin-bottom: 4px;
         }
 
         .dark .card-title {
@@ -240,7 +375,6 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         .card-description {
           color: #666;
           font-size: 14px;
-          margin-bottom: 0px;
           line-height: 1.5;
           max-width: 350px;
         }
@@ -292,6 +426,11 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           background: #f3e5f5;
           color: #7b1fa2;
           border-color: #7b1fa2;
+        }
+        .tag-models {
+          background: #e8f5e8;
+          color: #388e3c;
+          border-color: #388e3c;
         }
 
         .for-you-badge {
@@ -345,17 +484,12 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           background: #e8eaf6;
           color: #3f51b5;
         }
-
-        .dark .header {
-          color: #f3f4f6;
-        }
-
-        .dark .header::before {
-          color: #9ca3af;
-        }
       `}</style>
 
-      <div className="w-full max-w-6xl">{renderAgentGrid(navigate)}</div>
+      <div className="w-full max-w-6xl">
+        {renderTabNavigation(activeTab, setActiveTab)}
+        {renderContent(activeTab, navigate)}
+      </div>
     </div>
   );
 }
