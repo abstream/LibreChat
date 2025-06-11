@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface Studio {
+interface Agent {
   id: string;
   title: string;
   description: string;
@@ -12,7 +12,7 @@ interface Studio {
   url: string;
 }
 
-const studios: Studio[] = [
+const agents: Agent[] = [
   {
     id: 'trailblazer',
     title: 'TaskMaster AI',
@@ -109,9 +109,9 @@ const getTagClassName = (tag: string): string => {
   return `tag ${tagMap[tag] || 'tag-default'}`;
 };
 
-const handleStudioClick = (studio: Studio, navigate: (path: string) => void): void => {
-  console.log('Selected agent:', studio.title);
-  navigate(studio.url);
+const handleAgentClick = (agent: Agent, navigate: (path: string) => void): void => {
+  console.log('Selected agent:', agent.title);
+  navigate(agent.url);
 };
 
 const renderForYouBadge = (forYou: boolean) => {
@@ -133,29 +133,29 @@ const renderTags = (tags: string[]) => {
   );
 };
 
-const renderStudioCard = (studio: Studio, navigate: (path: string) => void) => {
+const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
   return (
     <div
-      key={studio.id}
-      className={`studio-card ${studio.className}`}
-      onClick={() => handleStudioClick(studio, navigate)}
+      key={agent.id}
+      className={`agent-card ${agent.className}`}
+      onClick={() => handleAgentClick(agent, navigate)}
     >
-      {renderForYouBadge(studio.forYou)}
+      {renderForYouBadge(agent.forYou)}
       <div className="card-header">
-        <div className="card-icon">{studio.icon}</div>
+        <div className="card-icon">{agent.icon}</div>
         <div>
-          <div className="card-title">{studio.title}</div>
-          <div className="card-description">{studio.description}</div>
+          <div className="card-title">{agent.title}</div>
+          <div className="card-description">{agent.description}</div>
         </div>
       </div>
-      {renderTags(studio.tags)}
+      {renderTags(agent.tags)}
     </div>
   );
 };
 
-const renderStudioGrid = (navigate: (path: string) => void) => {
+const renderAgentGrid = (navigate: (path: string) => void) => {
   return (
-    <div className="container">{studios.map((studio) => renderStudioCard(studio, navigate))}</div>
+    <div className="container">{agents.map((agent) => renderAgentCard(agent, navigate))}</div>
   );
 };
 
@@ -188,7 +188,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           width: 100%;
         }
 
-        .studio-card {
+        .agent-card {
           background: white;
           border-radius: 12px;
           padding: 5px;
@@ -199,12 +199,12 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           transition: all 0.3s ease;
         }
 
-        .studio-card:hover {
+        .agent-card:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
-        .dark .studio-card {
+        .dark .agent-card {
           background: #1f2937;
           border-color: #374151;
         }
@@ -355,7 +355,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
         }
       `}</style>
 
-      <div className="w-full max-w-6xl">{renderStudioGrid(navigate)}</div>
+      <div className="w-full max-w-6xl">{renderAgentGrid(navigate)}</div>
     </div>
   );
 }
