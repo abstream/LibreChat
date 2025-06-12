@@ -356,7 +356,6 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
 
         .card-header {
           display: flex;
-          align-items: center;
           margin-bottom: 5px;
         }
 
