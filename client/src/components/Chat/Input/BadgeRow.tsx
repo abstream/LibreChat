@@ -18,6 +18,7 @@ import { Badge } from '~/components/ui';
 import MCPSelect from './MCPSelect';
 import WebSearch from './WebSearch';
 import store from '~/store';
+import ExportAndShareMenu from '~/components/Chat/ExportAndShareMenu';
 
 interface BadgeRowProps {
   showEphemeralBadges?: boolean;
@@ -362,6 +363,7 @@ function BadgeRow({
         </>
       )}
       <OmnexioSearch conversationId={conversationId} />
+      <ExportAndShareMenu isSharedButtonEnabled={true} />
       {ghostBadge && (
         <div
           className="ghost-badge h-full"
