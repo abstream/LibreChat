@@ -80,7 +80,7 @@ export default function MobileNav({
           newConversation();
         }}
       >
-        {model && (
+        {(model || title !== 'New Chat') && (
           <svg
             width="24"
             height="24"
