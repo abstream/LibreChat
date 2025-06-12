@@ -234,7 +234,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     return { columns, itemsPerColumn };
   };
 
-  const renderFreeFeatures = (features: string[]): JSX.Element => {
+  const createFeatureColumns = (features: string[]): string[][] => {
     const { columns, itemsPerColumn } = calculateFreeFeatureColumns(features);
     const featureColumns: string[][] = [];
 
@@ -244,18 +244,27 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
       featureColumns.push(features.slice(start, end));
     }
 
+    return featureColumns;
+  };
+
+  const renderFeatureColumn = (columnFeatures: string[], columnIndex: number): JSX.Element => (
+    <div key={columnIndex} className="space-y-1">
+      {columnFeatures.map((feature, featureIndex) => (
+        <div key={featureIndex} className="flex items-start">
+          <CheckIcon className="mr-1 mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
+          <span className="">{feature}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderFreeFeatures = (features: string[]): JSX.Element => {
+    const featureColumns = createFeatureColumns(features);
+    const { columns } = calculateFreeFeatureColumns(features);
+
     return (
       <div className={`grid grid-cols-${columns} gap-2 text-sm text-text-secondary`}>
-        {featureColumns.map((columnFeatures, columnIndex) => (
-          <div key={columnIndex} className="space-y-1">
-            {columnFeatures.map((feature, featureIndex) => (
-              <div key={featureIndex} className="flex items-start">
-                <CheckIcon className="mr-1 mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
-                <span className="">{feature}</span>
-              </div>
-            ))}
-          </div>
-        ))}
+        {featureColumns.map(renderFeatureColumn)}
       </div>
     );
   };
@@ -271,30 +280,43 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     </ul>
   );
 
+  const getButtonSize = (plan: SubscriptionPlan): string => {
+    return plan.isFree && !isSmallScreen ? 'w-70' : 'mt-4 w-full';
+  };
+
+  const getButtonStyles = (plan: SubscriptionPlan): string => {
+    if (plan.recommended) {
+      return 'bg-primary text-primary-foreground hover:bg-primary/90 dark:text-black';
+    }
+    return 'bg-[#2f7ff7] text-primary-foreground hover:bg-[#2f7ff7]/90';
+  };
+
+  const getButtonInlineStyles = (plan: SubscriptionPlan): React.CSSProperties => {
+    return plan.isFree && !isSmallScreen ? { width: '280px' } : {};
+  };
+
+  const renderProcessingButton = (): JSX.Element => (
+    <div className="flex items-center justify-center">
+      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      {localize('com_ui_processing')}
+    </div>
+  );
+
   const renderPlanButton = (plan: SubscriptionPlan): JSX.Element => {
     const isProcessing = processingId === plan.id;
-    const buttonSize = plan.isFree && !isSmallScreen ? 'w-70' : 'mt-4 w-full';
+    const buttonSize = getButtonSize(plan);
+    const buttonStyles = getButtonStyles(plan);
+    const inlineStyles = getButtonInlineStyles(plan);
 
     return (
       <Button
-        className={`${buttonSize} ${
-          plan.recommended
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90 dark:text-black'
-            : 'bg-[#2f7ff7] text-primary-foreground hover:bg-[#2f7ff7]/90'
-        }`}
-        style={plan.isFree && !isSmallScreen ? { width: '280px' } : {}}
+        className={`${buttonSize} ${buttonStyles}`}
+        style={inlineStyles}
         onClick={plan.onClick}
         disabled={processingId !== null || plan.isDisabled}
         size="sm"
       >
-        {isProcessing ? (
-          <div className="flex items-center justify-center">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {localize('com_ui_processing')}
-          </div>
-        ) : (
-          plan.buttonText
-        )}
+        {isProcessing ? renderProcessingButton() : plan.buttonText}
       </Button>
     );
   };
@@ -317,6 +339,13 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     return `${baseClasses} ${heightClass} ${spanClass} ${borderClass}`;
   };
 
+  const renderFreePlanHeader = (plan: SubscriptionPlan): JSX.Element => (
+    <div className="flex-shrink-1 mr-20">
+      <h3 className="text-base font-semibold">{plan.name}</h3>
+      <div className="mt-1 text-lg font-bold">{plan.price}</div>
+    </div>
+  );
+
   const renderFreePlanContent = (plan: SubscriptionPlan): JSX.Element => {
     if (isSmallScreen) {
       return renderPaidPlanContent(plan);
@@ -324,22 +353,23 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
 
     return (
       <div className="flex items-center justify-between gap-4">
-        <div className="flex-shrink-1 mr-20">
-          <h3 className="text-base font-semibold">{plan.name}</h3>
-          <div className="mt-1 text-lg font-bold">{plan.price}</div>
-        </div>
-
+        {renderFreePlanHeader(plan)}
         <div className="min-w-0 flex-1">{renderFreeFeatures(plan.features)}</div>
-
         <div className="flex-shrink-0">{renderPlanButton(plan)}</div>
       </div>
     );
   };
 
-  const renderPaidPlanContent = (plan: SubscriptionPlan): JSX.Element => (
+  const renderPaidPlanHeader = (plan: SubscriptionPlan): JSX.Element => (
     <>
       <h3 className="text-lg font-semibold">{plan.name}</h3>
       <div className="mt-2 text-xl font-bold">{plan.price}</div>
+    </>
+  );
+
+  const renderPaidPlanContent = (plan: SubscriptionPlan): JSX.Element => (
+    <>
+      {renderPaidPlanHeader(plan)}
       {plan.isFree && isSmallScreen
         ? renderPlanFeatures(plan.features)
         : renderPlanFeatures(plan.features)}
@@ -372,23 +402,44 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
     );
   };
 
+  const renderFooterLink = (text: string, href?: string): JSX.Element => {
+    if (href) {
+      return (
+        <a className="text-sm text-blue-500" href={href}>
+          {text}
+        </a>
+      );
+    }
+    return <span>{text}</span>;
+  };
+
+  const renderFooterLine = (text: string, href?: string): JSX.Element => (
+    <div className="flex items-start gap-2">
+      <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
+      {href ? renderFooterLink(text, href) : <span>{text}</span>}
+    </div>
+  );
+
+  const renderPrivacyAndTermsLine = (): JSX.Element => (
+    <div className="flex items-start gap-2">
+      <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
+      <span className="text-sm">
+        {localize('com_by_subscribing')}{' '}
+        <span className="inline-flex flex-wrap items-center gap-1">
+          {renderFooterLink(localize('com_ui_privacy_policy'), '/pages/privacy-policy')}
+          <span>{localize('com_and')}</span>
+          {renderFooterLink(localize('com_ui_terms_of_service'), '/pages/tos')}
+        </span>
+      </span>
+    </div>
+  );
+
   const renderFooterLinks = (): JSX.Element => (
     <div className="border-t border-border-medium pt-2 text-sm text-text-secondary">
-      {localize('com_subscription_credits_rolling_note')}
-      <br />
-      {localize('com_subscription_omnexa_credit_note')}
-      <br />
-      {localize('com_subscription_web_search_credit_note')}
-      <br />
-      {localize('com_by_subscribing')}{' '}
-      <a className="text-sm text-blue-500" href="/pages/privacy-policy">
-        {localize('com_ui_privacy_policy')}
-      </a>{' '}
-      {localize('com_and')}{' '}
-      <a className="text-sm text-blue-500" href="/pages/tos">
-        {localize('com_ui_terms_of_service')}
-      </a>
-      <br />
+      {renderFooterLine(localize('com_subscription_credits_rolling_note'))}
+      {renderFooterLine(localize('com_subscription_omnexa_credit_note'))}
+      {renderFooterLine(localize('com_subscription_web_search_credit_note'))}
+      {renderPrivacyAndTermsLine()}
     </div>
   );
 
