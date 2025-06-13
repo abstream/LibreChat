@@ -202,7 +202,6 @@ const createTabNavigationView = (activeTab: TabKey, onTabChange: (tab: TabKey) =
   const tabs = [
     { key: 'Chat' as TabKey, label: 'Chat' },
     { key: 'Image' as TabKey, label: 'Image' },
-    { key: 'Video' as TabKey, label: 'Video' },
     { key: 'Models' as TabKey, label: 'Models' },
   ];
 
