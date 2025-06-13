@@ -15,6 +15,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Gemini 2.0 Flash Lite': 2,
   'Gemini 2.5 Pro': 100,
   'Gemini 2.5 Flash Preview': 12,
+  'Veo 3': 100,
   'Omnexio Search': 1,
   'deepseek-chat': 2,
   'deepseek-coder': 5,
