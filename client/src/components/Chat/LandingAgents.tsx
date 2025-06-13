@@ -24,6 +24,7 @@ interface ChatModel {
   shortDescription: string;
   description: string;
   category: string;
+  endpointName: string;
   platform: {
     id: string;
     name: string;
@@ -33,21 +34,7 @@ interface ChatModel {
 
 type TabKey = 'Chat' | 'Image' | 'Video' | 'Models';
 
-const mapChatModelToAgent = (model: ChatModel): Agent => {
-  return {
-    id: model.id,
-    title: model.label,
-    description: model.shortDescription || model.description,
-    icon: model.imageUrl,
-    tags: [],
-    className: getClassNameForModel(model),
-    forYou: false,
-    url: buildAgentUrl(model),
-    category: mapCategoryToTabKey(model.category),
-  };
-};
-
-const getIconForModel = (model: ChatModel): string => {
+const getPlatformIcon = (platformName: string): string => {
   const platformIconMap: Record<string, string> = {
     anthropic: '🤖',
     openai: '🧠',
@@ -57,26 +44,27 @@ const getIconForModel = (model: ChatModel): string => {
     omnexio: '⚡',
   };
 
-  const platformName = model.platform?.name?.toLowerCase() || '';
-  return platformIconMap[platformName] || '🎯';
+  const normalizedName = platformName.toLowerCase();
+  return platformIconMap[normalizedName] || '🎯';
 };
 
-const getClassNameForModel = (model: ChatModel): string => {
+const generateModelClassName = (model: ChatModel): string => {
   const platformName = model.platform?.name?.toLowerCase() || '';
   return `model-${platformName}-${model.id}`;
 };
 
-const capitalizeCategory = (category: string): string => {
+const normalizeCategory = (category: string): string => {
   return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 };
 
-const buildAgentUrl = (model: ChatModel): string => {
+const createAgentUrl = (model: ChatModel): string => {
   const encodedModelName = encodeURIComponent(model.label);
+  const endpoint = model.endpointName || 'Omnexio';
 
-  return `/c/new?endpoint=Omnexio&model=${encodedModelName}`;
+  return `/c/new?endpoint=${endpoint}&model=${encodedModelName}`;
 };
 
-const mapCategoryToTabKey = (category: string): TabKey => {
+const getCategoryTabKey = (category: string): TabKey => {
   const categoryMap: Record<string, TabKey> = {
     chat: 'Chat',
     image: 'Image',
@@ -88,7 +76,7 @@ const mapCategoryToTabKey = (category: string): TabKey => {
   return categoryMap[normalizedCategory] || 'Chat';
 };
 
-const getTagClassName = (tag: string): string => {
+const getTagStyleClass = (tag: string): string => {
   const tagMap: Record<string, string> = {
     Chat: 'tag-chat',
     Writing: 'tag-writing',
@@ -101,23 +89,41 @@ const getTagClassName = (tag: string): string => {
   return `tag ${tagMap[tag] || 'tag-default'}`;
 };
 
-const handleAgentClick = (agent: Agent, navigate: (path: string) => void): void => {
+const transformChatModelToAgent = (model: ChatModel): Agent => {
+  return {
+    id: model.id,
+    title: model.label,
+    description: model.shortDescription || model.description,
+    icon: model.imageUrl,
+    tags: [],
+    className: generateModelClassName(model),
+    forYou: false,
+    url: createAgentUrl(model),
+    category: getCategoryTabKey(model.category),
+  };
+};
+
+const navigateToAgent = (agent: Agent, navigate: (path: string) => void): void => {
   console.log('Selected agent:', agent.title);
   navigate(agent.url);
 };
 
-const renderForYouBadge = (forYou: boolean) => {
-  if (!forYou) return null;
+const createForYouBadge = (forYou: boolean) => {
+  if (!forYou) {
+    return null;
+  }
   return <div className="for-you-badge">For You</div>;
 };
 
-const renderTags = (tags: string[]) => {
-  if (tags.length === 0) return null;
+const createTagElements = (tags: string[]) => {
+  if (tags.length === 0) {
+    return null;
+  }
 
   return (
     <div className="tags">
       {tags.map((tag, index) => (
-        <span key={index} className={getTagClassName(tag)}>
+        <span key={index} className={getTagStyleClass(tag)}>
           {tag}
         </span>
       ))}
@@ -125,14 +131,14 @@ const renderTags = (tags: string[]) => {
   );
 };
 
-const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
+const createAgentCard = (agent: Agent, navigate: (path: string) => void) => {
   return (
     <div
       key={agent.id}
       className={`agent-card ${agent.className}`}
-      onClick={() => handleAgentClick(agent, navigate)}
+      onClick={() => navigateToAgent(agent, navigate)}
     >
-      {renderForYouBadge(agent.forYou)}
+      {createForYouBadge(agent.forYou)}
       <div className="card-header">
         <div className="card-icon">
           <img src={agent.icon} alt={agent.title} width={40} height={40} />
@@ -146,11 +152,11 @@ const renderAgentCard = (agent: Agent, navigate: (path: string) => void) => {
   );
 };
 
-const filterAgentsByCategory = (agents: Agent[], category: TabKey): Agent[] => {
+const getAgentsByCategory = (agents: Agent[], category: TabKey): Agent[] => {
   return agents.filter((agent) => agent.category === category);
 };
 
-const renderEmptyState = () => {
+const createEmptyStateView = () => {
   return (
     <div className="empty-state">
       <div className="empty-icon">🔍</div>
@@ -159,7 +165,7 @@ const renderEmptyState = () => {
   );
 };
 
-const renderLoadingState = () => {
+const createLoadingStateView = () => {
   return (
     <div className="empty-state">
       <div className="empty-icon">⏳</div>
@@ -168,15 +174,15 @@ const renderLoadingState = () => {
   );
 };
 
-const renderAgentGrid = (agents: Agent[], navigate: (path: string) => void) => {
+const createAgentGridView = (agents: Agent[], navigate: (path: string) => void) => {
   if (agents.length === 0) {
-    return renderEmptyState();
+    return createEmptyStateView();
   }
 
-  return <div className="container">{agents.map((agent) => renderAgentCard(agent, navigate))}</div>;
+  return <div className="container">{agents.map((agent) => createAgentCard(agent, navigate))}</div>;
 };
 
-const renderTabButton = (
+const createTabButton = (
   tabKey: TabKey,
   label: string,
   activeTab: TabKey,
@@ -192,7 +198,7 @@ const renderTabButton = (
   );
 };
 
-const renderTabNavigation = (activeTab: TabKey, onTabChange: (tab: TabKey) => void) => {
+const createTabNavigationView = (activeTab: TabKey, onTabChange: (tab: TabKey) => void) => {
   const tabs = [
     { key: 'Chat' as TabKey, label: 'Chat' },
     { key: 'Image' as TabKey, label: 'Image' },
@@ -202,38 +208,29 @@ const renderTabNavigation = (activeTab: TabKey, onTabChange: (tab: TabKey) => vo
 
   return (
     <div className="tab-navigation">
-      {tabs.map((tab) => renderTabButton(tab.key, tab.label, activeTab, onTabChange))}
+      {tabs.map((tab) => createTabButton(tab.key, tab.label, activeTab, onTabChange))}
     </div>
   );
 };
 
-const renderContent = (
+const createMainContentView = (
   activeTab: TabKey,
   agents: Agent[],
   navigate: (path: string) => void,
   isLoading: boolean,
 ) => {
   if (isLoading) {
-    return renderLoadingState();
+    return createLoadingStateView();
   }
 
-  const filteredAgents = filterAgentsByCategory(agents, activeTab);
-  return renderAgentGrid(filteredAgents, navigate);
+  const filteredAgents = getAgentsByCategory(agents, activeTab);
+  return createAgentGridView(filteredAgents, navigate);
 };
 
-export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabKey>('Chat');
-  const chatModelsQuery = useGetOmnexioChatModels();
-
-  const agents = useMemo(() => {
-    if (!chatModelsQuery.data?.length) return [];
-    return chatModelsQuery.data.map(mapChatModelToAgent);
-  }, [chatModelsQuery.data]);
-
+const createStyleSheet = () => {
   return (
-    <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-3 dark:bg-gray-900">
-      <style jsx>{`
+    <style jsx>
+      {`
         .tab-navigation {
           display: flex;
           gap: 32px;
@@ -454,11 +451,29 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
           top: -8px;
           right: 12px;
         }
-      `}</style>
+      `}
+    </style>
+  );
+};
 
+export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabKey>('Chat');
+  const chatModelsQuery = useGetOmnexioChatModels();
+
+  const agents = useMemo(() => {
+    if (!chatModelsQuery.data?.length) {
+      return [];
+    }
+    return chatModelsQuery.data.map(transformChatModelToAgent);
+  }, [chatModelsQuery.data]);
+
+  return (
+    <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-3 dark:bg-gray-900">
+      {createStyleSheet()}
       <div className="w-full max-w-6xl">
-        {renderTabNavigation(activeTab, setActiveTab)}
-        {renderContent(activeTab, agents, navigate, chatModelsQuery.isLoading)}
+        {createTabNavigationView(activeTab, setActiveTab)}
+        {createMainContentView(activeTab, agents, navigate, chatModelsQuery.isLoading)}
       </div>
     </div>
   );
