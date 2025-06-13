@@ -109,7 +109,12 @@ export default function SharedLinkButton({
     <>
       <div className="flex gap-2">
         {!shareId && (
-          <Button disabled={isCreateLoading} variant="submit" onClick={createShareLink}>
+          <Button
+            className="bg-blue-600"
+            disabled={isCreateLoading}
+            variant="submit"
+            onClick={createShareLink}
+          >
             {!isCreateLoading && localize('com_ui_create_link')}
             {isCreateLoading && <Spinner className="size-4" />}
           </Button>

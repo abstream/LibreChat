@@ -235,6 +235,7 @@ const omnexioModels = {
   'Gemini 2.0 Flash Lite': 10000,
   'Gemini 2.5 Flash Preview': 10000,
   'Gemini 2.5 Pro': 10000,
+  'Veo 3': 10000,
   'Llama 3.2 Turbo': 10000,
   'Llama 3.3 Turbo': 10000,
   'Llama 4 Maverick': 10000,

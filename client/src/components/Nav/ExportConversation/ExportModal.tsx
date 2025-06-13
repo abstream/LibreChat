@@ -171,7 +171,7 @@ export default function ExportModal({
         }
         buttons={
           <>
-            <Button onClick={exportConversation} variant="submit">
+            <Button onClick={exportConversation} variant="submit" className="bg-blue-600">
               {localize('com_endpoint_export')}
             </Button>
           </>

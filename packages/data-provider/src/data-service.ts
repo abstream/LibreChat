@@ -112,6 +112,10 @@ export function getOmnexioSubscriptionPlans(): Promise<string> {
   return request.get(endpoints.omnexioSubscriptionPlans());
 }
 
+export function getOmnexioChatModels(): Promise<string> {
+  return request.get(endpoints.omnexioChatModels());
+}
+
 export function changeOmnexioSubscription(subscriptionPlanId: number): Promise<void> {
   const payload = {
     subscription_plan_id: subscriptionPlanId,
@@ -761,6 +765,7 @@ export function updateConversationTag(
 ): Promise<t.TConversationTagResponse> {
   return request.put(endpoints.conversationTags(tag), payload);
 }
+
 export function deleteConversationTag(tag: string): Promise<t.TConversationTagResponse> {
   return request.delete(endpoints.conversationTags(tag));
 }
@@ -771,6 +776,7 @@ export function addTagToConversation(
 ): Promise<t.TTagConversationResponse> {
   return request.put(endpoints.addTagToConversation(conversationId), payload);
 }
+
 export function rebuildConversationTags(): Promise<t.TConversationTagsResponse> {
   return request.post(endpoints.conversationTags('rebuild'));
 }
