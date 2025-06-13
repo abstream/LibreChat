@@ -174,6 +174,7 @@ type TContentProps = {
 };
 
 const Markdown = memo(({ content = '', isLatestMessage }: TContentProps) => {
+  const localize = useLocalize();
   const LaTeXParsing = useRecoilValue<boolean>(store.LaTeXParsing);
   const isInitializing = content === '';
 
@@ -211,9 +212,9 @@ const Markdown = memo(({ content = '', isLatestMessage }: TContentProps) => {
   if (isInitializing) {
     return (
       <div className="absolute">
-        <p className="relative">
-          <span className={isLatestMessage ? 'result-thinking' : ''} />
-        </p>
+        <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-gray-600">
+          <span className="animate-pulse text-sm">{localize('com_ui_generating')}</span>
+        </span>
       </div>
     );
   }
