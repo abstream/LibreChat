@@ -60,7 +60,6 @@ const normalizeCategory = (category: string): string => {
 const createAgentUrl = (model: ChatModel): string => {
   const encodedModelName = encodeURIComponent(model.label);
   const endpoint = model.endpointName || 'Omnexio';
-
   return `/c/new?endpoint=${endpoint}&model=${encodedModelName}`;
 };
 
@@ -298,7 +297,7 @@ const createStyleSheet = () => {
 
         .container {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 10px;
           max-width: 1200px;
           width: 100%;
