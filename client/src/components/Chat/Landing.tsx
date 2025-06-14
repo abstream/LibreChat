@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { easings } from '@react-spring/web';
 import { EModelEndpoint } from 'librechat-data-provider';
+import { useSetRecoilState } from 'recoil';
 import { useChatContext, useAgentsMapContext, useAssistantsMapContext } from '~/Providers';
 import {
   useGetEndpointsQuery,
@@ -12,6 +13,7 @@ import ConvoIcon from '~/components/Endpoints/ConvoIcon';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { getIconEndpoint, getEntity } from '~/utils';
 import { useSearchParams } from 'react-router-dom';
+import store from '~/store';
 
 const containerClassName =
   'shadow-stroke relative flex h-full items-center justify-center rounded-full bg-white dark:bg-presentation dark:text-white text-black dark:after:shadow-none ';
@@ -238,6 +240,8 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   const { user } = useAuthContext();
   const localize = useLocalize();
 
+  const setSelectedModel = useSetRecoilState(store.selectedModelState);
+
   const [textHasMultipleLines, setTextHasMultipleLines] = useState(false);
   const [lineCount, setLineCount] = useState(1);
   const [contentHeight, setContentHeight] = useState(0);
@@ -254,6 +258,10 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   const selectedModel = useMemo(() => {
     return findModelByName(omnexioModels, model || '');
   }, [omnexioModels, model]);
+
+  useEffect(() => {
+    setSelectedModel(selectedModel);
+  }, [selectedModel, setSelectedModel]);
 
   const name = entity?.name ?? '';
   const description = getModelDescription(selectedModel);

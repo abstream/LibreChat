@@ -159,6 +159,9 @@ function BadgeRow({
   const allBadges = useChatBadges();
   const isEditing = useRecoilValue(store.isEditingBadges);
 
+  // Add this line to get the selected model from state
+  const selectedModel = useRecoilValue(store.selectedModelState);
+
   const badges = useMemo(
     () => allBadges.filter((badge) => badge.isAvailable !== false),
     [allBadges],
@@ -314,6 +317,9 @@ function BadgeRow({
     };
   }, [dragState.draggedBadge, handleMouseMove, handleMouseUp]);
 
+  // Add this variable to determine if OmnexioSearch should be shown
+  const shouldShowOmnexioSearch = selectedModel?.enableOmnexioSearch === true;
+
   return (
     <div ref={containerRef} className="relative flex flex-wrap items-center gap-2">
       {tempBadges.map((badge, index) => (
@@ -362,7 +368,8 @@ function BadgeRow({
           <MCPSelect conversationId={conversationId} />
         </>
       )}
-      <OmnexioSearch conversationId={conversationId} />
+      {/* Conditionally render OmnexioSearch based on selectedModel */}
+      {shouldShowOmnexioSearch && <OmnexioSearch conversationId={conversationId} />}
       <ExportAndShareMenu isSharedButtonEnabled={true} />
       {ghostBadge && (
         <div
