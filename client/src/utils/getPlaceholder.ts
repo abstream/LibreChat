@@ -32,6 +32,7 @@ const MODEL_COSTS: Record<string, number> = {
   'o4-mini': 20,
   'Claude 4 Opus': 100,
   'Claude 4 Sonnet': 20,
+  'Ai Writer': 5,
 };
 
 /**
