@@ -43,6 +43,9 @@ export default function useTextarea({
   const checkHealth = useInteractionHealthCheck();
   const enterToSend = useRecoilValue(store.enterToSend);
 
+  // Add selectedModel from Recoil state
+  const selectedModel = useRecoilValue(store.selectedModelState);
+
   const { index, conversation, isSubmitting, filesLoading, latestMessage, setFilesLoading } =
     useChatContext();
   const [activePrompt, setActivePrompt] = useRecoilState(store.activePromptByIndex(index));
@@ -58,73 +61,139 @@ export default function useTextarea({
   const entityName = entity?.name ?? '';
 
   const isNotAppendable = (latestMessage?.unfinished ?? false) && !isSubmitting && !isAssistant;
-  // && (conversationId?.length ?? 0) > 6; // also ensures that we don't show the wrong placeholder
+
+  const insertActivePrompt = useCallback(() => {
+    const prompt = activePrompt ?? '';
+
+    if (!prompt) {
+      return;
+    }
+
+    if (!textAreaRef.current) {
+      return;
+    }
+
+    insertTextAtCursor(textAreaRef.current, prompt);
+    forceResize(textAreaRef.current);
+    setActivePrompt(undefined);
+  }, [activePrompt, setActivePrompt, textAreaRef]);
+
+  const checkDisabledState = useCallback(() => {
+    if (disabled) {
+      return localize('com_endpoint_config_placeholder');
+    }
+    return null;
+  }, [disabled, localize]);
+
+  const checkAgentState = useCallback(() => {
+    const currentAgentId = conversation?.agent_id ?? '';
+
+    if (!isAgent) {
+      return null;
+    }
+
+    if (!currentAgentId || !agentsMap?.[currentAgentId]) {
+      return localize('com_endpoint_agent_placeholder');
+    }
+
+    return null;
+  }, [isAgent, conversation?.agent_id, agentsMap, localize]);
+
+  const checkAssistantState = useCallback(() => {
+    const currentEndpoint = conversation?.endpoint ?? '';
+    const currentAssistantId = conversation?.assistant_id ?? '';
+
+    if (!isAssistant) {
+      return null;
+    }
+
+    if (!currentAssistantId || !assistantMap?.[currentEndpoint]?.[currentAssistantId]) {
+      return localize('com_endpoint_assistant_placeholder');
+    }
+
+    return null;
+  }, [isAssistant, conversation?.endpoint, conversation?.assistant_id, assistantMap, localize]);
+
+  const checkAppendableState = useCallback(() => {
+    if (isNotAppendable) {
+      return localize('com_endpoint_message_not_appendable');
+    }
+    return null;
+  }, [isNotAppendable, localize]);
+
+  const generateDefaultPlaceholder = useCallback(() => {
+    const sender =
+      isAssistant || isAgent
+        ? getEntityName({ name: entityName, isAgent, localize })
+        : getPlaceholder(conversation?.model, localize, selectedModel);
+
+    return `${localize('com_endpoint_message_new', {
+      0: sender ? sender : localize('com_endpoint_ai'),
+    })}`;
+  }, [isAssistant, isAgent, entityName, localize, conversation?.model, selectedModel]);
+
+  const getPlaceholderText = useCallback(() => {
+    const disabledPlaceholder = checkDisabledState();
+    if (disabledPlaceholder) {
+      return disabledPlaceholder;
+    }
+
+    const agentPlaceholder = checkAgentState();
+    if (agentPlaceholder) {
+      return agentPlaceholder;
+    }
+
+    const assistantPlaceholder = checkAssistantState();
+    if (assistantPlaceholder) {
+      return assistantPlaceholder;
+    }
+
+    const appendablePlaceholder = checkAppendableState();
+    if (appendablePlaceholder) {
+      return appendablePlaceholder;
+    }
+
+    return generateDefaultPlaceholder();
+  }, [
+    checkDisabledState,
+    checkAgentState,
+    checkAssistantState,
+    checkAppendableState,
+    generateDefaultPlaceholder,
+  ]);
+
+  const updatePlaceholder = useCallback(() => {
+    const placeholder = getPlaceholderText();
+
+    if (!textAreaRef.current) {
+      return;
+    }
+
+    if (textAreaRef.current.getAttribute('placeholder') === placeholder) {
+      return;
+    }
+
+    textAreaRef.current.setAttribute('placeholder', placeholder);
+    forceResize(textAreaRef.current);
+  }, [getPlaceholderText, textAreaRef]);
 
   useEffect(() => {
-    const prompt = activePrompt ?? '';
-    if (prompt && textAreaRef.current) {
-      insertTextAtCursor(textAreaRef.current, prompt);
-      forceResize(textAreaRef.current);
-      setActivePrompt(undefined);
-    }
-  }, [activePrompt, setActivePrompt, textAreaRef]);
+    insertActivePrompt();
+  }, [insertActivePrompt]);
 
   useEffect(() => {
     const currentValue = textAreaRef.current?.value ?? '';
+
     if (currentValue) {
       return;
     }
 
-    const getPlaceholderText = () => {
-      if (disabled) {
-        return localize('com_endpoint_config_placeholder');
-      }
-      const currentEndpoint = conversation?.endpoint ?? '';
-      const currentAgentId = conversation?.agent_id ?? '';
-      const currentAssistantId = conversation?.assistant_id ?? '';
-      if (isAgent && (!currentAgentId || !agentsMap?.[currentAgentId])) {
-        return localize('com_endpoint_agent_placeholder');
-      } else if (
-        isAssistant &&
-        (!currentAssistantId || !assistantMap?.[currentEndpoint]?.[currentAssistantId])
-      ) {
-        return localize('com_endpoint_assistant_placeholder');
-      }
+    const debouncedUpdate = debounce(updatePlaceholder, 80);
+    debouncedUpdate();
 
-      if (isNotAppendable) {
-        return localize('com_endpoint_message_not_appendable');
-      }
-
-      const sender =
-        isAssistant || isAgent
-          ? getEntityName({ name: entityName, isAgent, localize })
-          : getPlaceholder(conversation?.model, localize);
-
-      return `${localize('com_endpoint_message_new', {
-        0: sender ? sender : localize('com_endpoint_ai'),
-      })}`;
-    };
-
-    const placeholder = getPlaceholderText();
-
-    if (textAreaRef.current?.getAttribute('placeholder') === placeholder) {
-      return;
-    }
-
-    const setPlaceholder = () => {
-      const placeholder = getPlaceholderText();
-
-      if (textAreaRef.current?.getAttribute('placeholder') !== placeholder) {
-        textAreaRef.current?.setAttribute('placeholder', placeholder);
-        forceResize(textAreaRef.current);
-      }
-    };
-
-    const debouncedSetPlaceholder = debounce(setPlaceholder, 80);
-    debouncedSetPlaceholder();
-
-    return () => debouncedSetPlaceholder.cancel();
+    return () => debouncedUpdate.cancel();
   }, [
+    updatePlaceholder,
     isAgent,
     localize,
     disabled,
@@ -137,6 +206,7 @@ export default function useTextarea({
     conversation,
     latestMessage,
     isNotAppendable,
+    selectedModel, // Add selectedModel to dependencies
   ]);
 
   const handleKeyDown = useCallback(
