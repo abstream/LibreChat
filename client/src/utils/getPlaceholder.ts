@@ -15,6 +15,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Gemini 2.0 Flash Lite': 2,
   'Gemini 2.5 Pro': 100,
   'Gemini 2.5 Flash Preview': 12,
+  'Gemini Flash 1.5': 1,
   'Veo 3': 100,
   'Ai Question': 1,
   'deepseek-chat': 2,
@@ -35,6 +36,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Ai Writer': 5,
   'Ai Code': 20,
   'Chat With Files': 10,
+  'Prompt Optimizer': 20,
 };
 
 /**
