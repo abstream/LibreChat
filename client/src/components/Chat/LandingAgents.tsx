@@ -468,7 +468,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
   }, [chatModelsQuery.data]);
 
   return (
-    <div className="flex h-full w-full flex-col items-center overflow-y-auto bg-gray-50 px-4 py-3 dark:bg-gray-900">
+    <div className="flex h-full w-full flex-col items-center overflow-y-auto px-4 py-3">
       {createStyleSheet()}
       <div className="w-full max-w-6xl">
         {createTabNavigationView(activeTab, setActiveTab)}
