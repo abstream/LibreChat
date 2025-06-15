@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
+import { Constants, QueryKeys, TMessage } from 'librechat-data-provider';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNewConvo } from '~/hooks';
 
 interface Agent {
   id: string;
@@ -130,12 +133,29 @@ const createTagElements = (tags: string[]) => {
   );
 };
 
-const createAgentCard = (agent: Agent, navigate: (path: string) => void) => {
+const handleAgentClick = (
+  agent: Agent,
+  navigate: (path: string) => void,
+  queryClient: any,
+  newConversation: () => void,
+): void => {
+  queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
+  queryClient.invalidateQueries([QueryKeys.messages]);
+  newConversation();
+  navigateToAgent(agent, navigate);
+};
+
+const createAgentCard = (
+  agent: Agent,
+  navigate: (path: string) => void,
+  queryClient: any,
+  newConversation: () => void,
+) => {
   return (
     <div
       key={agent.id}
       className={`agent-card ${agent.className}`}
-      onClick={() => navigateToAgent(agent, navigate)}
+      onClick={() => handleAgentClick(agent, navigate, queryClient, newConversation)}
     >
       {createForYouBadge(agent.forYou)}
       <div className="card-header">
@@ -173,12 +193,21 @@ const createLoadingStateView = () => {
   );
 };
 
-const createAgentGridView = (agents: Agent[], navigate: (path: string) => void) => {
+const createAgentGridView = (
+  agents: Agent[],
+  navigate: (path: string) => void,
+  queryClient: any,
+  newConversation: () => void,
+) => {
   if (agents.length === 0) {
     return createEmptyStateView();
   }
 
-  return <div className="container">{agents.map((agent) => createAgentCard(agent, navigate))}</div>;
+  return (
+    <div className="container">
+      {agents.map((agent) => createAgentCard(agent, navigate, queryClient, newConversation))}
+    </div>
+  );
 };
 
 const createTabButton = (
@@ -217,13 +246,15 @@ const createMainContentView = (
   agents: Agent[],
   navigate: (path: string) => void,
   isLoading: boolean,
+  queryClient: any,
+  newConversation: () => void,
 ) => {
   if (isLoading) {
     return createLoadingStateView();
   }
 
   const filteredAgents = getAgentsByCategory(agents, activeTab);
-  return createAgentGridView(filteredAgents, navigate);
+  return createAgentGridView(filteredAgents, navigate, queryClient, newConversation);
 };
 
 const createStyleSheet = () => {
@@ -459,6 +490,8 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>('Chat');
   const chatModelsQuery = useGetOmnexioChatModels();
+  const queryClient = useQueryClient();
+  const { newConversation } = useNewConvo();
 
   const agents = useMemo(() => {
     if (!chatModelsQuery.data?.length) {
@@ -472,7 +505,14 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
       {createStyleSheet()}
       <div className="w-full max-w-6xl">
         {createTabNavigationView(activeTab, setActiveTab)}
-        {createMainContentView(activeTab, agents, navigate, chatModelsQuery.isLoading)}
+        {createMainContentView(
+          activeTab,
+          agents,
+          navigate,
+          chatModelsQuery.isLoading,
+          queryClient,
+          newConversation,
+        )}
       </div>
     </div>
   );
