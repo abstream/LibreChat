@@ -61,8 +61,16 @@ export default function MobileNav({
           <img
             src="/assets/omnexio-logo.png"
             alt="Omnexio Logo"
-            className="mx-auto w-[120px]"
+            className="mx-auto w-[120px] cursor-pointer"
             width={120}
+            onClick={() => {
+              queryClient.setQueryData<TMessage[]>(
+                [QueryKeys.messages, conversation?.conversationId ?? Constants.NEW_CONVO],
+                [],
+              );
+              queryClient.invalidateQueries([QueryKeys.messages]);
+              newConversation();
+            }}
           />
         )}
       </h1>
