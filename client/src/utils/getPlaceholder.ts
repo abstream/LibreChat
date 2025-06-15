@@ -38,6 +38,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Chat With Files': 10,
   'Prompt Optimizer': 20,
   'Grok 3': 100,
+  'Tag Generator': 12,
 };
 
 /**
