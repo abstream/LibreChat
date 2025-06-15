@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 
 /**
@@ -8,6 +9,7 @@ import Footer from '~/routes/Pages/Footer';
 export default function PrivacyPolicy() {
   return (
     <>
+      <Header />
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <h1 className="mb-6 text-3xl font-semibold">Omnexio Privacy Policy</h1>
         <p className="mb-4 text-sm italic">Last updated: May 11, 2025</p>
@@ -29,8 +31,8 @@ export default function PrivacyPolicy() {
           <ul className="mb-4 list-disc space-y-3 pl-6">
             <li>
               <span className="font-medium">Account Information.</span> We collect your email
-              address to create an account and verify your identity. We also create
-              a user ID for your Omnexio account. If you are an existing Omnexio user, your name,
+              address to create an account and verify your identity. We also create a user ID for
+              your Omnexio account. If you are an existing Omnexio user, your name,
               Omnexio-associated email address, profile photo, and Omnexio user ID will be used to
               link your Omnexio account to your Omnexio account. Depending on your location, we may
               also ask you to provide your date of birth to verify your age. We use this information
@@ -54,8 +56,8 @@ export default function PrivacyPolicy() {
               <span className="font-medium">Subscription Billing Data.</span> We use a third-party
               service provider to collect and process your billing information when you subscribe to
               Omnexio. The information our billing provider collects may include your name, billing
-              address, your credit or debit card details, and email address. This
-              processing is necessary to comply with our contractual obligations to you.
+              address, your credit or debit card details, and email address. This processing is
+              necessary to comply with our contractual obligations to you.
             </li>
             <li>
               <span className="font-medium">Content Creator Payments.</span> If you are a content

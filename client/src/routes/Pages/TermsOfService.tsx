@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 
 /**
@@ -8,6 +9,7 @@ import Footer from '~/routes/Pages/Footer';
 export default function TermsOfService() {
   return (
     <>
+      <Header />
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <h1 className="mb-6 text-3xl font-semibold">Omnexio Terms of Service</h1>
         <p className="mb-4 text-sm italic">Last updated: May 22, 2025</p>
