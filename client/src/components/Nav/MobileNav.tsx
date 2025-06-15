@@ -5,7 +5,7 @@ import { QueryKeys, Constants } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import type { Dispatch, SetStateAction } from 'react';
 import { useLocalize, useNewConvo } from '~/hooks';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import store from '~/store';
 
 export default function MobileNav({
@@ -14,13 +14,17 @@ export default function MobileNav({
   setNavVisible: Dispatch<SetStateAction<boolean>>;
 }) {
   const [searchParams] = useSearchParams();
-  const model = searchParams.get('model');
-
+  const location = useLocation();
   const localize = useLocalize();
   const queryClient = useQueryClient();
   const { newConversation } = useNewConvo();
   const conversation = useRecoilValue(store.conversationByIndex(0));
   const { title = 'New Chat' } = conversation || {};
+
+  const model = searchParams.get('model');
+  const shouldShowBackButton = (): boolean => {
+    return !!model || location.pathname !== '/c/new';
+  };
 
   return (
     <div className="bg-token-main-surface-primary sticky top-0 z-10 flex min-h-[40px] items-center justify-center bg-white pl-1 dark:bg-gray-800 dark:text-white md:hidden">
@@ -88,7 +92,7 @@ export default function MobileNav({
           newConversation();
         }}
       >
-        {(model || title !== 'New Chat') && (
+        {shouldShowBackButton() && (
           <svg
             width="24"
             height="24"
