@@ -39,6 +39,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Prompt Optimizer': 20,
   'Grok 3': 100,
   'Tag Generator': 12,
+  'Ai Detector': 12,
 };
 
 /**
