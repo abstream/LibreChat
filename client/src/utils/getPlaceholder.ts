@@ -40,6 +40,7 @@ const MODEL_COSTS: Record<string, number> = {
   'Grok 3': 100,
   'Tag Generator': 12,
   'Ai Detector': 12,
+  'Ai Translator': 8,
 };
 
 /**
