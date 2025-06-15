@@ -5,6 +5,8 @@ import { HeaderNewChat, OpenSidebar } from './Menus';
 import { useLocalize, useMediaQuery, useNewConvo } from '~/hooks';
 import React from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import store from '~/store';
 
 const defaultInterface = getConfigDefaults().interface;
 
@@ -13,6 +15,7 @@ export default function Header() {
   const { newConversation } = useNewConvo();
   const [searchParams] = useSearchParams();
   const localize = useLocalize();
+  const conversation = useRecoilValue(store.conversationByIndex(0));
   const { navVisible, setNavVisible } = useOutletContext<ContextType>();
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
   if (isSmallScreen) {
@@ -20,6 +23,7 @@ export default function Header() {
   }
 
   const model = searchParams.get('model');
+  const { title = 'New Chat' } = conversation || {};
 
   return (
     <div className="sticky top-0 z-10 flex w-full items-center justify-between bg-white p-2 font-semibold text-text-primary dark:bg-gray-800">
@@ -60,7 +64,7 @@ export default function Header() {
             newConversation();
           }}
         >
-          {model && (
+          {(model || title !== 'New Chat') && (
             <svg
               width="24"
               height="24"
