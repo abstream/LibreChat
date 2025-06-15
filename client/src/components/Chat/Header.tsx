@@ -26,7 +26,7 @@ export default function Header() {
   return (
     <div className="sticky top-0 z-10 flex w-full items-center justify-between bg-white p-2 font-semibold text-text-primary dark:bg-gray-800">
       <div className="hide-scrollbar flex w-full items-center justify-between gap-2 overflow-x-auto">
-        <div className="mx-1 flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <div
             className={`flex items-center gap-2 ${
               !isSmallScreen ? 'transition-all duration-200 ease-in-out' : ''
@@ -52,35 +52,37 @@ export default function Header() {
           }}
         />
 
-        <button
-          type="button"
-          aria-label={localize('com_ui_new_chat')}
-          className="m-1 inline-flex size-10 items-center justify-center rounded-full"
-          onClick={() => {
-            queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
-            queryClient.invalidateQueries([QueryKeys.messages]);
-            newConversation();
-          }}
-        >
-          {shouldShowBackButton() && (
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="icon-md"
-            >
-              <path
-                d="M19 12H5M12 19L5 12L12 5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </button>
+        <div className="text-right" style={{ width: '88px' }}>
+          <button
+            type="button"
+            aria-label={localize('com_ui_new_chat')}
+            className="m-1 inline-flex size-10 items-center justify-center rounded-full"
+            onClick={() => {
+              queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
+              queryClient.invalidateQueries([QueryKeys.messages]);
+              newConversation();
+            }}
+          >
+            {shouldShowBackButton() && (
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon-md"
+              >
+                <path
+                  d="M19 12H5M12 19L5 12L12 5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
       {/* Empty div for spacing */}
       <div />
