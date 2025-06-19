@@ -82,6 +82,8 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
   );
 
   let content: React.ReactElement;
+  console.log(vvvv);
+  console.log(text);
   if (!isCreatedByUser) {
     content = <Markdown content={text} isLatestMessage={isLatestMessage} />;
   } else if (enableUserMsgMarkdown) {
