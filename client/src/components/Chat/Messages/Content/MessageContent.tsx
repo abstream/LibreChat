@@ -90,19 +90,26 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
     content = <>{text}</>;
   }
 
+  // Check if text starts with <video tag
+  const hasVideoTag = text.trim().startsWith('<video');
+
   return (
     <Container message={message}>
-      <div
-        className={cn(
-          isSubmitting ? 'submitting' : '',
-          showCursorState && !!text.length ? 'result-streaming' : '',
-          'markdown prose message-content dark:prose-invert light w-full break-words',
-          isCreatedByUser && !enableUserMsgMarkdown && 'whitespace-pre-wrap',
-          isCreatedByUser ? 'dark:text-gray-20' : 'dark:text-gray-100',
-        )}
-      >
-        {content}
-      </div>
+      {hasVideoTag ? (
+        <div dangerouslySetInnerHTML={{ __html: text }} />
+      ) : (
+        <div
+          className={cn(
+            isSubmitting ? 'submitting' : '',
+            showCursorState && !!text.length ? 'result-streaming' : '',
+            'markdown prose message-content dark:prose-invert light w-full break-words',
+            isCreatedByUser && !enableUserMsgMarkdown && 'whitespace-pre-wrap',
+            isCreatedByUser ? 'dark:text-gray-20' : 'dark:text-gray-100',
+          )}
+        >
+          {content}
+        </div>
+      )}
     </Container>
   );
 };
