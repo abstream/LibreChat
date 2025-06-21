@@ -168,22 +168,29 @@ export const p: React.ElementType = memo(({ children }: TParagraphProps) => {
   return <p className="mb-2 whitespace-pre-wrap">{children}</p>;
 });
 
-const ProgressBar = memo(() => {
+type TProgressBarProps = {
+  duration: number;
+};
+
+const ProgressBar = memo(({ duration }: TProgressBarProps) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const intervalMs = 100;
+    const increment = (intervalMs / (duration * 1000)) * 100;
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
         }
-        return prev + 2; // 2% every 100ms = 100% in 5 seconds
+        return prev + increment;
       });
-    }, 100);
+    }, intervalMs);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [duration]);
 
   return (
     <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-gray-200">
@@ -197,11 +204,28 @@ const ProgressBar = memo(() => {
 
 const GeneratingIndicator = memo(() => {
   const localize = useLocalize();
+  const selectedModel = useRecoilValue(store.selectedModelState);
+
+  const progressConfig = selectedModel?.options?._progress;
+  const shouldShowProgressBar = progressConfig?.show_progressbar ?? false;
+  const duration = progressConfig?.duration ?? 3;
+  const text = progressConfig?.text ?? localize('com_ui_thinking');
+
+  if (!shouldShowProgressBar) {
+    return (
+      <div className="absolute">
+        <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-gray-600">
+          <span className="animate-pulse text-sm">{text}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute">
       <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-gray-600">
-        <span className="animate-pulse text-sm">{localize('com_ui_generating')}</span>
-        <ProgressBar />
+        <span className="animate-pulse text-sm">{text}</span>
+        <ProgressBar duration={duration} />
       </div>
     </div>
   );
