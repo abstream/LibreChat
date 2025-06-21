@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef, useEffect } from 'react';
+import React, { memo, useMemo, useRef, useEffect, useState } from 'react';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import supersub from 'remark-supersub';
@@ -168,6 +168,45 @@ export const p: React.ElementType = memo(({ children }: TParagraphProps) => {
   return <p className="mb-2 whitespace-pre-wrap">{children}</p>;
 });
 
+const ProgressBar = memo(() => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 2; // 2% every 100ms = 100% in 5 seconds
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-gray-200">
+      <div
+        className="h-1 rounded-full bg-blue-500 transition-all duration-100 ease-out"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  );
+});
+
+const GeneratingIndicator = memo(() => {
+  const localize = useLocalize();
+  return (
+    <div className="absolute">
+      <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-gray-600">
+        <span className="animate-pulse text-sm">{localize('com_ui_generating')}</span>
+        <ProgressBar />
+      </div>
+    </div>
+  );
+});
+
 type TContentProps = {
   content: string;
   isLatestMessage: boolean;
@@ -210,13 +249,7 @@ const Markdown = memo(({ content = '', isLatestMessage }: TContentProps) => {
   ];
 
   if (isInitializing) {
-    return (
-      <div className="absolute">
-        <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-gray-600">
-          <span className="animate-pulse text-sm">{localize('com_ui_generating')}</span>
-        </span>
-      </div>
-    );
+    return <GeneratingIndicator />;
   }
 
   return (
