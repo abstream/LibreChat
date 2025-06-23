@@ -86,7 +86,12 @@ const AuthContextProvider = ({
         return;
       }
       setError(undefined);
-      setUserContext({ token, isAuthenticated: true, user, redirect: '/c/new' });
+      let redirect = '/c/new';
+      const intendedRedirect = sessionStorage.getItem('intendedRedirect');
+      if (intendedRedirect) {
+        redirect = intendedRedirect;
+      }
+      setUserContext({ token, isAuthenticated: true, user, redirect: redirect });
     },
     onError: (error: TResError | unknown) => {
       const resError = error as TResError;
@@ -142,6 +147,10 @@ const AuthContextProvider = ({
         if (token) {
           setUserContext({ token, isAuthenticated: true, user });
         } else {
+          const currentPath = location.pathname + location.search;
+          if (currentPath !== '/login') {
+            sessionStorage.setItem('intendedRedirect', currentPath);
+          }
           console.log('Token is not present. User is not authenticated.');
           if (authConfig?.test === true) {
             return;
