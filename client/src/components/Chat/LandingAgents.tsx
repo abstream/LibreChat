@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
 import { Constants, QueryKeys, TMessage } from 'librechat-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
@@ -105,6 +105,50 @@ const transformChatModelToAgent = (model: ChatModel): Agent => {
   };
 };
 
+const LAST_TAB_STORAGE_KEY = 'landing_agents_last_tab';
+
+const getTabFromUrl = (location: Location): TabKey => {
+  const searchParams = new URLSearchParams(location.search);
+  const tabParam = searchParams.get('tab') as TabKey;
+  const validTabs: TabKey[] = ['Chat', 'Image', 'Video', 'Models'];
+
+  if (validTabs.includes(tabParam)) {
+    return tabParam;
+  }
+
+  return 'Chat';
+};
+
+const getLastTabFromStorage = (): TabKey => {
+  try {
+    const storedTab = localStorage.getItem(LAST_TAB_STORAGE_KEY) as TabKey;
+    const validTabs: TabKey[] = ['Chat', 'Image', 'Video', 'Models'];
+
+    if (validTabs.includes(storedTab)) {
+      return storedTab;
+    }
+  } catch (error) {
+    console.warn('Failed to read last tab from localStorage:', error);
+  }
+
+  return 'Chat';
+};
+
+const saveTabToStorage = (tab: TabKey): void => {
+  try {
+    localStorage.setItem(LAST_TAB_STORAGE_KEY, tab);
+  } catch (error) {
+    console.warn('Failed to save tab to localStorage:', error);
+  }
+};
+
+const updateUrlWithTab = (tab: TabKey, navigate: any, location: Location): void => {
+  const searchParams = new URLSearchParams(location.search);
+  searchParams.set('tab', tab);
+  const newUrl = `${location.pathname}?${searchParams.toString()}`;
+  navigate(newUrl, { replace: true });
+};
+
 const navigateToAgent = (agent: Agent, navigate: (path: string) => void): void => {
   console.log('Selected agent:', agent.title);
   navigate(agent.url);
@@ -133,14 +177,18 @@ const createTagElements = (tags: string[]) => {
   );
 };
 
+const clearConversationData = (queryClient: any): void => {
+  queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
+  queryClient.invalidateQueries([QueryKeys.messages]);
+};
+
 const handleAgentClick = (
   agent: Agent,
   navigate: (path: string) => void,
   queryClient: any,
   newConversation: () => void,
 ): void => {
-  queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
-  queryClient.invalidateQueries([QueryKeys.messages]);
+  clearConversationData(queryClient);
   newConversation();
   navigateToAgent(agent, navigate);
 };
@@ -210,23 +258,46 @@ const createAgentGridView = (
   );
 };
 
+const handleTabClick = (
+  tabKey: TabKey,
+  navigate: any,
+  location: Location,
+  setActiveTab: (tab: TabKey) => void,
+): void => {
+  setActiveTab(tabKey);
+  saveTabToStorage(tabKey);
+  updateUrlWithTab(tabKey, navigate, location);
+};
+
 const createTabButton = (
   tabKey: TabKey,
   label: string,
   activeTab: TabKey,
-  onTabChange: (tab: TabKey) => void,
+  navigate: any,
+  location: Location,
+  setActiveTab: (tab: TabKey) => void,
 ) => {
   const isActive = activeTab === tabKey;
   const className = `tab-button ${isActive ? 'active' : ''}`;
 
   return (
-    <button key={tabKey} className={className} onClick={() => onTabChange(tabKey)} type="button">
+    <button
+      key={tabKey}
+      className={className}
+      onClick={() => handleTabClick(tabKey, navigate, location, setActiveTab)}
+      type="button"
+    >
       <span className="tab-label">{label}</span>
     </button>
   );
 };
 
-const createTabNavigationView = (activeTab: TabKey, onTabChange: (tab: TabKey) => void) => {
+const createTabNavigationView = (
+  activeTab: TabKey,
+  navigate: any,
+  location: Location,
+  setActiveTab: (tab: TabKey) => void,
+) => {
   const tabs = [
     { key: 'Chat' as TabKey, label: 'Chat' },
     { key: 'Image' as TabKey, label: 'Image' },
@@ -236,7 +307,9 @@ const createTabNavigationView = (activeTab: TabKey, onTabChange: (tab: TabKey) =
 
   return (
     <div className="tab-navigation">
-      {tabs.map((tab) => createTabButton(tab.key, tab.label, activeTab, onTabChange))}
+      {tabs.map((tab) =>
+        createTabButton(tab.key, tab.label, activeTab, navigate, location, setActiveTab),
+      )}
     </div>
   );
 };
@@ -486,9 +559,45 @@ const createStyleSheet = () => {
   );
 };
 
+const initializeActiveTab = (location: Location): TabKey => {
+  const tabFromUrl = getTabFromUrl(location);
+
+  if (tabFromUrl !== 'Chat') {
+    return tabFromUrl;
+  }
+
+  const lastTabFromStorage = getLastTabFromStorage();
+  return lastTabFromStorage;
+};
+
+const useTabNavigation = (navigate: any, location: Location) => {
+  const [activeTab, setActiveTab] = useState<TabKey>(() => initializeActiveTab(location));
+
+  useEffect(() => {
+    const tabFromUrl = getTabFromUrl(location);
+
+    if (tabFromUrl !== 'Chat') {
+      if (tabFromUrl !== activeTab) {
+        setActiveTab(tabFromUrl);
+        saveTabToStorage(tabFromUrl);
+      }
+      return;
+    }
+
+    const lastTabFromStorage = getLastTabFromStorage();
+    if (lastTabFromStorage !== activeTab) {
+      setActiveTab(lastTabFromStorage);
+      updateUrlWithTab(lastTabFromStorage, navigate, location);
+    }
+  }, [location.search, activeTab, navigate, location]);
+
+  return { activeTab, setActiveTab };
+};
+
 export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabKey>('Chat');
+  const location = useLocation();
+  const { activeTab, setActiveTab } = useTabNavigation(navigate, location);
   const chatModelsQuery = useGetOmnexioChatModels();
   const queryClient = useQueryClient();
   const { newConversation } = useNewConvo();
@@ -504,7 +613,7 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
     <div className="flex h-full w-full flex-col items-center overflow-y-auto px-4 py-3">
       {createStyleSheet()}
       <div className="w-full max-w-6xl">
-        {createTabNavigationView(activeTab, setActiveTab)}
+        {createTabNavigationView(activeTab, navigate, location, setActiveTab)}
         {createMainContentView(
           activeTab,
           agents,
