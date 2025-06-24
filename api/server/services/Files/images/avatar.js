@@ -27,9 +27,6 @@ async function resizeAvatar({ userId, input, desiredFormat = EImageOutputType.PN
       throw new Error('User ID is undefined');
     }
 
-    console.log(111111);
-    console.log(input);
-
     let imageBuffer;
     if (typeof input === 'string') {
       const response = await fetch(input);

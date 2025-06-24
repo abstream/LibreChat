@@ -18,7 +18,7 @@ const getProfileDetails = ({ idToken, profile }) => {
 
   const decoded = jwt.decode(idToken);
 
-  logger.debug(`Decoded Apple JWT: ${JSON.stringify(decoded, null, 2)}`);
+  logger.log(`Decoded Apple JWT: ${JSON.stringify(decoded, null, 2)}`);
 
   return {
     email: decoded.email,
