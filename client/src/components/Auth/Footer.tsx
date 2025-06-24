@@ -1,4 +1,5 @@
 import { useLocalize } from '~/hooks';
+import TagManager from 'react-gtm-module';
 import { TStartupConfig } from 'librechat-data-provider';
 
 function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | undefined }) {
@@ -8,6 +9,13 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
   }
   const privacyPolicy = startupConfig.interface?.privacyPolicy;
   const termsOfService = startupConfig.interface?.termsOfService;
+
+  if (startupConfig?.analyticsGtmId != null && typeof window.google_tag_manager === 'undefined') {
+    const tagManagerArgs = {
+      gtmId: startupConfig.analyticsGtmId,
+    };
+    TagManager.initialize(tagManagerArgs);
+  }
 
   const privacyPolicyRender = privacyPolicy?.externalUrl && (
     <a
