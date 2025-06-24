@@ -18,6 +18,10 @@ const { getBalanceConfig } = require('~/server/services/Config');
  * @throws {Error} Throws an error if there's an issue saving the updated user object.
  */
 const handleExistingUser = async (oldUser, avatarUrl) => {
+  if (avatarUrl === null) {
+    return;
+  }
+
   const fileStrategy = process.env.CDN_PROVIDER;
   const isLocal = fileStrategy === FileSources.local;
 
@@ -84,7 +88,7 @@ const createSocialUser = async ({
   const fileStrategy = process.env.CDN_PROVIDER;
   const isLocal = fileStrategy === FileSources.local;
 
-  if (!isLocal) {
+  if (!isLocal && avatarUrl !== null) {
     const resizedBuffer = await resizeAvatar({
       userId: newUserId,
       input: avatarUrl,
