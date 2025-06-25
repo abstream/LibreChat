@@ -43,6 +43,24 @@ export default function ExportAndShareMenu({
     setShowExports(true);
   };
 
+  const nativeShareHandler = async () => {
+    if (!navigator.share) {
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: 'OMNEXIO.AI',
+        text: 'Omni AI Client with Web Search',
+        url: window.location.href,
+      });
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
+  const supportsNativeShare = typeof navigator !== 'undefined' && 'share' in navigator;
+
   const dropdownItems: t.MenuItemProps[] = [
     {
       label: localize('com_ui_share_chat'),
@@ -65,12 +83,10 @@ export default function ExportAndShareMenu({
     },
     {
       label: localize('com_ui_share_omnexio'),
-      onClick: shareHandler,
+      onClick: nativeShareHandler,
       icon: <ScreenShare className="icon-md mr-2 text-text-secondary" />,
-      show: isSharedButtonEnabled,
-      /** NOTE: THE FOLLOWING PROPS ARE REQUIRED FOR MENU ITEMS THAT OPEN DIALOGS */
-      hideOnClick: false,
-      ref: shareButtonRef,
+      show: isSharedButtonEnabled && supportsNativeShare,
+      /** NOTE: Native share closes automatically, so we can use default hideOnClick */
       render: (props) => <button {...props} />,
     },
   ];
