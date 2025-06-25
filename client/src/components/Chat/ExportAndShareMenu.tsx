@@ -1,7 +1,7 @@
 import { useState, useId, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import * as Ariakit from '@ariakit/react';
-import { Upload, Share2 } from 'lucide-react';
+import { Upload, Share2, ScreenShare } from 'lucide-react';
 import type * as t from '~/common';
 import ExportModal from '~/components/Nav/ExportConversation/ExportModal';
 import { ShareButton } from '~/components/Conversations/ConvoOptions';
@@ -45,7 +45,7 @@ export default function ExportAndShareMenu({
 
   const dropdownItems: t.MenuItemProps[] = [
     {
-      label: localize('com_ui_share'),
+      label: localize('com_ui_share_chat'),
       onClick: shareHandler,
       icon: <Share2 className="icon-md mr-2 text-text-secondary" />,
       show: isSharedButtonEnabled,
@@ -55,12 +55,22 @@ export default function ExportAndShareMenu({
       render: (props) => <button {...props} />,
     },
     {
-      label: localize('com_endpoint_export'),
+      label: localize('com_ui_export_chat'),
       onClick: exportHandler,
       icon: <Upload className="icon-md mr-2 text-text-secondary" />,
       /** NOTE: THE FOLLOWING PROPS ARE REQUIRED FOR MENU ITEMS THAT OPEN DIALOGS */
       hideOnClick: false,
       ref: exportButtonRef,
+      render: (props) => <button {...props} />,
+    },
+    {
+      label: localize('com_ui_share_omnexio'),
+      onClick: shareHandler,
+      icon: <ScreenShare className="icon-md mr-2 text-text-secondary" />,
+      show: isSharedButtonEnabled,
+      /** NOTE: THE FOLLOWING PROPS ARE REQUIRED FOR MENU ITEMS THAT OPEN DIALOGS */
+      hideOnClick: false,
+      ref: shareButtonRef,
       render: (props) => <button {...props} />,
     },
   ];
