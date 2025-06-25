@@ -165,6 +165,10 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
   const navigate = useNavigate();
   const breadcrumbItems = createBreadcrumbItems(activeTab, selectedModel);
 
+  if (!selectedModel) {
+    return;
+  }
+
   return (
     <div className="breadcrumbs-container">
       {createBreadcrumbStyles()}
