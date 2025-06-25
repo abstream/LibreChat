@@ -8,15 +8,16 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbsProps {
-  activeTab: string;
+  activeTab: string | undefined;
   selectedModel?: {
     label: string;
+    category: string;
   };
 }
 
 const createBreadcrumbItems = (
-  activeTab: string,
-  selectedModel?: { label: string },
+  activeTab: string | undefined,
+  selectedModel?: { label: string; category: string },
 ): BreadcrumbItem[] => {
   const items: BreadcrumbItem[] = [
     {
@@ -26,9 +27,20 @@ const createBreadcrumbItems = (
     },
   ];
 
-  if (activeTab && activeTab !== 'Chat') {
+  if (!activeTab && selectedModel) {
+    activeTab = selectedModel.category.charAt(0).toUpperCase() + selectedModel.category.slice(1);
+  }
+
+  const categoryMap: Record<string, string> = {
+    Chat: 'Chat',
+    Image: 'Image',
+    Video: 'Video',
+    Models: 'AI',
+  };
+
+  if (activeTab) {
     items.push({
-      label: activeTab,
+      label: categoryMap[activeTab],
       href: `/c/new?tab=${activeTab}`,
       isActive: !selectedModel,
     });

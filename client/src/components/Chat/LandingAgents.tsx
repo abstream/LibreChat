@@ -4,7 +4,6 @@ import { useGetOmnexioChatModels } from '~/data-provider';
 import { Constants, QueryKeys, TMessage } from 'librechat-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNewConvo } from '~/hooks';
-import { Breadcrumbs } from './Breadcrumbs';
 
 interface Agent {
   id: string;
@@ -614,7 +613,6 @@ export default function LandingAgents({ centerFormOnLanding }: { centerFormOnLan
     <div className="flex h-full w-full flex-col items-center overflow-y-auto px-4 py-3">
       {createStyleSheet()}
       <div className="w-full max-w-6xl">
-        <Breadcrumbs activeTab={activeTab} selectedModel={undefined} />
         {createTabNavigationView(activeTab, navigate, location, setActiveTab)}
         {createMainContentView(
           activeTab,
