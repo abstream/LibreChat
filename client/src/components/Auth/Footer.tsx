@@ -17,6 +17,13 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
     TagManager.initialize(tagManagerArgs);
   }
 
+  if (startupConfig?.analyticsGtmId2 != null && typeof window.google_tag_manager === 'undefined') {
+    const tagManagerArgs = {
+      gtmId: startupConfig.analyticsGtmId2,
+    };
+    TagManager.initialize(tagManagerArgs);
+  }
+
   const privacyPolicyRender = privacyPolicy?.externalUrl && (
     <a
       className="text-sm text-blue-500"

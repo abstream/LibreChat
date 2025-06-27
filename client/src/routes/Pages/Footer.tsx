@@ -15,7 +15,13 @@ export default function Footer() {
       };
       TagManager.initialize(tagManagerArgs);
     }
-  }, [config?.analyticsGtmId]);
+    if (config?.analyticsGtmId2 != null && typeof window.google_tag_manager === 'undefined') {
+      const tagManagerArgs = {
+        gtmId: config.analyticsGtmId2,
+      };
+      TagManager.initialize(tagManagerArgs);
+    }
+  }, [config?.analyticsGtmId, config?.analyticsGtmId2]);
 
   return (
     <>
