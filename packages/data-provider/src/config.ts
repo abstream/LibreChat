@@ -1215,6 +1215,8 @@ export enum ErrorTypes {
   INVALID_AGENT_PROVIDER = 'invalid_agent_provider',
 
   INSUFFICIENT_CREDITS_ERROR = 'insufficient_credits_error',
+
+  FREE_PLAN_LIMITED_ERROR = 'free_plan_limited_error',
 }
 
 /**

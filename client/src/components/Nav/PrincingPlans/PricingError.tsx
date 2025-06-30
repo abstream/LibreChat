@@ -13,7 +13,7 @@ const isGuestUser = (email?: string): boolean => {
 
 const PricingError: FC<PricingErrorProps> = ({ message }) => {
   const { user } = useAuthContext();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLinkClick = () => {
     setIsModalOpen(true);

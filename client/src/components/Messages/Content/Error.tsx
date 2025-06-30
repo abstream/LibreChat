@@ -111,6 +111,15 @@ const errorMessages = {
       </>
     );
   },
+
+  free_plan_limited_error: () => {
+    const message = `Free plan limited to 1000 words per message. Upgrade to send longer messages.`;
+    return (
+      <>
+        <PricingError message={message} />
+      </>
+    );
+  },
 };
 
 const Error = ({ text }: { text: string }) => {

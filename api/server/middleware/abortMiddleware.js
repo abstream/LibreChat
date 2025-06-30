@@ -327,6 +327,10 @@ const handleAbortError = async (res, req, error, data) => {
     errorText = `{"type":"${ErrorTypes.INSUFFICIENT_CREDITS_ERROR}"}`;
   }
 
+  if (error?.type === ErrorTypes.FREE_PLAN_LIMITED_ERROR) {
+    errorText = `{"type":"${ErrorTypes.FREE_PLAN_LIMITED_ERROR}"}`;
+  }
+
   if (error?.type === ErrorTypes.INVALID_REQUEST) {
     errorText = `{"type":"${ErrorTypes.INVALID_REQUEST}"}`;
   }
