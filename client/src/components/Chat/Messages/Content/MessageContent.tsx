@@ -11,6 +11,7 @@ import EditMessage from './EditMessage';
 import { useLocalize } from '~/hooks';
 import Container from './Container';
 import Markdown from './Markdown';
+import Forward from './Forward';
 import { cn } from '~/utils';
 import store from '~/store';
 
@@ -69,6 +70,23 @@ export const ErrorMessage = ({
   );
 };
 
+const parseOmnexioContent = (text: string) => {
+  const omnexioMatch = text.match(/<omnexio>(.*?)<\/omnexio>/s);
+
+  if (!omnexioMatch) {
+    return { omnexioData: null, cleanText: text };
+  }
+
+  try {
+    const omnexioData = JSON.parse(omnexioMatch[1]);
+    const cleanText = text.replace(/<omnexio>.*?<\/omnexio>/s, '').trim();
+    return { omnexioData, cleanText };
+  } catch (error) {
+    console.error('Failed to parse omnexio JSON:', error);
+    return { omnexioData: null, cleanText: text };
+  }
+};
+
 const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplayProps) => {
   const { isSubmitting, latestMessage } = useChatContext();
   const enableUserMsgMarkdown = useRecoilValue(store.enableUserMsgMarkdown);
@@ -81,27 +99,29 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
     [message.messageId, latestMessage?.messageId],
   );
 
+  const { omnexioData, cleanText } = useMemo(() => parseOmnexioContent(text), [text]);
+
   let content: React.ReactElement;
   if (!isCreatedByUser) {
-    content = <Markdown content={text} isLatestMessage={isLatestMessage} />;
+    content = <Markdown content={cleanText} isLatestMessage={isLatestMessage} />;
   } else if (enableUserMsgMarkdown) {
-    content = <MarkdownLite content={text} />;
+    content = <MarkdownLite content={cleanText} />;
   } else {
-    content = <>{text}</>;
+    content = <>{cleanText}</>;
   }
 
   // Check if text starts with <video tag
-  const hasVideoTag = text.trim().startsWith('<video');
+  const hasVideoTag = cleanText.trim().startsWith('<video');
 
   return (
     <Container message={message}>
       {hasVideoTag ? (
-        <div dangerouslySetInnerHTML={{ __html: text }} />
+        <div dangerouslySetInnerHTML={{ __html: cleanText }} />
       ) : (
         <div
           className={cn(
             isSubmitting ? 'submitting' : '',
-            showCursorState && !!text.length ? 'result-streaming' : '',
+            showCursorState && !!cleanText.length ? 'result-streaming' : '',
             'markdown prose message-content dark:prose-invert light w-full break-words',
             isCreatedByUser && !enableUserMsgMarkdown && 'whitespace-pre-wrap',
             isCreatedByUser ? 'dark:text-gray-20' : 'dark:text-gray-100',
@@ -110,6 +130,7 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
           {content}
         </div>
       )}
+      {omnexioData && <Forward data={omnexioData} />}
     </Container>
   );
 };
@@ -158,7 +179,9 @@ const MessageContent = ({
 
   if (error) {
     return <ErrorMessage message={props.message} text={text} />;
-  } else if (edit) {
+  }
+
+  if (edit) {
     return <EditMessage text={text} isSubmitting={isSubmitting} {...props} />;
   }
 
