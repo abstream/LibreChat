@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { cn } from '~/utils';
 import { LocalStorageKeys } from 'librechat-data-provider';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetMessagesByConvoId } from '~/data-provider';
 
 interface ForwardData {
@@ -25,6 +25,7 @@ const encodeBase64 = (plainText: string): string => {
 };
 
 const Forward: React.FC<ForwardProps> = ({ data, className }) => {
+  const navigate = useNavigate();
   const { endpoint, model, message } = data;
   const params = useParams();
   const currentConvoId = useMemo(() => params.conversationId, [params.conversationId]);
@@ -37,8 +38,9 @@ const Forward: React.FC<ForwardProps> = ({ data, className }) => {
       _messages?.filter((message) => message.sender === 'User').pop()?.text || '';
 
     localStorage.setItem(`${LocalStorageKeys.TEXT_DRAFT}new`, encodeBase64(lastUserMessage));
-    window.location.href =
+    const url =
       '/c/new?endpoint=' + encodeURIComponent(endpoint) + '&model=' + encodeURIComponent(model);
+    navigate(url);
   };
 
   return (
