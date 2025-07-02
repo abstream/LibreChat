@@ -132,6 +132,7 @@ const DisplayMessage = ({ text, isCreatedByUser, message, showCursor }: TDisplay
       )}
       {omnexioData &&
         omnexioData?.action === 'forward' &&
+        omnexioData.data &&
         omnexioData.data.map((item, index) => <Forward key={index} data={item} />)}
     </Container>
   );
