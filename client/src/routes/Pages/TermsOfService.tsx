@@ -22,13 +22,11 @@ export default function TermsOfService() {
             an individual and to the entity you represent. By using Omnexio, you consent to these
             Omnexio Terms of Service.
           </p>
-
           <p className="mb-4 font-bold">
             IMPORTANT! PLEASE READ THIS DOCUMENT CAREFULLY. THIS DOCUMENT WILL BECOME LEGALLY
             BINDING UPON MARKING THE "ACCEPT TERMS AND CONDITIONS" BY SUBSCRIBING. IF YOU DO NOT
             UNDERSTAND ANY PART OF THIS DOCUMENT, PLEASE CONTACT US.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">ABOUT US</h2>
           <p className="mb-4">
             DOTSOA OOD is a company organized under the laws of Bulgaria, with legal entity number
@@ -36,7 +34,6 @@ export default function TermsOfService() {
             Center, Building D, Floor 1, Sofia, Bulgaria (referred to in this document as "Company,"
             "we," or "us").
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">
             1. A Platform for Open Exploration (Omnexio)
           </h2>
@@ -55,7 +52,6 @@ export default function TermsOfService() {
             update the Third-Party AI Models available on the platform at any time without prior
             notice.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">2. Age Requirements</h2>
           <p className="mb-4">
             Use of Omnexio by anyone under 13 years of age is prohibited. You represent that you are
@@ -66,15 +62,12 @@ export default function TermsOfService() {
             accepting these Omnexio Terms of Service on behalf of someone else or an entity, you
             confirm that you have the legal authority to bind that person or entity to these Terms.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">3. Your Use of Omnexio</h2>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">3.1 Use of Omnexio</h3>
           <p className="mb-4">
             Subject to your compliance with these Terms, we grant you a personal, non-exclusive,
             non-transferable right to use Omnexio and its agents.
           </p>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">3.2 User Acknowledgments</h3>
           <p className="mb-2">You acknowledge and agree that:</p>
           <ul className="mb-4 list-disc space-y-2 pl-6">
@@ -113,7 +106,6 @@ export default function TermsOfService() {
               be fully functional, and DOTSOA OOD disclaims any liability for such issues.
             </li>
           </ul>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">3.3 Restricted Uses</h3>
           <p className="mb-2">You agree not to use Omnexio or agents on Omnexio to:</p>
           <ul className="mb-4 list-disc space-y-2 pl-6">
@@ -166,7 +158,6 @@ export default function TermsOfService() {
               outputs, and you must independently verify such outputs before relying on them.
             </li>
           </ul>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">3.4 Feedback</h3>
           <p className="mb-4">
             We welcome your feedback and suggestions about how to improve Omnexio or agents on
@@ -175,9 +166,7 @@ export default function TermsOfService() {
             the feedback, in whole or part, freely and without any compensation to you. Please
             provide your feedback by emailing us at support@omnexio.com.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">4. Your Content</h2>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">4.1 Your Content</h3>
           <p className="mb-4">
             Omnexio may enable you to interact with the platform by asking questions, creating
@@ -202,12 +191,10 @@ export default function TermsOfService() {
             </a>
             .
           </p>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">4.2 Ownership</h3>
           <p className="mb-4">
             You retain ownership of Your Content, subject to the non-exclusive rights granted below.
           </p>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">4.3 Your Responsibility</h3>
           <p className="mb-4">
             You acknowledge and agree agents accessible via Omnexio answer your questions based on
@@ -226,7 +213,6 @@ export default function TermsOfService() {
             if it creates risk for DOTSOA OOD or Omnexio or negatively impacts the experience of
             other Omnexio users.
           </p>
-
           <h3 className="mb-2 mt-4 text-lg font-medium">4.4 Our Use of Your Content</h3>
           <p className="mb-2">
             We may use Your Content and Your Bots to provide and improve Omnexio, including:
@@ -247,7 +233,6 @@ export default function TermsOfService() {
             By using Omnexio, you grant us a worldwide, non-exclusive, royalty-free, transferable,
             and perpetual license to use Your Content and Your Bots as stated above.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">5. Termination</h2>
           <p className="mb-4">
             You may cease your use of Omnexio or terminate these Omnexio Terms of Service at any
@@ -260,7 +245,6 @@ export default function TermsOfService() {
             4.5 (Your Content), this Section 5 (Termination), Section 7 (Disclaimers and Limitation
             of Liability) and Section 8 (General).
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">6. Privacy</h2>
           <p className="mb-4">
             As detailed in the Omnexio Privacy Policy, we may collect certain personal information
@@ -278,7 +262,6 @@ export default function TermsOfService() {
             </a>
             .
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">
             7. DISCLAIMERS AND LIMITATION OF LIABILITY
           </h2>
@@ -302,13 +285,20 @@ export default function TermsOfService() {
             HARM.
           </p>
           <p className="mb-4">
+            DOTSOA OOD MAY UTILIZE THIRD-PARTY ARTIFICIAL INTELLIGENCE DETECTION SERVICES (“AI
+            DETECTORS”) TO ANALYZE USER-SUBMITTED CONTENT. THESE AI DETECTORS OPERATE INDEPENDENTLY
+            AND ARE NOT DEVELOPED, CONTROLLED, OR GUARANTEED BY DOTSOA OOD. ACCORDINGLY, DOTSOA OOD
+            DISCLAIMS ALL RESPONSIBILITY AND LIABILITY FOR THE ACCURACY, RELIABILITY, OR
+            CONSEQUENCES OF ANY RESULTS OR CONCLUSIONS GENERATED BY SUCH AI DETECTORS. YOU
+            ACKNOWLEDGE THAT ANY RELIANCE ON AI DETECTOR RESULTS IS AT YOUR OWN RISK.
+          </p>
+          <p className="mb-4">
             FURTHERMORE, DOTSOA OOD DOES NOT GUARANTEE THAT YOUR USE OF OMNEXIO WILL BE ERROR-FREE,
             UNINTERRUPTED, OR FREE FROM SERVICE OUTAGES. DOTSOA OOD AND ITS THIRD-PARTY AI PROVIDERS
             ARE NOT LIABLE FOR ANY ERRORS, DISRUPTIONS, SERVICE OUTAGES, OR ANY RESULTING DAMAGES,
             WHETHER DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, OR OTHERWISE, TO THE FULLEST EXTENT
             PERMITTED BY APPLICABLE LAW.
           </p>
-
           <h2 className="mb-4 mt-6 text-xl font-medium">8. Changes to Terms of Service</h2>
           <p className="mb-4">
             DOTSOA OOD reserves the right to modify, amend, or update these Omnexio Terms of Service
