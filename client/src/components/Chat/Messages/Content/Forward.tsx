@@ -3,7 +3,6 @@ import { cn } from '~/utils';
 import { LocalStorageKeys } from 'librechat-data-provider';
 
 interface ForwardData {
-  action: string;
   endpoint: string;
   model: string;
   message: string;
@@ -24,11 +23,11 @@ const encodeBase64 = (plainText: string): string => {
 };
 
 const Forward: React.FC<ForwardProps> = ({ data, className }) => {
-  const { action, endpoint, model, message } = data;
+  const { endpoint, model, message } = data;
 
   const handleForwardClick = () => {
     // Handle the forward action logic here
-    console.log('Forward action:', { action, endpoint, model, message });
+    console.log('Forward action:', { endpoint, model, message });
     localStorage.setItem(
       `${LocalStorageKeys.TEXT_DRAFT}new`,
       encodeBase64('TODO: get the latest user message from the conversation'),
@@ -47,9 +46,7 @@ const Forward: React.FC<ForwardProps> = ({ data, className }) => {
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="mb-2 flex items-center gap-2">
-            <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-              {action.toUpperCase()}
-            </span>
+            <span className="text-xs font-medium text-blue-600 dark:text-blue-400">Forward</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">→ {model}</span>
           </div>
           <p className="text-sm text-gray-700 dark:text-gray-300">{message}</p>
