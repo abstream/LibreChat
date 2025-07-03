@@ -42,12 +42,15 @@ const oauthHandler = async (req, res) => {
     res.redirect(domains.client);
   } catch (err) {
     logger.error('Error in setting authentication tokens:', err);
+
+    // Redirect to login page with auth_failed parameter to prevent infinite redirect loops
+    res.redirect(`${domains.client}/login?redirect=false`);
   }
 };
 
 router.get('/error', (req, res) => {
   // A single error message is pushed by passport when authentication fails.
-  logger.error('Error in OAuth authentication:', { message: req.session.messages.pop() });
+  // logger.error('Error in OAuth authentication:', { message: req.session.messages.pop() });
 
   // Redirect to login page with auth_failed parameter to prevent infinite redirect loops
   res.redirect(`${domains.client}/login?redirect=false`);
