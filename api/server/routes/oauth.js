@@ -66,17 +66,26 @@ router.get(
   }),
 );
 
-router.get(
-  '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: `${domains.client}/oauth/error`,
-    failureMessage: true,
-    session: false,
-    scope: ['openid', 'profile', 'email'],
-  }),
-  setBalanceConfig,
-  oauthHandler,
-);
+const authenticateGoogle = (req, res, next) => {
+  passport.authenticate(
+    'google',
+    {
+      session: false,
+      scope: ['openid', 'profile', 'email'],
+    },
+    (err, user, info) => {
+      if (err || !user) {
+        return res.redirect(`${domains.client}/oauth/error`);
+      }
+
+      // Success - attach user to request and continue
+      req.user = user;
+      next();
+    },
+  )(req, res, next);
+};
+
+router.get('/google/callback', authenticateGoogle, setBalanceConfig, oauthHandler);
 
 /**
  * Facebook Routes
