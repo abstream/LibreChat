@@ -21,7 +21,6 @@ const domains = {
 };
 
 router.use(logHeaders);
-router.use(loginLimiter);
 
 const oauthHandler = async (req, res) => {
   try {
