@@ -30,6 +30,10 @@ export default function Footer() {
           Home
         </a>
         <div className="border-r-[1px] border-gray-300 dark:border-gray-600"></div>
+        <a className="text-sm text-blue-500" href="/agents" rel="noreferrer">
+          Agents
+        </a>
+        <div className="border-r-[1px] border-gray-300 dark:border-gray-600"></div>
         <a className="text-sm text-blue-500" href="/pages/privacy-policy" rel="noreferrer">
           Privacy policy
         </a>

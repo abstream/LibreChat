@@ -1,6 +1,7 @@
 import { useLocalize } from '~/hooks';
 import TagManager from 'react-gtm-module';
 import { TStartupConfig } from 'librechat-data-provider';
+import React from 'react';
 
 function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | undefined }) {
   const localize = useLocalize();
@@ -48,6 +49,10 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
 
   return (
     <div className="align-end m-4 flex justify-center gap-2" role="contentinfo">
+      <a className="text-sm text-blue-500" href="/agents" rel="noreferrer">
+        Agents
+      </a>
+      <div className="border-r-[1px] border-gray-300 dark:border-gray-600"></div>
       {privacyPolicyRender}
       {privacyPolicyRender && termsOfServiceRender && (
         <div className="border-r-[1px] border-gray-300 dark:border-gray-600" />
