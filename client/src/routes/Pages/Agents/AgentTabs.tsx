@@ -14,7 +14,7 @@ interface AgentTabsProps {
 
 export function AgentTabs({ tabs, activeTab, onTabChange }: AgentTabsProps) {
   return (
-    <div className="mb-8">
+    <div className="mb-4">
       <div className="flex flex-wrap justify-center gap-2 rounded-lg bg-white p-2 shadow-sm dark:bg-gray-800">
         {tabs.map((tab) => (
           <button
