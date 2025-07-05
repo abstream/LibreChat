@@ -60,9 +60,9 @@ export function AgentGrid({ models, onAgentClick }: AgentGridProps) {
             {model.label}
           </h3>
 
-          {model.description && (
+          {model.shortDescription && (
             <p className="mb-4 line-clamp-3 text-center text-sm text-gray-600 dark:text-gray-300">
-              {model.description}
+              {model.shortDescription}
             </p>
           )}
         </div>
