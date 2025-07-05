@@ -12,6 +12,10 @@ export default function Header() {
     window.location.href = '/';
   };
 
+  const handleNavigateBack = () => {
+    history.back();
+  };
+
   return (
     <>
       <div className="sticky top-0 z-10 flex w-full items-center justify-between bg-white p-2 font-semibold text-text-primary dark:bg-gray-800">
@@ -28,7 +32,7 @@ export default function Header() {
             type="button"
             aria-label={localize('com_ui_new_chat')}
             className="m-1 inline-flex size-10 items-center justify-center rounded-full"
-            onClick={handleNavigateHome}
+            onClick={handleNavigateBack}
           >
             <svg
               width="24"

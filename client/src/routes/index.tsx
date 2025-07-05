@@ -13,12 +13,14 @@ import RouteErrorBoundary from './RouteErrorBoundary';
 import StartupLayout from './Layouts/Startup';
 import LoginLayout from './Layouts/Login';
 import PrivacyPolicy from './Pages/PrivacyPolicy';
+import TermsOfService from './Pages/TermsOfService';
+import AgentsPage from './Pages/Agents/AgentsPage';
+import AgentProfilePage from './Pages/Agents/AgentProfilePage';
 import dashboardRoutes from './Dashboard';
 import ShareRoute from './ShareRoute';
 import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
-import TermsOfService from '~/routes/Pages/TermsOfService';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -35,6 +37,16 @@ export const router = createBrowserRouter([
   {
     path: 'pages/tos',
     element: <TermsOfService />,
+  },
+  {
+    path: 'agents',
+    element: <AgentsPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: 'agents/:agent_name',
+    element: <AgentProfilePage />,
+    errorElement: <RouteErrorBoundary />,
   },
   {
     path: 'share/:shareId',

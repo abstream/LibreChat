@@ -54,10 +54,10 @@ export default function Header() {
     newConversation();
   };
 
-  const handleNewChatClick = () => {
+  const handleNavigateBack = () => {
     queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
     queryClient.invalidateQueries([QueryKeys.messages]);
-    newConversation();
+    history.back();
   };
 
   return (
@@ -91,7 +91,7 @@ export default function Header() {
               type="button"
               aria-label={localize('com_ui_new_chat')}
               className="m-1 inline-flex size-10 items-center justify-center rounded-full"
-              onClick={handleNewChatClick}
+              onClick={handleNavigateBack}
             >
               {shouldShowBackButton() && (
                 <svg
