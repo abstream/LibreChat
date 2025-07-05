@@ -31,9 +31,10 @@ export function AgentGrid({ models, onAgentClick }: AgentGridProps) {
             height: 48px;
             margin-right: 8px;
             margin-left: 5px;
+            margin-top: 4px;
             border-radius: 8px;
             display: flex;
-            align-items: center;
+            align-items: baseline;
             justify-content: center;
             font-size: 24px;
           }
