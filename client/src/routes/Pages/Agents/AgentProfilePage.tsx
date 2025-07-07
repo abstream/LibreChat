@@ -27,7 +27,7 @@ export default function AgentProfilePage() {
   };
 
   const handleBackToAgents = () => {
-    navigate('/agents?tab=' + agent.category);
+    navigate('/?tab=' + agent.category);
   };
 
   if (isLoading) {

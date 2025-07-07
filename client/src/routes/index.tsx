@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
     element: <TermsOfService />,
   },
   {
-    path: 'agents',
+    index: true,
     element: <AgentsPage />,
     errorElement: <RouteErrorBoundary />,
   },

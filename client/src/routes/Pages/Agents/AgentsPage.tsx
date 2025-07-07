@@ -24,7 +24,7 @@ export default function AgentsPage() {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('tab', tabId);
 
-    const newUrl = newSearchParams.toString() ? `/agents?${newSearchParams.toString()}` : '/agents';
+    const newUrl = newSearchParams.toString() ? `/?${newSearchParams.toString()}` : '/';
 
     navigate(newUrl, { replace: true });
   };
