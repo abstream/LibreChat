@@ -23,7 +23,7 @@ export default function AgentProfilePage() {
     // Navigate to chat with this specific agent
     const encodedModelName = encodeURIComponent(agent.label);
     const endpoint = agent.endpointName || 'Omnexio';
-    return `/c/new?endpoint=${endpoint}&model=${encodedModelName}`;
+    navigate(`/c/new?endpoint=${endpoint}&model=${encodedModelName}`);
   };
 
   const handleBackToAgents = () => {
