@@ -39,16 +39,17 @@ export default defineConfig(({ command }) => ({
       includeManifestIcons: false,
       workbox: {
         globPatterns: [
-          '**/*.{js,css,html}',
+          '**/*.{js,css,html,xml}', // Added xml to include sitemap.xml
           'assets/favicon*.png',
           'assets/icon-*.png',
           'assets/apple-touch-icon*.png',
           'assets/maskable-icon.png',
           'manifest.webmanifest',
+          'sitemap.xml', // Explicitly include sitemap.xml
         ],
         globIgnores: ['images/**/*', '**/*.map'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-        navigateFallbackDenylist: [/^\/oauth/, /^\/api/],
+        navigateFallbackDenylist: [/^\/oauth/, /^\/api/, /^\/sitemap\.xml$/], // Don't intercept sitemap.xml
       },
       includeAssets: [],
       manifest: {
@@ -93,7 +94,10 @@ export default defineConfig(({ command }) => ({
       threshold: 10240,
     }),
   ],
-  publicDir: command === 'serve' ? './public' : false,
+  // FIXED: Always use ./public as publicDir
+  publicDir: './public',
+  // Add specific handling for XML files
+  assetsInclude: ['**/*.xml'],
   build: {
     sourcemap: process.env.NODE_ENV === 'development',
     outDir: './dist',
@@ -208,6 +212,10 @@ export default defineConfig(({ command }) => ({
         assetFileNames: (assetInfo) => {
           if (assetInfo.names?.[0] && /\.(woff|woff2|eot|ttf|otf)$/.test(assetInfo.names[0])) {
             return 'assets/fonts/[name][extname]';
+          }
+          // Keep sitemap.xml at root level
+          if (assetInfo.names?.[0] === 'sitemap.xml') {
+            return '[name][extname]';
           }
           return 'assets/[name].[hash][extname]';
         },
