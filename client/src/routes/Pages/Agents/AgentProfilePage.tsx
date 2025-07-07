@@ -129,7 +129,7 @@ export default function AgentProfilePage() {
               onClick={handleTryAgent}
               className="bg-blue-600 px-8 py-3 text-lg hover:bg-blue-700"
             >
-              {`Try ${agent.label}`}
+              Chat Now
             </Button>
           </div>
         </div>
