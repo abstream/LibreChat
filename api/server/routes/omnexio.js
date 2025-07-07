@@ -11,6 +11,6 @@ router.get('/balance', requireJwtAuth, omnexioBalanceController);
 router.post('/subscriptions', requireJwtAuth, omnexioSubscriptionCheckoutController);
 router.get('/subscription-plans', requireJwtAuth, omnexioSubscriptionPlans);
 router.post('/subscription/change', requireJwtAuth, omnexioSubscriptionChangeController);
-router.get('/chat-models', requireJwtAuth, omnexioChatModels);
+router.get('/chat-models', omnexioChatModels);
 
 module.exports = router;

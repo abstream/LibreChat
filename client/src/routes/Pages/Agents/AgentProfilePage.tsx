@@ -23,7 +23,7 @@ export default function AgentProfilePage() {
     // Navigate to chat with this specific agent
     const encodedModelName = encodeURIComponent(agent.label);
     const endpoint = agent.endpointName || 'Omnexio';
-    return `/c/new?endpoint=${endpoint}&model=${encodedModelName}`;
+    navigate(`/c/new?endpoint=${endpoint}&model=${encodedModelName}`);
   };
 
   const handleBackToAgents = () => {
@@ -119,48 +119,7 @@ export default function AgentProfilePage() {
           {/* Agent Description */}
           {agent.description && (
             <div className="mb-8">
-              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
-                About this Agent
-              </h2>
-              <p className="leading-relaxed text-gray-600 dark:text-gray-300">
-                {agent.description}
-              </p>
-            </div>
-          )}
-
-          {/* Additional Info */}
-          {(agent.capabilities || agent.useCases) && (
-            <div className="mb-8">
-              {agent.capabilities && (
-                <div className="mb-6">
-                  <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-                    Capabilities
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {agent.capabilities.map((capability: string, index: number) => (
-                      <span
-                        key={index}
-                        className="rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                      >
-                        {capability}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {agent.useCases && (
-                <div className="mb-6">
-                  <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-                    Use Cases
-                  </h3>
-                  <ul className="list-inside list-disc space-y-1 text-gray-600 dark:text-gray-300">
-                    {agent.useCases.map((useCase: string, index: number) => (
-                      <li key={index}>{useCase}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div dangerouslySetInnerHTML={{ __html: agent.description }} />
             </div>
           )}
 
@@ -170,7 +129,7 @@ export default function AgentProfilePage() {
               onClick={handleTryAgent}
               className="bg-blue-600 px-8 py-3 text-lg hover:bg-blue-700"
             >
-              {`Try ${agent.label}`}
+              Chat Now
             </Button>
           </div>
         </div>

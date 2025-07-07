@@ -23,50 +23,69 @@ export function AgentGrid({ models, onAgentClick }: AgentGridProps) {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {models.map((model: any, index: number) => (
-        <div
-          key={`${model.id}-${index}`}
-          onClick={() => onAgentClick(model)}
-          className="dark:hover:bg-gray-750 group cursor-pointer rounded-lg bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-800"
-        >
-          <div className="mb-4 flex items-center justify-center">
-            {model.imageUrl ? (
-              <img
-                src={model.imageUrl}
-                alt={model.label}
-                className="h-16 w-16 rounded-full object-cover"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const fallback = target.nextElementSibling as HTMLElement;
-                  if (fallback) {
-                    fallback.style.display = 'flex';
-                  }
-                }}
-              />
-            ) : null}
-            <div
-              className={`${
-                model.imageUrl ? 'hidden' : 'flex'
-              } h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-2xl dark:bg-blue-900`}
-              style={{ display: model.imageUrl ? 'none' : 'flex' }}
-            >
-              🤖
+    <>
+      <style jsx>
+        {`
+          .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 8px;
+            margin-left: 5px;
+            margin-top: 4px;
+            border-radius: 8px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            font-size: 24px;
+          }
+
+          .card-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 350px;
+          }
+
+          .agent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e5e9;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+
+          .agent-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+          }
+        `}
+      </style>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {models.map((model: any, index: number) => (
+          <div
+            key={`${model.id}-${index}`}
+            onClick={() => onAgentClick(model)}
+            className="agent-card dark:hover:bg-gray-750 group flex cursor-pointer rounded-lg bg-white p-1 shadow-sm transition-all duration-200 hover:shadow-md dark:bg-gray-800"
+          >
+            <div className="card-icon">
+              <img width={40} height={40} src={model.imageUrl} alt={model.label} />
+            </div>
+
+            <div>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+                {model.label}
+              </h3>
+
+              {model.shortDescription && (
+                <p className="card-description">{model.shortDescription}</p>
+              )}
             </div>
           </div>
-
-          <h3 className="mb-2 text-center text-lg font-semibold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-            {model.label}
-          </h3>
-
-          {model.description && (
-            <p className="mb-4 line-clamp-3 text-center text-sm text-gray-600 dark:text-gray-300">
-              {model.description}
-            </p>
-          )}
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
