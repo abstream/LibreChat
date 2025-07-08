@@ -10,7 +10,7 @@ function Logged() {
     redirect = intendedRedirect;
   }
 
-  navigate(redirect, { replace: true });
+  navigate(redirect);
 
   return <></>;
 }
