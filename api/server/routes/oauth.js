@@ -38,7 +38,7 @@ const oauthHandler = async (req, res) => {
     } else {
       await setAuthTokens(req.user._id, res);
     }
-    res.redirect(domains.client);
+    res.redirect(`${domains.client}/c/new`);
   } catch (err) {
     logger.error('Error in setting authentication tokens:', err);
 
@@ -80,7 +80,7 @@ const authenticateGoogle = (req, res, next) => {
 
       // Success - attach user to request and continue
       req.user = user;
-      return res.redirect(`${domains.client}/c/new`);
+      next();
     },
   )(req, res, next);
 };
