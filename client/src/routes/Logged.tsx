@@ -10,7 +10,7 @@ function Logged() {
     redirect = intendedRedirect;
   }
 
-  navigate(redirect);
+  window.location.href = redirect;
 
   return <></>;
 }
