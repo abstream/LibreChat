@@ -67,13 +67,10 @@ export default function AgentsPage() {
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8 text-center">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
-            Your Complete AI Command Center
-          </h1>
+          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">All Your Ai</h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Access dozens of AI agents and models through one unified platform. Our omni-client
-            interface and in-houseAI search engine integrates real time data with the perfect AI
-            tool, increasing your productivity.
+            Access dozens of Ai agents and models through one account - our Ai search engine
+            integrates real time data with the perfect Ai tool, increasing your productivity.
           </p>
         </div>
 
