@@ -10,7 +10,9 @@ function Logged() {
     redirect = intendedRedirect;
   }
 
-  window.location.href = redirect;
+  setTimeout(() => {
+    window.location.href = redirect;
+  }, 1000);
 
   return <></>;
 }
