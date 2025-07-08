@@ -80,7 +80,7 @@ const authenticateGoogle = (req, res, next) => {
 
       // Success - attach user to request and continue
       req.user = user;
-      return res.redirect(`${domains.client}/login`);
+      next();
     },
   )(req, res, next);
 };
