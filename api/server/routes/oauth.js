@@ -38,7 +38,7 @@ const oauthHandler = async (req, res) => {
     } else {
       await setAuthTokens(req.user._id, res);
     }
-    res.redirect(`${domains.client}/c/new`);
+    res.redirect(`${domains.client}/login`);
   } catch (err) {
     logger.error('Error in setting authentication tokens:', err);
 
