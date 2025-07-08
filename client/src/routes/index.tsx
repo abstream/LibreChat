@@ -21,6 +21,7 @@ import ShareRoute from './ShareRoute';
 import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
+import Logged from '~/routes/Logged';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
           {
             path: 'login/2fa',
             element: <TwoFactorScreen />,
+          },
+          {
+            path: 'logged',
+            element: <Logged />,
           },
         ],
       },
