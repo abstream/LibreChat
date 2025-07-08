@@ -5,7 +5,7 @@ import { QueryKeys, Constants } from 'librechat-data-provider';
 import type { TMessage } from 'librechat-data-provider';
 import type { Dispatch, SetStateAction } from 'react';
 import { useLocalize, useNewConvo } from '~/hooks';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
 import { Breadcrumbs } from '../Chat/Breadcrumbs';
 import store from '~/store';
@@ -30,6 +30,7 @@ export default function MobileNav({
 }: {
   setNavVisible: Dispatch<SetStateAction<boolean>>;
 }) {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const localize = useLocalize();
@@ -63,7 +64,7 @@ export default function MobileNav({
       [],
     );
     queryClient.invalidateQueries([QueryKeys.messages]);
-    newConversation();
+    navigate('/c/new');
   };
 
   const handleNewChatClick = () => {

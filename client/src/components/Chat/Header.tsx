@@ -1,4 +1,4 @@
-import { useLocation, useOutletContext, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { Constants, QueryKeys, type TMessage } from 'librechat-data-provider';
 import type { ContextType } from '~/common';
 import { HeaderNewChat, OpenSidebar } from './Menus';
@@ -24,6 +24,7 @@ const getActiveTabFromUrl = (): string | undefined => {
 };
 
 export default function Header() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { newConversation } = useNewConvo();
   const [searchParams] = useSearchParams();
@@ -51,7 +52,7 @@ export default function Header() {
   const handleLogoClick = () => {
     queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
     queryClient.invalidateQueries([QueryKeys.messages]);
-    newConversation();
+    navigate('/c/new');
   };
 
   const handleNavigateBack = () => {
