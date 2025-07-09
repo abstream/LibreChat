@@ -39,13 +39,14 @@ export default defineConfig(({ command }) => ({
       includeManifestIcons: false,
       workbox: {
         globPatterns: [
-          '**/*.{js,css,html,xml}', // Added xml to include sitemap.xml
+          '**/*.{js,css,html,xml}',
           'assets/favicon*.png',
           'assets/icon-*.png',
           'assets/apple-touch-icon*.png',
           'assets/maskable-icon.png',
           'manifest.webmanifest',
-          'sitemap.xml', // Explicitly include sitemap.xml
+          'sitemap.xml',
+          'favicon.ico',
         ],
         globIgnores: ['images/**/*', '**/*.map'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
