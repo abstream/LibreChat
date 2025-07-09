@@ -110,14 +110,5 @@ export default function useAppStartup({
       };
       TagManager.initialize(tagManagerArgs);
     }
-    if (
-      startupConfig?.analyticsGtmId2 != null &&
-      typeof window.google_tag_manager === 'undefined'
-    ) {
-      const tagManagerArgs = {
-        gtmId: startupConfig.analyticsGtmId2,
-      };
-      TagManager.initialize(tagManagerArgs);
-    }
-  }, [startupConfig?.analyticsGtmId, startupConfig?.analyticsGtmId2]);
+  }, [startupConfig?.analyticsGtmId]);
 }

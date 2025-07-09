@@ -573,7 +573,6 @@ export type TStartupConfig = {
   sharedLinksEnabled: boolean;
   publicSharedLinksEnabled: boolean;
   analyticsGtmId?: string;
-  analyticsGtmId2?: string;
   instanceProjectId: string;
   bundlerURL?: string;
   staticBundlerURL?: string;

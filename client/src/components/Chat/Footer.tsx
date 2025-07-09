@@ -50,13 +50,7 @@ export default function Footer({ className }: { className?: string }) {
       };
       TagManager.initialize(tagManagerArgs);
     }
-    if (config?.analyticsGtmId2 != null && typeof window.google_tag_manager === 'undefined') {
-      const tagManagerArgs = {
-        gtmId: config.analyticsGtmId2,
-      };
-      TagManager.initialize(tagManagerArgs);
-    }
-  }, [config?.analyticsGtmId, config?.analyticsGtmId2]);
+  }, [config?.analyticsGtmId]);
 
   const mainContentRender = mainContentParts.map((text, index) => (
     <React.Fragment key={`main-content-part-${index}`}>
