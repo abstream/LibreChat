@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { easings } from '@react-spring/web';
 import { EModelEndpoint } from 'librechat-data-provider';
 import { useSetRecoilState } from 'recoil';
@@ -78,6 +78,17 @@ function getModelDescription(selectedModel: any) {
   }
 
   return selectedModel.description || selectedModel.shortDescription || '';
+}
+
+function getModelRelated(selectedModel: any) {
+  if (!selectedModel) {
+    return [];
+  }
+  if (!selectedModel.options?._related) {
+    return [];
+  }
+
+  return selectedModel.options?._related;
 }
 
 function getModelImageUrl(selectedModel: any) {
@@ -266,6 +277,7 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
   const name = entity?.name ?? '';
   const description = getModelDescription(selectedModel);
   const imageUrl = getModelImageUrl(selectedModel);
+  const related = getModelRelated(selectedModel);
 
   const getGreeting = useCallback(() => {
     if (model) {
@@ -337,6 +349,20 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
         {description && (
           <div className="animate-fadeIn mt-4 max-w-md text-center text-sm font-normal text-text-primary">
             <div dangerouslySetInnerHTML={{ __html: description }} />
+            {related && (
+              <div className="mt-2">
+                <b>Related:</b>
+                {related.map((item: any, index: number) => (
+                  <a
+                    key={`${item.id}-${index}`}
+                    className="ml-1 text-blue-500 underline"
+                    href={item.secure_url}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
