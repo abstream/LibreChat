@@ -120,6 +120,20 @@ export default function AgentProfilePage() {
           {agent.description && (
             <div className="mb-8">
               <div dangerouslySetInnerHTML={{ __html: agent.description }} />
+              {agent.options?._related && (
+                <div className="mt-2">
+                  <b>Related:</b>
+                  {agent.options._related.map((item: any, index: number) => (
+                    <a
+                      key={`${item.id}-${index}`}
+                      className="ml-1 text-blue-500 underline"
+                      href={item.public_url}
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
