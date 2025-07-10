@@ -6,7 +6,7 @@ import { useAuthContext, usePreviousLocation } from '~/hooks';
 import { DashboardContext } from '~/Providers';
 import store from '~/store';
 import { useSEO } from '~/hooks/useSEO';
-import { SEO_DATA } from '~/data/seoData';
+import { SEO_DATA } from '~/seo/seoData';
 
 export default function DashboardRoute() {
   const queryClient = useQueryClient();

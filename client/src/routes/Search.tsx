@@ -9,7 +9,7 @@ import { Spinner } from '~/components';
 import { buildTree } from '~/utils';
 import store from '~/store';
 import { useSEO } from '~/hooks/useSEO';
-import { SEO_DATA } from '~/data/seoData';
+import { SEO_DATA } from '~/seo/seoData';
 
 export default function Search() {
   const localize = useLocalize();

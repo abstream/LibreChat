@@ -6,7 +6,7 @@ import { AgentGrid } from './AgentGrid';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 import { useSEO } from '~/hooks/useSEO';
-import { SEO_DATA } from '~/data/seoData';
+import { SEO_DATA } from '~/seo/seoData';
 
 const TABS = [
   { id: 'chat', label: 'Chat' },

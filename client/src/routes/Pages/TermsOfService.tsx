@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 import { useSEO } from '~/hooks/useSEO';
-import { SEO_DATA } from '~/data/seoData';
+import { SEO_DATA } from '~/seo/seoData';
 
 /**
  * Component for displaying the Terms of Service page
