@@ -1,12 +1,16 @@
 import React from 'react';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/data/seoData';
 
 /**
  * Component for displaying the Privacy Policy page
  * @returns Privacy Policy React component
  */
 export default function PrivacyPolicy() {
+  useSEO(SEO_DATA.privacy);
+
   return (
     <>
       <Header />

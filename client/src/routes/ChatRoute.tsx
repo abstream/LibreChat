@@ -13,6 +13,8 @@ import temporaryStore from '~/store/temporary';
 import { Spinner } from '~/components/svg';
 import { useRecoilCallback } from 'recoil';
 import store from '~/store';
+import { useSEO } from '~/hooks/useSEO';
+import { generateChatSEO } from '~/utils/seoUtils';
 
 export default function ChatRoute() {
   const { data: startupConfig } = useGetStartupConfig();
@@ -32,6 +34,8 @@ export default function ChatRoute() {
   useIdChangeEffect(conversationId);
   const { hasSetConversation, conversation } = store.useCreateConversationAtom(index);
   const { newConversation } = useNewConvo();
+
+  useSEO(generateChatSEO(conversationId));
 
   const modelsQuery = useGetModelsQuery({
     enabled: isAuthenticated,

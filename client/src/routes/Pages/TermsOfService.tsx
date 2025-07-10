@@ -1,12 +1,16 @@
 import React from 'react';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/data/seoData';
 
 /**
  * Component for displaying the Terms of Service page
  * @returns Terms of Service React component
  */
 export default function TermsOfService() {
+  useSEO(SEO_DATA.terms);
+
   return (
     <>
       <Header />

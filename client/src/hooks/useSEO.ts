@@ -13,7 +13,7 @@ interface SEOConfig {
 }
 
 const DEFAULT_SEO = {
-  title: 'Omnexio - All Your AI in One Place',
+  title: 'Omnexio - Any AI Model, Any Query: Powered by Omnexio Web Search',
   description:
     'Access dozens of AI agents and models through one account - our AI search engine integrates real time data with the perfect AI tool, increasing your productivity.',
   keywords:

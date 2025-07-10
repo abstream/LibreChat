@@ -8,6 +8,8 @@ import { useMessagesInfiniteQuery } from '~/data-provider';
 import { Spinner } from '~/components';
 import { buildTree } from '~/utils';
 import store from '~/store';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/data/seoData';
 
 export default function Search() {
   const localize = useLocalize();
@@ -16,6 +18,11 @@ export default function Search() {
   const { isAuthenticated } = useAuthContext();
   const search = useRecoilValue(store.search);
   const searchQuery = search.debouncedQuery;
+
+  useSEO({
+    ...SEO_DATA.search,
+    title: searchQuery ? `Search: "${searchQuery}" - Omnexio` : SEO_DATA.search.title,
+  });
 
   const {
     data: searchMessages,
