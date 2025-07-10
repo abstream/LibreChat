@@ -22,6 +22,7 @@ import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
 import Logged from '~/routes/Logged';
+import PaymentSuccess from '~/routes/Pages/PaymentSuccess';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -116,6 +117,10 @@ export const router = createBrowserRouter([
           {
             path: 'search',
             element: <Search />,
+          },
+          {
+            path: 'pages/payment-success',
+            element: <PaymentSuccess />,
           },
         ],
       },
