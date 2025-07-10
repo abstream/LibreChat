@@ -95,8 +95,6 @@ export default function PaymentSuccess() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
-
       <div className="container mx-auto max-w-2xl px-4 py-16">
         <div className="rounded-lg bg-white p-8 text-center shadow-sm dark:bg-gray-800">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
@@ -153,8 +151,6 @@ export default function PaymentSuccess() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
