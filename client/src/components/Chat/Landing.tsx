@@ -82,10 +82,10 @@ function getModelDescription(selectedModel: any) {
 
 function getModelRelated(selectedModel: any) {
   if (!selectedModel) {
-    return [];
+    return null;
   }
   if (!selectedModel.options?._related) {
-    return [];
+    return null;
   }
 
   return selectedModel.options?._related;
