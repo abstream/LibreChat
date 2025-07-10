@@ -2,13 +2,13 @@ export const generateAgentSEO = (agentName: string, agentData: any) => {
   const formattedName = agentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 
   return {
-    title: `${formattedName} - AI Agent | Omnexio`,
+    title: `${formattedName} | Omnexio`,
     description:
       agentData?.short_description ||
       agentData?.description ||
       `Interact with ${formattedName}, an advanced AI agent available on Omnexio. Get instant responses and powerful AI capabilities.`,
-    keywords: `${formattedName}, AI agent, ${agentData?.category || 'AI'}, artificial intelligence, Omnexio`,
-    ogTitle: `${formattedName} - AI Agent`,
+    keywords: `${formattedName}, ${agentData?.category || 'AI'}, artificial intelligence, Omnexio`,
+    ogTitle: `${formattedName}`,
     ogDescription:
       agentData?.short_description ||
       `Experience the power of ${formattedName} AI agent on Omnexio`,
