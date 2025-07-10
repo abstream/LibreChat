@@ -5,6 +5,8 @@ import { AgentTabs } from './AgentTabs';
 import { AgentGrid } from './AgentGrid';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/seo/seoData';
 
 const TABS = [
   { id: 'chat', label: 'Chat' },
@@ -19,6 +21,12 @@ export default function AgentsPage() {
   const { data: omnexioModels, isLoading } = useGetOmnexioChatModels();
 
   const activeTab = searchParams.get('tab') || 'chat';
+
+  useSEO({
+    ...SEO_DATA.agents,
+    title: `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} AI - Omnexio`,
+    description: `Discover ${activeTab} AI models and agents. ${SEO_DATA.agents.description}`,
+  });
 
   const handleTabChange = (tabId: string) => {
     const newSearchParams = new URLSearchParams(searchParams);

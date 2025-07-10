@@ -5,6 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuthContext, usePreviousLocation } from '~/hooks';
 import { DashboardContext } from '~/Providers';
 import store from '~/store';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/seo/seoData';
 
 export default function DashboardRoute() {
   const queryClient = useQueryClient();
@@ -12,6 +14,8 @@ export default function DashboardRoute() {
   const prevLocationRef = usePreviousLocation();
   const clearConvoState = store.useClearConvoState();
   const [prevLocationPath, setPrevLocationPath] = useState('');
+
+  useSEO(SEO_DATA.dashboard);
 
   useEffect(() => {
     setPrevLocationPath(prevLocationRef.current?.pathname || '');
