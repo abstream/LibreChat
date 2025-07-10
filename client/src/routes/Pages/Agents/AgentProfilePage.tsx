@@ -4,6 +4,8 @@ import { useGetOmnexioChatModels } from '~/data-provider';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 import { Button } from '~/components/ui';
+import { useSEO } from '~/hooks/useSEO';
+import { generateAgentSEO } from '~/utils/seoUtils';
 
 export default function AgentProfilePage() {
   const { agent_name } = useParams<{ agent_name: string }>();
@@ -18,6 +20,8 @@ export default function AgentProfilePage() {
       return formattedName === agent_name;
     });
   }, [omnexioModels, agent_name]);
+
+  useSEO(agent ? generateAgentSEO(agent_name || '', agent) : {});
 
   const handleTryAgent = () => {
     // Navigate to chat with this specific agent
