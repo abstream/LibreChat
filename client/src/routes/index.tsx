@@ -22,7 +22,7 @@ import ChatRoute from './ChatRoute';
 import Search from './Search';
 import Root from './Root';
 import Logged from '~/routes/Logged';
-import PaymentSuccess from '~/routes/Pages/PaymentSuccess';
+import PaymentSuccess from '~/components/Chat/PaymentSuccess';
 
 const AuthLayout = () => (
   <AuthContextProvider>
