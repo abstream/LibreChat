@@ -4,14 +4,13 @@ export const generateAgentSEO = (agentName: string, agentData: any) => {
   return {
     title: `${formattedName} - Omnexio`,
     description:
-      agentData?.short_description ||
+      agentData?.shortDescription ||
       agentData?.description ||
       `Interact with ${formattedName}, an advanced AI agent available on Omnexio. Get instant responses and powerful AI capabilities.`,
     keywords: `${formattedName}, ${agentData?.category || 'AI'}, artificial intelligence, Omnexio`,
     ogTitle: `${formattedName}`,
     ogDescription:
-      agentData?.short_description ||
-      `Experience the power of ${formattedName} AI agent on Omnexio`,
+      agentData?.shortDescription || `Experience the power of ${formattedName} AI agent on Omnexio`,
     ogImage: agentData?.imageUrl || '/assets/omnexio-logo.png',
   };
 };
