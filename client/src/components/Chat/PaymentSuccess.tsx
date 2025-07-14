@@ -14,7 +14,6 @@ export default function PaymentSuccess() {
   useSEO({
     title: 'Payment Successful - Omnexio',
     description: 'Thank you for your subscription! Your payment has been processed successfully.',
-    robots: 'noindex, nofollow',
   });
 
   const handleContinue = () => {
