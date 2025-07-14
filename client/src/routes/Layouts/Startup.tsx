@@ -37,9 +37,9 @@ export default function StartupLayout({ isAuthenticated }: { isAuthenticated?: b
     }
   }, [isAuthenticated, navigate, data]);
 
-  useEffect(() => {
-    document.title = startupConfig?.appTitle || 'Omnexio';
-  }, [startupConfig?.appTitle]);
+  // useEffect(() => {
+  //   document.title = startupConfig?.appTitle || 'Omnexio';
+  // }, [startupConfig?.appTitle]);
 
   useEffect(() => {
     setError(null);

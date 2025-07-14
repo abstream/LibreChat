@@ -8,8 +8,11 @@ import { useLocalize, TranslationKeys, ThemeContext } from '~/hooks';
 import type { TLoginLayoutContext } from '~/common';
 import { Spinner, Button } from '~/components';
 import { ErrorMessage } from './ErrorMessage';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/seo/seoData';
 
 const Registration: React.FC = () => {
+  useSEO(SEO_DATA.register);
   const navigate = useNavigate();
   const localize = useLocalize();
   const { theme } = useContext(ThemeContext);

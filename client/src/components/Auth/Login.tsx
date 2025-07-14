@@ -12,11 +12,14 @@ import { useCreateGuest } from '~/data-provider';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { ThemeContext } from '~/hooks';
 import { useContext } from 'react';
+import { useSEO } from '~/hooks/useSEO';
+import { SEO_DATA } from '~/seo/seoData';
 
 const VISITED_STORAGE_KEY = 'appTitle';
 const MINIMUM_LOADING_DURATION = 1000; // 1000ms = 1 second
 
 function Login() {
+  useSEO(SEO_DATA.login);
   const localize = useLocalize();
   const { theme } = useContext(ThemeContext);
   const { error, setError, login } = useAuthContext();

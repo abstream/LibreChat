@@ -24,7 +24,7 @@ export default function AgentsPage() {
 
   useSEO({
     ...SEO_DATA.agents,
-    title: `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} AI - Omnexio`,
+    title: `Omnexio AI`,
     description: `Discover ${activeTab} AI models and agents. ${SEO_DATA.agents.description}`,
   });
 
