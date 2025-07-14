@@ -71,7 +71,7 @@ export default function AgentProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen" style={{ 'background-color': '#E6F3FF' }}>
       <Header />
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
