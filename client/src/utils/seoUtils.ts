@@ -2,7 +2,7 @@ export const generateAgentSEO = (agentName: string, agentData: any) => {
   const formattedName = agentName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 
   return {
-    title: `${formattedName} | Omnexio`,
+    title: `${formattedName} - Omnexio`,
     description:
       agentData?.short_description ||
       agentData?.description ||
