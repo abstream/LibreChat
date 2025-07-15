@@ -11,7 +11,7 @@ async function omnexioNewsletterController(req, res) {
     };
 
     const url = `${OMNEXIO_BASE_URL}/v1/newsletter`;
-    const response = await axios.put(url, payload, {
+    const response = await axios.post(url, payload, {
       headers: {
         Authorization: `Bearer ${OMNEXIO_API_KEY}`,
       },
