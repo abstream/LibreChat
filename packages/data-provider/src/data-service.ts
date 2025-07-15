@@ -123,6 +123,14 @@ export function changeOmnexioSubscription(subscriptionPlanId: number): Promise<v
   return request.post(endpoints.omnexioSubscriptionChange(), payload);
 }
 
+export function omnexioNewsletter(code: string, username: string): Promise<string> {
+  const payload = {
+    code: code,
+    username: username,
+  };
+  return request.post(endpoints.omnexioNewsletter(), payload);
+}
+
 export function createGuest(): Promise<{ username: string; password: string }> {
   return request.post(endpoints.guest());
 }

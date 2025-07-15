@@ -291,5 +291,6 @@ export const omnexioSubscriptions = () => `${omnexio()}/subscriptions`;
 export const omnexioSubscriptionPlans = () => `${omnexio()}/subscription-plans`;
 export const omnexioSubscriptionChange = () => `${omnexio()}/subscription/change`;
 export const omnexioChatModels = () => `${omnexio()}/chat-models`;
+export const omnexioNewsletter = () => `${omnexio()}/newsletter`;
 
 export const guest = () => '/api/guest';
