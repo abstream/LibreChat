@@ -7,6 +7,11 @@ interface CreateOmnexioSubscriptionParams {
   subscriptionId: number;
 }
 
+interface omnexioNewsletterParams {
+  code: string;
+  username: string;
+}
+
 /**
  * Hook for creating an Omnexio subscription
  */
@@ -39,6 +44,26 @@ export const useChangeOmnexioSubscription = (): UseMutationResult<
   return useMutation(
     (params: CreateOmnexioSubscriptionParams) =>
       dataService.changeOmnexioSubscription(params.subscriptionId),
+    {
+      onError: (error) => {
+        console.error('Error changing subscription:', error);
+      },
+    },
+  );
+};
+
+/**
+ * Hook for changing an existing Omnexio subscription
+ */
+export const useOmnexioNewsletter = (): UseMutationResult<
+  void, // response type
+  unknown, // error type
+  omnexioNewsletterParams, // variables type (reusing the same interface)
+  unknown // context type
+> => {
+  return useMutation(
+    (params: omnexioNewsletterParams) =>
+      dataService.omnexioNewsletter(params.code, params.username),
     {
       onError: (error) => {
         console.error('Error changing subscription:', error);
