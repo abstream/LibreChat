@@ -17,7 +17,7 @@ async function omnexioNewsletterController(req, res) {
       },
     });
 
-    return res.status(200).send('');
+    return res.status(200).send(response.data);
   } catch (error) {
     logger.error('[omnexioNewsletterController] Error fetching checkout url:', error);
     // Return 0 as a fallback instead of exposing the error to the client
