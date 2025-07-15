@@ -42,6 +42,7 @@ export default function AgentsPage() {
   const handleNewsletterSuccess = (data: any): void => {
     setNewsletterMessage(data.message);
     console.log(data.message);
+    console.log(data);
   };
 
   const dismissMessage = (): void => {
