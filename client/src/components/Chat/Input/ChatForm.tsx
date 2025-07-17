@@ -167,7 +167,13 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   useQueryParams({ textAreaRef });
 
   const { ref, ...registerProps } = methods.register('text', {
-    required: true,
+    required: false, // Change from true to false to allow empty text
+    validate: (value) => {
+      // Custom validation: require either text or files
+      const hasText = value && value.trim().length > 0;
+      const hasFiles = files && files.size > 0;
+      return hasText || hasFiles || 'Please enter a message or attach a file';
+    },
     onChange: useCallback(
       (e: React.ChangeEvent<HTMLTextAreaElement>) =>
         methods.setValue('text', e.target.value, { shouldValidate: true }),

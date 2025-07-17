@@ -4,6 +4,7 @@ import type { Control } from 'react-hook-form';
 import { TooltipAnchor } from '~/components/ui';
 import { SendIcon } from '~/components/svg';
 import { useLocalize } from '~/hooks';
+import { useChatContext } from '~/Providers';
 import { cn } from '~/utils';
 
 type SendButtonProps = {
@@ -42,7 +43,12 @@ const SubmitButton = React.memo(
 const SendButton = React.memo(
   forwardRef((props: SendButtonProps, ref: React.ForwardedRef<HTMLButtonElement>) => {
     const data = useWatch({ control: props.control });
-    return <SubmitButton ref={ref} disabled={props.disabled || !data.text} />;
+    const { files } = useChatContext();
+
+    // Allow submission if there's text OR if there are files
+    const hasContent = data.text || (files && files.size > 0);
+
+    return <SubmitButton ref={ref} disabled={props.disabled || !hasContent} />;
   }),
 );
 
