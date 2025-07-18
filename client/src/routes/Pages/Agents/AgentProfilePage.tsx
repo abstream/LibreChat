@@ -5,12 +5,17 @@ import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 import { Button } from '~/components/ui';
 import { useSEO } from '~/hooks/useSEO';
+import { useShareThis } from '~/hooks/useShareThis';
+import { ShareThisButton } from '~/components/ui/ShareThisButton';
 import { generateAgentSEO } from '~/utils/seoUtils';
 
 export default function AgentProfilePage() {
   const { agent_name } = useParams<{ agent_name: string }>();
   const navigate = useNavigate();
   const { data: omnexioModels, isLoading } = useGetOmnexioChatModels();
+
+  // Enable ShareThis for this page
+  useShareThis({ enabled: true });
 
   const agent = useMemo(() => {
     if (!omnexioModels || !agent_name) return null;
@@ -118,6 +123,11 @@ export default function AgentProfilePage() {
                 </span>
               )}
             </div>
+          </div>
+
+          {/* ShareThis Button */}
+          <div className="mb-8 flex justify-center">
+            <ShareThisButton className="justify-center" size="medium" />
           </div>
 
           {/* Agent Description */}

@@ -6,6 +6,8 @@ import { AgentGrid } from './AgentGrid';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
 import { useSEO } from '~/hooks/useSEO';
+import { useShareThis } from '~/hooks/useShareThis';
+import { ShareThisButton } from '~/components/ui/ShareThisButton';
 import { SEO_DATA } from '~/seo/seoData';
 
 const TABS = [
@@ -25,6 +27,9 @@ export default function AgentsPage() {
   const activeTab = searchParams.get('tab') || 'chat';
   const code = searchParams.get('code');
   const username = searchParams.get('username');
+
+  // Enable ShareThis for this page
+  useShareThis({ enabled: true });
 
   const processOmnexioNewsletterOnLoad = (): void => {
     if (!code || !username) {
@@ -139,6 +144,11 @@ export default function AgentsPage() {
             Access dozens of Ai agents and models through one account - our Ai search engine
             integrates real time data with the perfect Ai tool, increasing your productivity.
           </p>
+
+          {/* ShareThis Button */}
+          <div className="mt-6 flex justify-center">
+            <ShareThisButton className="justify-center" size="medium" />
+          </div>
         </div>
 
         <AgentTabs tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />
