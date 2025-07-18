@@ -15,7 +15,16 @@ export default function Header() {
   };
 
   const handleNavigateBack = () => {
-    history.back();
+    const currentOrigin = window.location.origin;
+
+    // Check if we came from within our site
+    if (document.referrer && document.referrer.startsWith(currentOrigin)) {
+      history.back();
+      return;
+    }
+
+    // If no internal referrer or came from external site, go to home
+    window.location.href = '/';
   };
 
   const isHomePage = location.pathname === '/';
