@@ -2,223 +2,253 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://omnexio.ai</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1</priority>
     </url>
     <url>
+        <loc>https://omnexio.ai/agents/ai-banner-generator</loc>
+        <lastmod>2025-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://omnexio.ai/agents/ai-poster-generator</loc>
+        <lastmod>2025-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://omnexio.ai/agents/ai-logo-generator</loc>
+        <lastmod>2025-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://omnexio.ai/agents/ai-summarizer</loc>
+        <lastmod>2025-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://omnexio.ai/agents/ai-resume-builder</loc>
+        <lastmod>2025-07-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://omnexio.ai/agents/ai-writer</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-detector</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-humanizer</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-question</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-code</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/chat-with-files</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/prompt-optimizer</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-translator</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/tag-generator</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-image-generator</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/chat-with-images</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-background-remover</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/flux-image-generator</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/ai-video-generator</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/google-veo-3</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gpt-4o</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gemini-2.5-pro</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/grok-3</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/grok-4</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/claude-4-sonnet</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/llama-4-maverick</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/llama-4-scout</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gemini-2.5-flash-preview</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gemini-2.0-flash</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/deepseek-chat</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/deepseek-coder</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/deepseek-reasoner</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gpt-4o-mini</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gpt-4.1</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gpt-4.1-mini</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/o4-mini</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/agents/gemini-flash-1.5</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/pages/privacy-policy</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/pages/tos</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/login</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://omnexio.ai/register</loc>
-        <lastmod>2025-07-15</lastmod>
+        <lastmod>2025-07-18</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
