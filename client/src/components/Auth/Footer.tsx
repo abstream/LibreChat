@@ -51,6 +51,10 @@ function Footer({ startupConfig }: { startupConfig: TStartupConfig | null | unde
         <div className="border-r-[1px] border-gray-300 dark:border-gray-600" />
       )}
       {termsOfServiceRender}
+      <div className="border-r-[1px] border-gray-300 dark:border-gray-600" />
+      <a className="text-sm text-blue-500" href="/pages/contact-us">
+        {localize('com_ui_contact_us')}
+      </a>
     </div>
   );
 }
