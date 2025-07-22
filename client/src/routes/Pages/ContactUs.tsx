@@ -9,7 +9,7 @@ import { SEO_DATA } from '~/seo/seoData';
  * @returns Contact Us React component
  */
 export default function ContactUs() {
-  useSEO(SEO_DATA.terms);
+  useSEO(SEO_DATA.contacts);
 
   return (
     <>

@@ -56,6 +56,14 @@ export const SEO_DATA = {
     keywords: 'terms of service, terms and conditions, AI usage terms, legal agreement',
   },
 
+  contacts: {
+    title: 'Contact Us',
+    description:
+      "Get in touch with Omnexio's team for support, inquiries, and assistance with our AI platform and services.",
+    keywords:
+      'contact us, customer support, AI platform help, Omnexio contact, get in touch, customer service',
+  },
+
   login: {
     title: 'Login',
     description:
