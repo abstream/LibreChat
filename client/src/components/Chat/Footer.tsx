@@ -34,6 +34,12 @@ export default function Footer({ className }: { className?: string }) {
     </a>
   );
 
+  const contactUsRender = (
+    <a className="text-blue-500 underline" href="/pages/contact-us">
+      {localize('com_ui_contact_us')}
+    </a>
+  );
+
   const mainContentParts = (
     typeof config?.customFooter === 'string'
       ? config.customFooter
@@ -78,9 +84,12 @@ export default function Footer({ className }: { className?: string }) {
     </React.Fragment>
   ));
 
-  const footerElements = [...mainContentRender, privacyPolicyRender, termsOfServiceRender].filter(
-    Boolean,
-  );
+  const footerElements = [
+    ...mainContentRender,
+    privacyPolicyRender,
+    termsOfServiceRender,
+    contactUsRender,
+  ].filter(Boolean);
 
   return (
     <div className="relative w-full">
