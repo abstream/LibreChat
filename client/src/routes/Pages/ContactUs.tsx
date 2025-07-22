@@ -24,10 +24,10 @@ export default function ContactUs() {
           <p className="mb-4 text-gray-600">
             <b className="text-gray-800">Email us:</b>{' '}
             <a
-              href="mailto:support@omnexio.ai"
+              href="mailto:admin@omnexio.ai"
               className="text-blue-600 underline transition-colors duration-200 hover:text-blue-800"
             >
-              support@omnexio.ai
+              admin@omnexio.ai
             </a>
           </p>
         </div>

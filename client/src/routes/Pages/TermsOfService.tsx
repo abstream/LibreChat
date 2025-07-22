@@ -168,7 +168,7 @@ export default function TermsOfService() {
             Omnexio. By submitting feedback, you agree to grant us the right, at our discretion, to
             use, copy, disclose, create derivative works, display, publish, and otherwise exploit
             the feedback, in whole or part, freely and without any compensation to you. Please
-            provide your feedback by emailing us at support@omnexio.com.
+            provide your feedback by emailing us at admin@omnexio.com.
           </p>
           <h2 className="mb-4 mt-6 text-xl font-medium">4. Your Content</h2>
           <h3 className="mb-2 mt-4 text-lg font-medium">4.1 Your Content</h3>
