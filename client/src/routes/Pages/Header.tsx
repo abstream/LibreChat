@@ -61,7 +61,7 @@ export default function Header() {
   const menuItems = [
     { label: 'Home', path: '/' },
     { label: 'Pricing', path: '/pages/pricing' },
-    { label: 'Contact', path: '/pages/contact-us' },
+    { label: 'Contacts', path: '/pages/contact-us' },
     { label: 'Terms of Service', path: '/pages/tos' },
     { label: 'Privacy Policy', path: '/pages/privacy-policy' },
   ];
