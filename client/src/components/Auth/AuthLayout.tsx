@@ -7,6 +7,7 @@ import { ThemeSelector } from '~/components';
 import { Banner } from '../Banners';
 import Footer from './Footer';
 import React from 'react';
+import Header from '~/routes/Pages/Header';
 
 function AuthLayout({
   children,
@@ -65,40 +66,7 @@ function AuthLayout({
     <div className="relative flex min-h-screen flex-col bg-white dark:bg-gray-900">
       <Banner />
       <BlinkAnimation active={isFetching}>
-        <div className="mt-6 flex w-full items-center justify-between bg-cover">
-          <div></div>
-          <div>
-            <img
-              src="/assets/omnexio-logo.png"
-              alt={localize('com_ui_logo', { 0: startupConfig?.appTitle ?? 'Omnexio' })}
-            />
-          </div>
-          <div>
-            <button
-              type="button"
-              aria-label={localize('com_ui_new_chat')}
-              className="mr-2 inline-flex size-12 items-center justify-center rounded-full text-blue-600"
-              onClick={handleNavigateContactUs}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-badge-question-mark-icon lucide-badge-question-mark"
-              >
-                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                <line x1="12" x2="12.01" y1="17" y2="17" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <Header />
       </BlinkAnimation>
       <DisplayError />
       <div className="absolute bottom-0 left-0 md:m-4">

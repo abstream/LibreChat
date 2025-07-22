@@ -121,7 +121,7 @@ export default function Header() {
               <button
                 type="button"
                 aria-label={localize('com_ui_new_chat')}
-                className="m-1 inline-flex size-10 items-center justify-center rounded-full text-blue-600"
+                className="m-1 inline-flex size-10 items-center justify-center rounded-full text-blue-500"
                 onClick={handleNavigateContactUs}
               >
                 <svg
