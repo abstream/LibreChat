@@ -17,6 +17,10 @@ export default function ContactUs() {
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="rounded-lg border border-gray-200 bg-white p-8 text-center shadow-sm">
           <h1 className="mb-6 text-3xl font-semibold text-gray-800">Contact Us</h1>
+          <p className="mb-6 text-lg leading-relaxed text-gray-600">
+            If you have any questions, feedback, or need new features, we'd love to hear from you.
+            Our team is here to help and improve your experience.
+          </p>
           <p className="mb-4 text-gray-600">
             <b className="text-gray-800">Email us:</b>{' '}
             <a
