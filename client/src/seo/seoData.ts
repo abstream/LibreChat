@@ -64,6 +64,14 @@ export const SEO_DATA = {
       'contact us, customer support, AI platform help, Omnexio contact, get in touch, customer service',
   },
 
+  pricing: {
+    title: 'Pricing',
+    description:
+      'Choose the perfect AI plan for your needs. Access dozens of AI models and agents with flexible pricing options. Start with our free plan or upgrade for unlimited access.',
+    keywords:
+      'AI pricing, subscription plans, AI models pricing, AI agents cost, free AI, premium AI, AI platform pricing',
+  },
+
   login: {
     title: 'Login',
     description:
