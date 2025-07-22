@@ -204,44 +204,8 @@ export default function PricingPage() {
       <Header />
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
-            Choose Your AI Plan
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
-            Access dozens of AI agents and models through one account. Start free or upgrade for
-            unlimited access to the perfect AI tool for every task.
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
           {subscriptionPlans.map(renderPlanCard)}
-        </div>
-
-        <div className="mt-8 border-t border-border-medium pt-6 text-sm text-text-secondary">
-          <div className="space-y-2">
-            <div className="flex items-start gap-2">
-              <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
-              <span>Credits roll over each month - never lose unused credits</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
-              <span>All plans include access to real-time data integration</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <CheckIcon className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-500" />
-              <span>
-                By subscribing you agree to our{' '}
-                <a className="text-blue-500" href="/pages/privacy-policy">
-                  Privacy Policy
-                </a>{' '}
-                and{' '}
-                <a className="text-blue-500" href="/pages/tos">
-                  Terms of Service
-                </a>
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
