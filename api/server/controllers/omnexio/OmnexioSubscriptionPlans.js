@@ -5,7 +5,7 @@ const { logger } = require('~/config');
 async function omnexioSubscriptionPlans(req, res) {
   try {
     let subscriptionPlans;
-    if (req.user.id) {
+    if (req.user?.id) {
       subscriptionPlans = await fetchAndEnrichSubscriptionPlans(req.user.id);
     } else {
       subscriptionPlans = await fetchAllSubscriptionPlans();
