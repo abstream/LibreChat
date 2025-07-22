@@ -14,6 +14,7 @@ import StartupLayout from './Layouts/Startup';
 import LoginLayout from './Layouts/Login';
 import PrivacyPolicy from './Pages/PrivacyPolicy';
 import TermsOfService from './Pages/TermsOfService';
+import PricingPage from './Pages/PricingPage';
 import AgentsPage from './Pages/Agents/AgentsPage';
 import AgentProfilePage from './Pages/Agents/AgentProfilePage';
 import dashboardRoutes from './Dashboard';
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
   {
     path: 'pages/tos',
     element: <TermsOfService />,
+  },
+  {
+    path: 'pages/pricing',
+    element: <PricingPage />,
   },
   {
     index: true,

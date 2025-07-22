@@ -4,7 +4,12 @@ const { logger } = require('~/config');
 // Main controller function
 async function omnexioSubscriptionPlans(req, res) {
   try {
-    const subscriptionPlans = await fetchAndEnrichSubscriptionPlans(req.user.id);
+    let subscriptionPlans;
+    if (req.user?.id) {
+      subscriptionPlans = await fetchAndEnrichSubscriptionPlans(req.user.id);
+    } else {
+      subscriptionPlans = await fetchAllSubscriptionPlans();
+    }
     return res.status(200).send(subscriptionPlans);
   } catch (error) {
     logger.error('[omnexioSubscriptions] Error fetching plans:', error);
