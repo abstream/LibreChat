@@ -164,11 +164,11 @@ export default function MobileNav({
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="lucide lucide-badge-question-mark-icon lucide-badge-question-mark"
+              className="lucide lucide-user-pen-icon lucide-user-pen"
             >
-              <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" x2="12.01" y1="17" y2="17" />
+              <path d="M11.5 15H7a4 4 0 0 0-4 4v2" />
+              <path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+              <circle cx="10" cy="7" r="4" />
             </svg>
           </button>
         )}
