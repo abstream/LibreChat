@@ -15,13 +15,7 @@ export default function Footer() {
       };
       TagManager.initialize(tagManagerArgs);
     }
-    if (config?.analyticsGtmId2 != null && typeof window.google_tag_manager === 'undefined') {
-      const tagManagerArgs = {
-        gtmId: config.analyticsGtmId2,
-      };
-      TagManager.initialize(tagManagerArgs);
-    }
-  }, [config?.analyticsGtmId, config?.analyticsGtmId2]);
+  }, [config?.analyticsGtmId]);
 
   return (
     <>
@@ -36,6 +30,10 @@ export default function Footer() {
         <div className="border-r-[1px] border-gray-300 dark:border-gray-600"></div>
         <a className="text-sm text-blue-500" href="/pages/tos" rel="noreferrer">
           Terms of service
+        </a>
+        <div className="border-r-[1px] border-gray-300 dark:border-gray-600"></div>
+        <a className="text-sm text-blue-500" href="/pages/contact-us" rel="noreferrer">
+          Contact us
         </a>
       </div>
     </>

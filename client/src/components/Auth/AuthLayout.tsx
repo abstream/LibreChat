@@ -6,6 +6,8 @@ import { BlinkAnimation } from './BlinkAnimation';
 import { ThemeSelector } from '~/components';
 import { Banner } from '../Banners';
 import Footer from './Footer';
+import React from 'react';
+import Header from '~/routes/Pages/Header';
 
 function AuthLayout({
   children,
@@ -25,6 +27,10 @@ function AuthLayout({
   error: TranslationKeys | null;
 }) {
   const localize = useLocalize();
+
+  const handleNavigateContactUs = () => {
+    window.location.href = '/pages/contact-us';
+  };
 
   const hasStartupConfigError = startupConfigError !== null && startupConfigError !== undefined;
   const DisplayError = () => {
@@ -60,15 +66,7 @@ function AuthLayout({
     <div className="relative flex min-h-screen flex-col bg-white dark:bg-gray-900">
       <Banner />
       <BlinkAnimation active={isFetching}>
-        <div className="mt-6 h-10 w-full bg-cover">
-          <a href="/" title="Omnexio">
-            <img
-              src="/assets/omnexio-logo.png"
-              className="h-full w-full object-contain"
-              alt={localize('com_ui_logo', { 0: startupConfig?.appTitle ?? 'Omnexio' })}
-            />
-          </a>
-        </div>
+        <Header />
       </BlinkAnimation>
       <DisplayError />
       <div className="absolute bottom-0 left-0 md:m-4">

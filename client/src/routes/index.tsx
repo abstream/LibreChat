@@ -23,6 +23,7 @@ import Search from './Search';
 import Root from './Root';
 import Logged from '~/routes/Logged';
 import PaymentSuccess from '~/components/Chat/PaymentSuccess';
+import ContactUs from '~/routes/Pages/ContactUs';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -32,6 +33,10 @@ const AuthLayout = () => (
 );
 
 export const router = createBrowserRouter([
+  {
+    path: 'pages/contact-us',
+    element: <ContactUs />,
+  },
   {
     path: 'pages/privacy-policy',
     element: <PrivacyPolicy />,

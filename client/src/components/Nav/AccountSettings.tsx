@@ -149,6 +149,14 @@ function AccountSettings() {
           <LinkIcon aria-hidden="true" />
           {localize('com_ui_terms_of_service')}
         </Select.SelectItem>
+        <Select.SelectItem
+          value=""
+          onClick={() => (window.location.href = '/pages/contact-us')}
+          className="select-item text-sm"
+        >
+          <LinkIcon aria-hidden="true" />
+          {localize('com_ui_contact_us')}
+        </Select.SelectItem>
         <DropdownMenuSeparator />
         <Select.SelectItem
           aria-selected={true}
