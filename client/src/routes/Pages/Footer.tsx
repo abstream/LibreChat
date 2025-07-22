@@ -36,6 +36,7 @@ export default function Footer() {
           Contact us
         </a>
       </div>
+      <div className="h-14"></div>
     </>
   );
 }
