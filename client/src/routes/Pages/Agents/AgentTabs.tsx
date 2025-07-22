@@ -24,7 +24,7 @@ export function AgentTabs({ tabs, activeTab, onTabChange }: AgentTabsProps) {
               'rounded-md px-4 py-2 text-sm font-medium transition-all duration-200',
               'hover:bg-gray-100 dark:hover:bg-gray-700',
               activeTab === tab.id
-                ? 'bg-blue-500 text-white shadow-sm'
+                ? 'bg-blue-400 text-white shadow-sm'
                 : 'text-gray-600 dark:text-gray-300',
             )}
           >

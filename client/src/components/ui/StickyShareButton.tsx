@@ -9,12 +9,12 @@ interface StickyShareButtonProps {
 
 const StickyShareButton: React.FC<StickyShareButtonProps> = ({ title, text, url }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform">
       <ShareButton
         title={title}
         text={text}
         url={url}
-        className="rounded-full bg-blue-600 px-6 py-3 text-white shadow-lg transition-all duration-200 hover:bg-blue-700 hover:shadow-xl"
+        className="rounded-full bg-blue-400 px-12 py-3 text-white shadow-lg transition-all duration-200 hover:bg-blue-400 hover:shadow-xl"
       />
     </div>
   );

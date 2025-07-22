@@ -156,7 +156,7 @@ export default function AgentProfilePage() {
           <div className="text-center">
             <Button
               onClick={handleTryAgent}
-              className="bg-blue-600 px-8 py-3 text-lg hover:bg-blue-700"
+              className="bg-blue-400 px-8 py-3 text-lg hover:bg-blue-400"
             >
               Chat Now
             </Button>
