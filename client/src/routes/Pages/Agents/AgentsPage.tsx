@@ -5,6 +5,7 @@ import { AgentTabs } from './AgentTabs';
 import { AgentGrid } from './AgentGrid';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
+import StickyShareButton from '~/components/ui/StickyShareButton';
 import { useSEO } from '~/hooks/useSEO';
 import { SEO_DATA } from '~/seo/seoData';
 
@@ -114,6 +115,15 @@ export default function AgentsPage() {
     );
   };
 
+  const shareData = useMemo(
+    () => ({
+      title: 'Omnexio AI - All Your AI in One Place',
+      text: `Discover ${activeTab.toLowerCase()} AI models and agents. Access dozens of AI agents and models through one account - our AI search engine integrates real time data with the perfect AI tool.`,
+      url: window.location.href,
+    }),
+    [activeTab],
+  );
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -147,6 +157,8 @@ export default function AgentsPage() {
       </div>
 
       <Footer />
+
+      <StickyShareButton title={shareData.title} text={shareData.text} url={shareData.url} />
     </div>
   );
 }

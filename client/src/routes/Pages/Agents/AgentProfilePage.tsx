@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGetOmnexioChatModels } from '~/data-provider';
 import Header from '~/routes/Pages/Header';
 import Footer from '~/routes/Pages/Footer';
+import StickyShareButton from '~/components/ui/StickyShareButton';
 import { Button } from '~/components/ui';
 import { useSEO } from '~/hooks/useSEO';
 import { generateAgentSEO } from '~/utils/seoUtils';
@@ -33,6 +34,16 @@ export default function AgentProfilePage() {
   const handleBackToAgents = () => {
     navigate('/?tab=' + agent.category);
   };
+
+  const shareData = useMemo(() => {
+    if (!agent) return null;
+
+    return {
+      title: `${agent.label} - AI Agent on Omnexio`,
+      text: `Check out ${agent.label} on Omnexio - ${agent.shortDescription || agent.description?.replace(/<[^>]*>/g, '').slice(0, 100) + '...' || 'An AI agent that can help you with various tasks.'}`,
+      url: window.location.href,
+    };
+  }, [agent]);
 
   if (isLoading) {
     return (
@@ -154,6 +165,10 @@ export default function AgentProfilePage() {
       </div>
 
       <Footer />
+
+      {shareData && (
+        <StickyShareButton title={shareData.title} text={shareData.text} url={shareData.url} />
+      )}
     </div>
   );
 }
