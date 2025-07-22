@@ -37,6 +37,7 @@ export default function Header() {
     <>
       <div className="sticky top-0 z-10 flex w-full items-center justify-between bg-white p-2 font-semibold text-text-primary dark:bg-gray-800">
         <div className="hide-scrollbar flex w-full items-center justify-between gap-2 overflow-x-auto">
+          <div className="w-10"></div>
           <img
             src="/assets/omnexio-logo.png"
             alt="Omnexio Logo"
