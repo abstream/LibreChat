@@ -149,6 +149,12 @@ export default function AgentProfilePage() {
                   ))}
                 </div>
               )}
+              <div>
+                <b>Web search by</b>{' '}
+                <a className="ml-1 text-blue-500 underline" href="https://aisearchapi.io">
+                  AI Search API
+                </a>
+              </div>
             </div>
           )}
 
