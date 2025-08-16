@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { CheckIcon, Loader2 } from 'lucide-react';
 import { Button } from '~/components/ui';
 import { useSEO } from '~/hooks/useSEO';
-import { useGetOmnexioSubscriptionPlans } from '~/data-provider';
+import { useGetOmnexioPricingSubscriptionPlans } from '~/data-provider';
 import { SEO_DATA } from '~/seo/seoData';
 import Header from './Header';
 import Footer from './Footer';
@@ -19,7 +19,7 @@ interface SubscriptionPlan {
 }
 
 export default function PricingPage() {
-  const subscriptionPlansQuery = useGetOmnexioSubscriptionPlans();
+  const subscriptionPlansQuery = useGetOmnexioPricingSubscriptionPlans();
   const [processingId, setProcessingId] = useState<number | null>(null);
 
   useSEO(SEO_DATA.pricing);
