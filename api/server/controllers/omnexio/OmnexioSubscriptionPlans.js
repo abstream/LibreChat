@@ -6,10 +6,8 @@ async function omnexioSubscriptionPlans(req, res) {
   try {
     let subscriptionPlans;
     if (req.user?.id) {
-      logger.warn('111111');
       subscriptionPlans = await fetchAndEnrichSubscriptionPlans(req.user.id);
     } else {
-      logger.warn('2222222');
       subscriptionPlans = await fetchAllSubscriptionPlans();
     }
     return res.status(200).send(subscriptionPlans);
@@ -21,7 +19,6 @@ async function omnexioSubscriptionPlans(req, res) {
 
 // Fetch all plans and enrich with user's current plan
 async function fetchAndEnrichSubscriptionPlans(userId) {
-  logger.warn('userId:' + userId);
   const allPlans = await fetchAllSubscriptionPlans();
   const currentPlanId = await fetchCurrentSubscriptionPlanId(userId);
 

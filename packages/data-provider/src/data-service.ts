@@ -112,6 +112,10 @@ export function getOmnexioSubscriptionPlans(): Promise<string> {
   return request.get(endpoints.omnexioSubscriptionPlans());
 }
 
+export function getOmnexioPricingSubscriptionPlans(): Promise<string> {
+  return request.get(endpoints.omnexioSubscriptionPlans());
+}
+
 export function getOmnexioChatModels(): Promise<string> {
   return request.get(endpoints.omnexioChatModels());
 }
