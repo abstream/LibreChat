@@ -40,7 +40,7 @@ export const useGetOmnexioPricingSubscriptionPlans = (
   config?: UseQueryOptions<string>,
 ): QueryObserverResult<any> => {
   return useQuery<string>(
-    [QueryKeys.omnexioSubscriptionPlans],
+    [QueryKeys.omnexioPricingSubscriptionPlans],
     () => dataService.getOmnexioPricingSubscriptionPlans(),
     {
       refetchOnWindowFocus: true,
