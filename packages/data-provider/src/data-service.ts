@@ -113,7 +113,7 @@ export function getOmnexioSubscriptionPlans(): Promise<string> {
 }
 
 export function getOmnexioPricingSubscriptionPlans(): Promise<string> {
-  return request.get(endpoints.omnexioSubscriptionPlans());
+  return request.get(endpoints.omnexioPricingSubscriptionPlans());
 }
 
 export function getOmnexioChatModels(): Promise<string> {
