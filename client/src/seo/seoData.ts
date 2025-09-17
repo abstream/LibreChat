@@ -8,9 +8,9 @@ export const SEO_DATA = {
   },
 
   agents: {
-    title: 'AI Agents & Models',
+    title: 'Deep Search Engine | AI Semantic Search',
     description:
-      'Discover and interact with dozens of AI agents and models including chat, image, video, and specialized AI tools. All accessible through one unified platform.',
+      'Omnexio is a deep search engine powered by AI semantic search. Get real-time answers, analyze multiple sources, and explore data faster.',
     keywords:
       'AI agents, AI models, chat AI, image AI, video AI, OpenAI GPT, Claude, artificial intelligence tools',
   },

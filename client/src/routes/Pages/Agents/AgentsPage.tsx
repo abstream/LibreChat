@@ -56,8 +56,6 @@ export default function AgentsPage() {
 
   useSEO({
     ...SEO_DATA.agents,
-    title: `Omnexio AI`,
-    description: `Discover ${activeTab} AI models and agents. ${SEO_DATA.agents.description}`,
   });
 
   const handleTabChange = (tabId: string) => {
@@ -117,7 +115,7 @@ export default function AgentsPage() {
 
   const shareData = useMemo(
     () => ({
-      title: 'Omnexio AI - All Your AI in One Place',
+      title: 'Omnexio AI - Deep Search Engine with AI Semantic Search',
       text: `Discover ${activeTab.toLowerCase()} AI models and agents. Access dozens of AI agents and models through one account - our AI search engine integrates real time data with the perfect AI tool.`,
       url: window.location.href,
     }),
@@ -144,10 +142,12 @@ export default function AgentsPage() {
         {renderNewsletterMessage()}
 
         <div className="mb-8 text-center">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">All Your Ai</h1>
+          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+            Deep Search Engine with AI Semantic Search
+          </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Access dozens of Ai agents and models through one account - our Ai search engine
-            integrates real time data with the perfect Ai tool, increasing your productivity.
+            Discover real answers from multiple sources with deep search. Omnexio helps
+            professionals, creators, and SMBs cut through noise and find insights faster.
           </p>
         </div>
 
