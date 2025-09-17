@@ -1,10 +1,11 @@
 import type { FC } from 'react';
+import { BookCopy } from 'lucide-react';
+import { TooltipAnchor } from '@librechat/client';
 import { Settings2 } from 'lucide-react';
 import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover';
 import { EditPresetDialog, PresetItems } from './Presets';
 import { useLocalize, usePresets } from '~/hooks';
 import { useChatContext } from '~/Providers';
-import { TooltipAnchor } from '~/components';
 
 const PresetsMenu: FC = () => {
   const localize = useLocalize();

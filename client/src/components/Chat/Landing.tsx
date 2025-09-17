@@ -1,14 +1,10 @@
 import React, { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import { easings } from '@react-spring/web';
 import { EModelEndpoint } from 'librechat-data-provider';
+import { BirthdayIcon, TooltipAnchor, SplitText, Button} from '@librechat/client';
 import { useSetRecoilState } from 'recoil';
 import { useChatContext, useAgentsMapContext, useAssistantsMapContext } from '~/Providers';
-import {
-  useGetEndpointsQuery,
-  useGetStartupConfig,
-  useGetOmnexioChatModels,
-} from '~/data-provider';
-import { BirthdayIcon, TooltipAnchor, SplitText, Button } from '~/components';
+import { useGetEndpointsQuery, useGetStartupConfig, useGetOmnexioChatModels } from '~/data-provider';
 import ConvoIcon from '~/components/Endpoints/ConvoIcon';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { getIconEndpoint, getEntity } from '~/utils';

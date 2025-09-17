@@ -1,11 +1,11 @@
-import { useForm } from 'react-hook-form';
 import React, { useState, useEffect, useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { ThemeContext, Spinner, Button, isDark } from '@librechat/client';
 import type { TLoginUser, TStartupConfig } from 'librechat-data-provider';
 import type { TAuthContext } from '~/common';
 import { useResendVerificationEmail, useGetStartupConfig } from '~/data-provider';
-import { ThemeContext, useLocalize } from '~/hooks';
-import { Spinner, Button } from '~/components';
+import { useLocalize } from '~/hooks';
 
 type TLoginFormProps = {
   onSubmit: (data: TLoginUser) => void;
@@ -35,7 +35,7 @@ const LoginForm: React.FC<TLoginFormProps> = ({
 
   const { data: config } = useGetStartupConfig();
   const useUsernameLogin = config?.ldap?.username;
-  const validTheme = theme === 'dark' ? 'dark' : 'light';
+  const validTheme = isDark(theme) ? 'dark' : 'light';
   const requireCaptcha = Boolean(startupConfig.turnstile?.siteKey);
 
   useEffect(() => {

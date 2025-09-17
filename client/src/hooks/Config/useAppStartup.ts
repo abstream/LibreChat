@@ -5,6 +5,8 @@ import { LocalStorageKeys } from 'librechat-data-provider';
 import { useAvailablePluginsQuery } from 'librechat-data-provider/react-query';
 import type { TStartupConfig, TPlugin, TUser } from 'librechat-data-provider';
 import { mapPlugins, selectPlugins, processPlugins } from '~/utils';
+import { cleanupTimestampedStorage } from '~/utils/timestamps';
+import useSpeechSettingsInit from './useSpeechSettingsInit';
 import store from '~/store';
 
 const pluginStore: TPlugin = {
@@ -30,6 +32,13 @@ export default function useAppStartup({
     enabled: !!user?.plugins,
     select: selectPlugins,
   });
+
+  useSpeechSettingsInit(!!user);
+
+  /** Clean up old localStorage entries on startup */
+  useEffect(() => {
+    cleanupTimestampedStorage();
+  }, []);
 
   /** Set the app title */
   useEffect(() => {
