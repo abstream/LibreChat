@@ -248,17 +248,6 @@ const xAIModels = {
   'grok-4': 256000, // 256K context
 };
 
-const aggregateModels = {
-  ...openAIModels,
-  ...googleModels,
-  ...bedrockModels,
-  ...xAIModels,
-  // misc.
-  kimi: 131000,
-  // GPT-OSS
-  'gpt-oss-20b': 131000,
-  'gpt-oss-120b': 131000,
-};
 const omnexioModels = {
   'Claude 3.5 Haiku': 10000,
   'Claude 3.7 Sonnet': 10000,
@@ -283,6 +272,11 @@ const aggregateModels = {
   ...googleModels,
   ...bedrockModels,
   ...xAIModels,
+  // misc.
+  kimi: 131000,
+  // GPT-OSS
+  'gpt-oss-20b': 131000,
+  'gpt-oss-120b': 131000,
   ...omnexioModels,
 };
 
