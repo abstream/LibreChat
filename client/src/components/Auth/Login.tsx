@@ -11,7 +11,7 @@ import { useLocalize } from '~/hooks';
 import LoginForm from './LoginForm';
 import { useCreateGuest } from '~/data-provider';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { ThemeContext } from '~/hooks';
+import { ThemeContext } from '@librechat/client';
 import { useContext } from 'react';
 import { useSEO } from '~/hooks/useSEO';
 import { SEO_DATA } from '~/seo/seoData';
