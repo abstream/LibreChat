@@ -34,3 +34,4 @@ export { default as useTextToSpeech } from './Input/useTextToSpeech';
 export { default as useGenerationsByLatest } from './useGenerationsByLatest';
 export { useResourcePermissions } from './useResourcePermissions';
 export { useShare } from './useShare';
+export { default as useMediaQuery } from './useMediaQuery';
