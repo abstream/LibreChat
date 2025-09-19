@@ -7,6 +7,7 @@ import StickyShareButton from '~/components/ui/StickyShareButton';
 import { Button } from '~/components/ui';
 import { useSEO } from '~/hooks/useSEO';
 import { generateAgentSEO } from '~/utils/seoUtils';
+import { ThemeSelector } from '@librechat/client';
 
 export default function AgentProfilePage() {
   const { agent_name } = useParams<{ agent_name: string }>();
@@ -49,6 +50,11 @@ export default function AgentProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
+
+        <div className="absolute bottom-0 left-0 md:m-4">
+          <ThemeSelector />
+        </div>
+
         <div className="flex items-center justify-center py-20">
           <div className="text-lg text-gray-600 dark:text-gray-300">Loading agent...</div>
         </div>
@@ -61,6 +67,11 @@ export default function AgentProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
+
+        <div className="absolute bottom-0 left-0 md:m-4">
+          <ThemeSelector />
+        </div>
+
         <div className="container mx-auto max-w-4xl px-4 py-8">
           <div className="text-center">
             <div className="mb-8">
@@ -84,6 +95,10 @@ export default function AgentProfilePage() {
   return (
     <div className="min-h-screen" style={{ 'background-color': '#f0f8ff' }}>
       <Header />
+
+      <div className="absolute bottom-0 left-0 md:m-4">
+        <ThemeSelector />
+      </div>
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-800">

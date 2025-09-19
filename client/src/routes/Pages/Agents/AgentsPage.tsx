@@ -8,6 +8,7 @@ import Footer from '~/routes/Pages/Footer';
 import StickyShareButton from '~/components/ui/StickyShareButton';
 import { useSEO } from '~/hooks/useSEO';
 import { SEO_DATA } from '~/seo/seoData';
+import { ThemeSelector } from '@librechat/client';
 
 const TABS = [
   { id: 'chat', label: 'Chat' },
@@ -137,6 +138,10 @@ export default function AgentsPage() {
   return (
     <div className="min-h-screen" style={{ 'background-color': '#f0f8ff' }}>
       <Header />
+
+      <div className="absolute bottom-0 left-0 md:m-4">
+        <ThemeSelector />
+      </div>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         {renderNewsletterMessage()}
