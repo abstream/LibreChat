@@ -48,18 +48,14 @@ const oauthHandler = async (req, res, next) => {
     res.redirect(`${domains.client}/logged`);
   } catch (err) {
     logger.error('Error in setting authentication tokens:', err);
-    next(err);
+    // Redirect to login page with auth_failed parameter to prevent infinite redirect loops
+    res.redirect(`${domains.client}/login?redirect=false`);
   }
 };
 
 router.get('/error', (req, res) => {
-  /** A single error message is pushed by passport when authentication fails. */
-  const errorMessage = req.session?.messages?.pop() || 'Unknown error';
-  logger.error('Error in OAuth authentication:', {
-    message: errorMessage,
-  });
-
-  res.redirect(`${domains.client}/login?redirect=false&error=${ErrorTypes.AUTH_FAILED}`);
+  // Redirect to login page with auth_failed parameter to prevent infinite redirect loops
+  res.redirect(`${domains.client}/login?redirect=false`);
 });
 
 /**
@@ -73,19 +69,26 @@ router.get(
   }),
 );
 
-router.get(
-  '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: `${domains.client}/oauth/error`,
-    failureMessage: true,
-    session: false,
-    scope: ['openid', 'profile', 'email'],
-  }),
-  setBalanceConfig,
-  checkDomainAllowed,
-  oauthHandler,
-);
+const authenticateGoogle = (req, res, next) => {
+  passport.authenticate(
+    'google',
+    {
+      session: false,
+      scope: ['openid', 'profile', 'email'],
+    },
+    (err, user, info) => {
+      if (err || !user) {
+        return res.redirect(`${domains.client}/oauth/error`);
+      }
 
+      // Success - attach user to request and continue
+      req.user = user;
+      next();
+    },
+  )(req, res, next);
+};
+
+router.get('/google/callback', authenticateGoogle, setBalanceConfig, oauthHandler);
 /**
  * Facebook Routes
  */
