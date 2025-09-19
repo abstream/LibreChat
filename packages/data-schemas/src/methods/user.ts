@@ -1,5 +1,5 @@
 import mongoose, { FilterQuery } from 'mongoose';
-import type { IUser, BalanceConfig, UserCreateData, UserUpdateResult } from '~/types';
+import type { IUser, BalanceConfig, CreateUserRequest, UserDeleteResult } from '~/types';
 import { signPayload } from '~/crypto';
 
 /** Factory function that takes mongoose instance and returns the methods */
@@ -31,7 +31,7 @@ export function createUserMethods(mongoose: typeof import('mongoose')) {
    * Creates a new user, optionally with a TTL of 1 week.
    */
   async function createUser(
-    data: UserCreateData,
+    data: CreateUserRequest,
     balanceConfig?: BalanceConfig,
     disableTTL: boolean = true,
     returnUser: boolean = false,
@@ -123,7 +123,7 @@ export function createUserMethods(mongoose: typeof import('mongoose')) {
   /**
    * Delete a user by their unique ID.
    */
-  async function deleteUserById(userId: string): Promise<UserUpdateResult> {
+  async function deleteUserById(userId: string): Promise<UserDeleteResult> {
     try {
       const User = mongoose.models.User;
       const result = await User.deleteOne({ _id: userId });
@@ -145,7 +145,18 @@ export function createUserMethods(mongoose: typeof import('mongoose')) {
       throw new Error('No user provided');
     }
 
-    const expires = eval(process.env.SESSION_EXPIRY ?? '0') ?? 1000 * 60 * 15;
+    let expires = 1000 * 60 * 15;
+
+    if (process.env.SESSION_EXPIRY !== undefined && process.env.SESSION_EXPIRY !== '') {
+      try {
+        const evaluated = eval(process.env.SESSION_EXPIRY);
+        if (evaluated) {
+          expires = evaluated;
+        }
+      } catch (error) {
+        console.warn('Invalid SESSION_EXPIRY expression, using default:', error);
+      }
+    }
 
     return await signPayload({
       payload: {
@@ -159,15 +170,125 @@ export function createUserMethods(mongoose: typeof import('mongoose')) {
     });
   }
 
-  // Return all methods
+  /**
+   * Update a user's personalization memories setting.
+   * Handles the edge case where the personalization object doesn't exist.
+   */
+  async function toggleUserMemories(
+    userId: string,
+    memoriesEnabled: boolean,
+  ): Promise<IUser | null> {
+    const User = mongoose.models.User;
+
+    // First, ensure the personalization object exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return null;
+    }
+
+    // Use $set to update the nested field, which will create the personalization object if it doesn't exist
+    const updateOperation = {
+      $set: {
+        'personalization.memories': memoriesEnabled,
+      },
+    };
+
+    return (await User.findByIdAndUpdate(userId, updateOperation, {
+      new: true,
+      runValidators: true,
+    }).lean()) as IUser | null;
+  }
+
+  /**
+   * Search for users by pattern matching on name, email, or username (case-insensitive)
+   * @param searchPattern - The pattern to search for
+   * @param limit - Maximum number of results to return
+   * @param fieldsToSelect - The fields to include or exclude in the returned documents
+   * @returns Array of matching user documents
+   */
+  const searchUsers = async function ({
+    searchPattern,
+    limit = 20,
+    fieldsToSelect = null,
+  }: {
+    searchPattern: string;
+    limit?: number;
+    fieldsToSelect?: string | string[] | null;
+  }) {
+    if (!searchPattern || searchPattern.trim().length === 0) {
+      return [];
+    }
+
+    const regex = new RegExp(searchPattern.trim(), 'i');
+    const User = mongoose.models.User;
+
+    const query = User.find({
+      $or: [{ email: regex }, { name: regex }, { username: regex }],
+    }).limit(limit * 2); // Get more results to allow for relevance sorting
+
+    if (fieldsToSelect) {
+      query.select(fieldsToSelect);
+    }
+
+    const users = await query.lean();
+
+    // Score results by relevance
+    const exactRegex = new RegExp(`^${searchPattern.trim()}$`, 'i');
+    const startsWithPattern = searchPattern.trim().toLowerCase();
+
+    const scoredUsers = users.map((user) => {
+      const searchableFields = [user.name, user.email, user.username].filter(Boolean);
+      let maxScore = 0;
+
+      for (const field of searchableFields) {
+        const fieldLower = field.toLowerCase();
+        let score = 0;
+
+        // Exact match gets highest score
+        if (exactRegex.test(field)) {
+          score = 100;
+        }
+        // Starts with query gets high score
+        else if (fieldLower.startsWith(startsWithPattern)) {
+          score = 80;
+        }
+        // Contains query gets medium score
+        else if (fieldLower.includes(startsWithPattern)) {
+          score = 50;
+        }
+        // Default score for regex match
+        else {
+          score = 10;
+        }
+
+        maxScore = Math.max(maxScore, score);
+      }
+
+      return { ...user, _searchScore: maxScore };
+    });
+
+    /** Top results sorted by relevance */
+    return scoredUsers
+      .sort((a, b) => b._searchScore - a._searchScore)
+      .slice(0, limit)
+      .map((user) => {
+        // Remove the search score from final results
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _searchScore, ...userWithoutScore } = user;
+        return userWithoutScore;
+      });
+  };
+
   return {
     findUser,
     countUsers,
     createUser,
     updateUser,
+    searchUsers,
     getUserById,
-    deleteUserById,
     generateToken,
+    deleteUserById,
+    toggleUserMemories,
   };
 }
 

@@ -9,13 +9,13 @@ import {
   OGDialogTrigger,
   OGDialogHeader,
   OGDialogTitle,
-} from '~/components';
+} from '@librechat/client';
 import { useDeleteUserMutation, useGetOmnexioSubscriptionPlans } from '~/data-provider';
 import { useAuthContext } from '~/hooks/AuthContext';
+import { LocalizeFunction } from '~/common';
 import { useLocalize } from '~/hooks';
 import { useToastContext } from '~/Providers';
 import { cn } from '~/utils';
-import { LocalizeFunction } from '~/common';
 
 const DeleteAccount = ({ disabled = false }: { title?: string; disabled?: boolean }) => {
   const localize = useLocalize();

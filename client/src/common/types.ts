@@ -8,6 +8,11 @@ import type * as t from 'librechat-data-provider';
 import type { LucideIcon } from 'lucide-react';
 import type { TranslationKeys } from '~/hooks';
 
+export interface ConfigFieldDetail {
+  title: string;
+  description: string;
+}
+
 export type CodeBarProps = {
   lang: string;
   error?: boolean;
@@ -143,6 +148,7 @@ export enum Panel {
   actions = 'actions',
   model = 'model',
   version = 'version',
+  mcp = 'mcp',
 }
 
 export type FileSetter =
@@ -164,6 +170,15 @@ export type ActionAuthForm = {
   client_url: string;
   scope: string;
   token_exchange_method: t.TokenExchangeMethodEnum;
+};
+
+export type MCPForm = ActionAuthForm & {
+  name?: string;
+  description?: string;
+  url?: string;
+  tools?: string[];
+  icon?: string;
+  trust?: boolean;
 };
 
 export type ActionWithNullableMetadata = Omit<t.Action, 'metadata'> & {
@@ -188,14 +203,47 @@ export type AgentPanelProps = {
   index?: number;
   agent_id?: string;
   activePanel?: string;
+  mcp?: t.MCP;
+  mcps?: t.MCP[];
   action?: t.Action;
   actions?: t.Action[];
   createMutation: UseMutationResult<t.Agent, Error, t.AgentCreateParams>;
   setActivePanel: React.Dispatch<React.SetStateAction<Panel>>;
+  setMcp: React.Dispatch<React.SetStateAction<t.MCP | undefined>>;
   setAction: React.Dispatch<React.SetStateAction<t.Action | undefined>>;
   endpointsConfig?: t.TEndpointsConfig;
   setCurrentAgentId: React.Dispatch<React.SetStateAction<string | undefined>>;
   agentsConfig?: t.TAgentsEndpoint | null;
+};
+
+export interface MCPServerInfo {
+  serverName: string;
+  tools: t.AgentToolType[];
+  isConfigured: boolean;
+  isConnected: boolean;
+  metadata: t.TPlugin;
+}
+
+export type AgentPanelContextType = {
+  action?: t.Action;
+  actions?: t.Action[];
+  setAction: React.Dispatch<React.SetStateAction<t.Action | undefined>>;
+  mcp?: t.MCP;
+  mcps?: t.MCP[];
+  setMcp: React.Dispatch<React.SetStateAction<t.MCP | undefined>>;
+  setMcps: React.Dispatch<React.SetStateAction<t.MCP[] | undefined>>;
+  groupedTools: Record<string, t.AgentToolType & { tools?: t.AgentToolType[] }>;
+  activePanel?: string;
+  tools: t.AgentToolType[];
+  pluginTools?: t.TPlugin[];
+  setActivePanel: React.Dispatch<React.SetStateAction<Panel>>;
+  setCurrentAgentId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  agent_id?: string;
+  startupConfig?: t.TStartupConfig | null;
+  agentsConfig?: t.TAgentsEndpoint | null;
+  endpointsConfig?: t.TEndpointsConfig | null;
+  /** Pre-computed MCP server information indexed by server key */
+  mcpServersMap: Map<string, MCPServerInfo>;
 };
 
 export type AgentModelPanelProps = {
@@ -306,6 +354,7 @@ export type TAskProps = {
 
 export type TOptions = {
   editedMessageId?: string | null;
+  editedContent?: t.TEditedContent;
   editedText?: string | null;
   isRegenerate?: boolean;
   isContinued?: boolean;

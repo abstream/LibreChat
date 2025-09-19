@@ -11,6 +11,17 @@ const {
 } = require('librechat-data-provider');
 const { SplitStreamHandler: _Handler } = require('@librechat/agents');
 const {
+  Tokenizer,
+  createFetch,
+  matchModelName,
+  getClaudeHeaders,
+  getModelMaxTokens,
+  configureReasoning,
+  checkPromptCacheSupport,
+  getModelMaxOutputTokens,
+  createStreamEventHandlers,
+} = require('@librechat/api');
+const {
   truncateText,
   formatMessage,
   addCacheControl,
@@ -18,16 +29,8 @@ const {
   parseParamFromPrompt,
   createContextHandlers,
 } = require('./prompts');
-const {
-  getClaudeHeaders,
-  configureReasoning,
-  checkPromptCacheSupport,
-} = require('~/server/services/Endpoints/anthropic/helpers');
-const { getModelMaxTokens, getModelMaxOutputTokens, matchModelName } = require('~/utils');
 const { spendTokens, spendStructuredTokens } = require('~/models/spendTokens');
 const { encodeAndFormat } = require('~/server/services/Files/images/encode');
-const { createFetch, createStreamEventHandlers } = require('./generators');
-const Tokenizer = require('~/server/services/Tokenizer');
 const { sleep } = require('~/server/utils');
 const BaseClient = require('./BaseClient');
 const { logger } = require('~/config');
@@ -191,10 +194,11 @@ class AnthropicClient extends BaseClient {
         reverseProxyUrl: this.options.reverseProxyUrl,
       }),
       apiKey: this.apiKey,
+      fetchOptions: {},
     };
 
     if (this.options.proxy) {
-      options.httpAgent = new HttpsProxyAgent(this.options.proxy);
+      options.fetchOptions.agent = new HttpsProxyAgent(this.options.proxy);
     }
 
     if (this.options.reverseProxyUrl) {

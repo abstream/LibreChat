@@ -1,21 +1,99 @@
+const undici = require('undici');
 const fetch = require('node-fetch');
 const passport = require('passport');
 const client = require('openid-client');
 const jwtDecode = require('jsonwebtoken/decode');
-const { CacheKeys } = require('librechat-data-provider');
 const { HttpsProxyAgent } = require('https-proxy-agent');
 const { hashToken, logger } = require('@librechat/data-schemas');
+const { CacheKeys, ErrorTypes } = require('librechat-data-provider');
 const { Strategy: OpenIDStrategy } = require('openid-client/passport');
+const {
+  isEnabled,
+  logHeaders,
+  safeStringify,
+  findOpenIDUser,
+  getBalanceConfig,
+} = require('@librechat/api');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
+const { isEmailDomainAllowed } = require('~/server/services/domains');
 const { findUser, createUser, updateUser } = require('~/models');
-const { getBalanceConfig } = require('~/server/services/Config');
+const { getAppConfig } = require('~/server/services/Config');
 const getLogStores = require('~/cache/getLogStores');
-const { isEnabled } = require('~/server/utils');
 
 /**
  * @typedef {import('openid-client').ClientMetadata} ClientMetadata
  * @typedef {import('openid-client').Configuration} Configuration
  **/
+
+/**
+ * @param {string} url
+ * @param {client.CustomFetchOptions} options
+ */
+async function customFetch(url, options) {
+  const urlStr = url.toString();
+  logger.debug(`[openidStrategy] Request to: ${urlStr}`);
+  const debugOpenId = isEnabled(process.env.DEBUG_OPENID_REQUESTS);
+  if (debugOpenId) {
+    logger.debug(`[openidStrategy] Request method: ${options.method || 'GET'}`);
+    logger.debug(`[openidStrategy] Request headers: ${logHeaders(options.headers)}`);
+    if (options.body) {
+      let bodyForLogging = '';
+      if (options.body instanceof URLSearchParams) {
+        bodyForLogging = options.body.toString();
+      } else if (typeof options.body === 'string') {
+        bodyForLogging = options.body;
+      } else {
+        bodyForLogging = safeStringify(options.body);
+      }
+      logger.debug(`[openidStrategy] Request body: ${bodyForLogging}`);
+    }
+  }
+
+  try {
+    /** @type {undici.RequestInit} */
+    let fetchOptions = options;
+    if (process.env.PROXY) {
+      logger.info(`[openidStrategy] proxy agent configured: ${process.env.PROXY}`);
+      fetchOptions = {
+        ...options,
+        dispatcher: new undici.ProxyAgent(process.env.PROXY),
+      };
+    }
+
+    const response = await undici.fetch(url, fetchOptions);
+
+    if (debugOpenId) {
+      logger.debug(`[openidStrategy] Response status: ${response.status} ${response.statusText}`);
+      logger.debug(`[openidStrategy] Response headers: ${logHeaders(response.headers)}`);
+    }
+
+    if (response.status === 200 && response.headers.has('www-authenticate')) {
+      const wwwAuth = response.headers.get('www-authenticate');
+      logger.warn(`[openidStrategy] Non-standard WWW-Authenticate header found in successful response (200 OK): ${wwwAuth}.
+This violates RFC 7235 and may cause issues with strict OAuth clients. Removing header for compatibility.`);
+
+      /** Cloned response without the WWW-Authenticate header */
+      const responseBody = await response.arrayBuffer();
+      const newHeaders = new Headers();
+      for (const [key, value] of response.headers.entries()) {
+        if (key.toLowerCase() !== 'www-authenticate') {
+          newHeaders.append(key, value);
+        }
+      }
+
+      return new Response(responseBody, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders,
+      });
+    }
+
+    return response;
+  } catch (error) {
+    logger.error(`[openidStrategy] Fetch error: ${error.message}`);
+    throw error;
+  }
+}
 
 /** @typedef {Configuration | null}  */
 let openidConfig = null;
@@ -28,11 +106,29 @@ class CustomOpenIDStrategy extends OpenIDStrategy {
     const hostAndProtocol = process.env.DOMAIN_SERVER;
     return new URL(`${hostAndProtocol}${req.originalUrl ?? req.url}`);
   }
+
   authorizationRequestParams(req, options) {
     const params = super.authorizationRequestParams(req, options);
     if (options?.state && !params.has('state')) {
       params.set('state', options.state);
     }
+
+    if (process.env.OPENID_AUDIENCE) {
+      params.set('audience', process.env.OPENID_AUDIENCE);
+      logger.debug(
+        `[openidStrategy] Adding audience to authorization request: ${process.env.OPENID_AUDIENCE}`,
+      );
+    }
+
+    /** Generate nonce for federated providers that require it */
+    const shouldGenerateNonce = isEnabled(process.env.OPENID_GENERATE_NONCE);
+    if (shouldGenerateNonce && !params.has('nonce') && this._sessionKey) {
+      const crypto = require('crypto');
+      const nonce = crypto.randomBytes(16).toString('hex');
+      params.set('nonce', nonce);
+      logger.debug('[openidStrategy] Generated nonce for federated provider:', nonce);
+    }
+
     return params;
   }
 }
@@ -47,7 +143,7 @@ class CustomOpenIDStrategy extends OpenIDStrategy {
  */
 const exchangeAccessTokenIfNeeded = async (config, accessToken, sub, fromCache = false) => {
   const tokensCache = getLogStores(CacheKeys.OPENID_EXCHANGED_TOKENS);
-  const onBehalfFlowRequired = isEnabled(process.env.OPENID_ON_BEHALF_FLOW_FOR_USERINFRO_REQUIRED);
+  const onBehalfFlowRequired = isEnabled(process.env.OPENID_ON_BEHALF_FLOW_FOR_USERINFO_REQUIRED);
   if (onBehalfFlowRequired) {
     if (fromCache) {
       const cachedToken = await tokensCache.get(sub);
@@ -59,7 +155,7 @@ const exchangeAccessTokenIfNeeded = async (config, accessToken, sub, fromCache =
       config,
       'urn:ietf:params:oauth:grant-type:jwt-bearer',
       {
-        scope: process.env.OPENID_ON_BEHALF_FLOW_USERINFRO_SCOPE || 'user.read',
+        scope: process.env.OPENID_ON_BEHALF_FLOW_USERINFO_SCOPE || 'user.read',
         assertion: accessToken,
         requested_token_use: 'on_behalf_of',
       },
@@ -88,7 +184,7 @@ const getUserInfo = async (config, accessToken, sub) => {
     const exchangedAccessToken = await exchangeAccessTokenIfNeeded(config, accessToken, sub);
     return await client.fetchUserInfo(config, exchangedAccessToken, sub);
   } catch (error) {
-    logger.warn(`[openidStrategy] getUserInfo: Error fetching user info: ${error}`);
+    logger.error('[openidStrategy] getUserInfo: Error fetching user info:', error);
     return null;
   }
 };
@@ -197,56 +293,81 @@ function convertToUsername(input, defaultValue = '') {
  */
 async function setupOpenId() {
   try {
+    const shouldGenerateNonce = isEnabled(process.env.OPENID_GENERATE_NONCE);
+
     /** @type {ClientMetadata} */
     const clientMetadata = {
       client_id: process.env.OPENID_CLIENT_ID,
       client_secret: process.env.OPENID_CLIENT_SECRET,
     };
 
+    if (shouldGenerateNonce) {
+      clientMetadata.response_types = ['code'];
+      clientMetadata.grant_types = ['authorization_code'];
+      clientMetadata.token_endpoint_auth_method = 'client_secret_post';
+    }
+
     /** @type {Configuration} */
     openidConfig = await client.discovery(
       new URL(process.env.OPENID_ISSUER),
       process.env.OPENID_CLIENT_ID,
       clientMetadata,
+      undefined,
+      {
+        [client.customFetch]: customFetch,
+      },
     );
-    if (process.env.PROXY) {
-      const proxyAgent = new HttpsProxyAgent(process.env.PROXY);
-      openidConfig[client.customFetch] = (...args) => {
-        return fetch(args[0], { ...args[1], agent: proxyAgent });
-      };
-      logger.info(`[openidStrategy] proxy agent added: ${process.env.PROXY}`);
-    }
+
     const requiredRole = process.env.OPENID_REQUIRED_ROLE;
     const requiredRoleParameterPath = process.env.OPENID_REQUIRED_ROLE_PARAMETER_PATH;
     const requiredRoleTokenKind = process.env.OPENID_REQUIRED_ROLE_TOKEN_KIND;
     const usePKCE = isEnabled(process.env.OPENID_USE_PKCE);
+    logger.info(`[openidStrategy] OpenID authentication configuration`, {
+      generateNonce: shouldGenerateNonce,
+      reason: shouldGenerateNonce
+        ? 'OPENID_GENERATE_NONCE=true - Will generate nonce and use explicit metadata for federated providers'
+        : 'OPENID_GENERATE_NONCE=false - Standard flow without explicit nonce or metadata',
+    });
+
     const openidLogin = new CustomOpenIDStrategy(
       {
         config: openidConfig,
         scope: process.env.OPENID_SCOPE,
         callbackURL: process.env.DOMAIN_SERVER + process.env.OPENID_CALLBACK_URL,
+        clockTolerance: process.env.OPENID_CLOCK_TOLERANCE || 300,
         usePKCE,
       },
       async (tokenset, done) => {
         try {
           const claims = tokenset.claims();
-          let user = await findUser({ openidId: claims.sub });
-          logger.info(
-            `[openidStrategy] user ${user ? 'found' : 'not found'} with openidId: ${claims.sub}`,
-          );
-
-          if (!user) {
-            user = await findUser({ email: claims.email });
-            logger.info(
-              `[openidStrategy] user ${user ? 'found' : 'not found'} with email: ${
-                claims.email
-              } for openidId: ${claims.sub}`,
-            );
-          }
           const userinfo = {
             ...claims,
             ...(await getUserInfo(openidConfig, tokenset.access_token, claims.sub)),
           };
+
+          const appConfig = await getAppConfig();
+          if (!isEmailDomainAllowed(userinfo.email, appConfig?.registration?.allowedDomains)) {
+            logger.error(
+              `[OpenID Strategy] Authentication blocked - email domain not allowed [Email: ${userinfo.email}]`,
+            );
+            return done(null, false, { message: 'Email domain not allowed' });
+          }
+
+          const result = await findOpenIDUser({
+            openidId: claims.sub,
+            email: claims.email,
+            strategyName: 'openidStrategy',
+            findUser,
+          });
+          let user = result.user;
+          const error = result.error;
+
+          if (error) {
+            return done(null, false, {
+              message: ErrorTypes.AUTH_FAILED,
+            });
+          }
+
           const fullName = getFullName(userinfo);
 
           if (requiredRole) {
@@ -284,7 +405,7 @@ async function setupOpenId() {
             username = userinfo[process.env.OPENID_USERNAME_CLAIM];
           } else {
             username = convertToUsername(
-              userinfo.username || userinfo.given_name || userinfo.email,
+              userinfo.preferred_username || userinfo.username || userinfo.email,
             );
           }
 
@@ -296,16 +417,17 @@ async function setupOpenId() {
               email: userinfo.email || '',
               emailVerified: userinfo.email_verified || false,
               name: fullName,
+              idOnTheSource: userinfo.oid,
             };
 
-            const balanceConfig = await getBalanceConfig();
-
+            const balanceConfig = getBalanceConfig(appConfig);
             user = await createUser(user, balanceConfig, true, true);
           } else {
             user.provider = 'openid';
             user.openidId = userinfo.sub;
             user.username = username;
             user.name = fullName;
+            user.idOnTheSource = userinfo.oid;
           }
 
           if (!!userinfo && userinfo.picture && !user.avatar?.includes('manual=true')) {
@@ -326,7 +448,9 @@ async function setupOpenId() {
               userinfo.sub,
             );
             if (imageBuffer) {
-              const { saveBuffer } = getStrategyFunctions(process.env.CDN_PROVIDER);
+              const { saveBuffer } = getStrategyFunctions(
+                appConfig?.fileStrategy ?? process.env.CDN_PROVIDER,
+              );
               const imagePath = await saveBuffer({
                 fileName,
                 userId: user._id.toString(),
