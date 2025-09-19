@@ -16,6 +16,7 @@ import { langSubset, preprocessLaTeX } from '~/utils';
 import { unicodeCitation } from '~/components/Web';
 import { code, a, p } from './MarkdownComponents';
 import store from '~/store';
+import { useLocalize } from '~/hooks';
 
 type TProgressBarProps = {
   duration: number;
