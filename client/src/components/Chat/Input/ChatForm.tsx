@@ -222,6 +222,14 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     [isCollapsed, isMoreThanThreeRows],
   );
 
+  useEffect(() => {
+    // Log textarea value on component mount if it exists
+    const currentTextValue = methods.getValues('text');
+    if (currentTextValue && currentTextValue.trim().length > 0) {
+      methods.handleSubmit(submitMessage)();
+    }
+  }, []);
+
   return (
     <form
       onSubmit={methods.handleSubmit(submitMessage)}
