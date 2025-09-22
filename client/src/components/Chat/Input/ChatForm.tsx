@@ -228,7 +228,7 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     if (currentTextValue && currentTextValue.trim().length > 0) {
       methods.handleSubmit(submitMessage)();
     }
-  }, []);
+  }, [methods, submitMessage]);
 
   return (
     <form
