@@ -30,7 +30,7 @@ export default function PricingPage() {
     setProcessingId(planId);
 
     setTimeout(() => {
-      window.location.href = '/login';
+      window.location.href = '/register';
     }, 500);
   };
 
@@ -44,7 +44,7 @@ export default function PricingPage() {
       name: plan.name,
       price: plan.label,
       features: plan.features,
-      buttonText: 'Join',
+      buttonText: 'Sign up',
       recommended: plan.isRecommended,
       isFree: isPlanFree(plan),
     };
