@@ -5,7 +5,7 @@ import {
   imageGenTools,
   isImageVisionTool,
 } from 'librechat-data-provider';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import type { TMessageContentParts, TAttachment } from 'librechat-data-provider';
 import { OpenAIImageGen, EmptyText, Reasoning, ExecuteCode, AgentUpdate, Text } from './Parts';
 import { ErrorMessage } from './MessageContent';
@@ -16,6 +16,7 @@ import WebSearch from './WebSearch';
 import ToolCall from './ToolCall';
 import ImageGen from './ImageGen';
 import Image from './Image';
+import Forward from '~/components/Chat/Messages/Content/Forward';
 
 type PartProps = {
   part?: TMessageContentParts;
@@ -24,6 +25,23 @@ type PartProps = {
   showCursor: boolean;
   isCreatedByUser: boolean;
   attachments?: TAttachment[];
+};
+
+const parseOmnexioContent = (text: string) => {
+  const omnexioMatch = text.match(/<omnexio>(.*?)<\/omnexio>/s);
+
+  if (!omnexioMatch) {
+    return { omnexioData: null, cleanText: text };
+  }
+
+  try {
+    const omnexioData = JSON.parse(omnexioMatch[1]);
+    const cleanText = text.replace(/<omnexio>.*?<\/omnexio>/s, '').trim();
+    return { omnexioData, cleanText };
+  } catch (error) {
+    console.error('Failed to parse omnexio JSON:', error);
+    return { omnexioData: null, cleanText: text };
+  }
 };
 
 const Part = memo(
@@ -65,9 +83,22 @@ const Part = memo(
       if (part.tool_call_ids != null && !text) {
         return null;
       }
+
+      const { omnexioData, cleanText } = useMemo(() => parseOmnexioContent(text), [text]);
+      // Check if text starts with <video tag
+      const hasVideoTag = cleanText.trim().startsWith('<video');
+
       return (
         <Container>
-          <Text text={text} isCreatedByUser={isCreatedByUser} showCursor={showCursor} />
+          {hasVideoTag ? (
+            <div dangerouslySetInnerHTML={{ __html: cleanText }} />
+          ) : (
+            <Text text={cleanText} isCreatedByUser={isCreatedByUser} showCursor={showCursor} />
+          )}
+          {omnexioData &&
+            omnexioData?.action === 'forward' &&
+            omnexioData.data &&
+            omnexioData.data.map((item, index) => <Forward key={index} data={item} />)}
         </Container>
       );
     } else if (part.type === ContentTypes.THINK) {
