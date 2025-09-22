@@ -58,11 +58,6 @@ export const router = createBrowserRouter(
       element: <PricingPage />,
     },
     {
-      index: true,
-      element: <AgentsPage />,
-      errorElement: <RouteErrorBoundary />,
-    },
-    {
       path: 'agents/:agent_name',
       element: <AgentProfilePage />,
       errorElement: <RouteErrorBoundary />,
