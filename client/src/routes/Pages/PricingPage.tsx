@@ -7,6 +7,7 @@ import { SEO_DATA } from '~/seo/seoData';
 import Header from './Header';
 import Footer from './Footer';
 import StickyShareButton from '~/components/ui/StickyShareButton';
+import { ThemeSelector } from '@librechat/client';
 
 interface SubscriptionPlan {
   id: number;
@@ -109,7 +110,7 @@ export default function PricingPage() {
     const { columns } = calculateFreeFeatureColumns(features);
 
     return (
-      <div className={`grid grid-cols-${columns} gap-2 text-sm text-text-secondary`}>
+      <div className={`grid grid-cols-${columns} gap-2 text-sm`}>
         {featureColumns.map(renderFeatureColumn)}
       </div>
     );
@@ -140,8 +141,8 @@ export default function PricingPage() {
       <Button
         className={`mt-4 w-full ${
           plan.recommended
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90 dark:text-black'
-            : 'bg-[#2f7ff7] text-primary-foreground hover:bg-[#2f7ff7]/90'
+            ? 'bg-black text-white hover:bg-primary/90'
+            : 'bg-[#2f7ff7] text-white hover:bg-[#2f7ff7]/90'
         }`}
         onClick={() => handleJoinPlan(plan.id)}
         disabled={processingId !== null}
@@ -162,8 +163,8 @@ export default function PricingPage() {
     const baseClasses =
       'relative flex flex-col rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md p-4';
     const borderClass = plan.recommended
-      ? 'border-primary bg-primary/5 dark:border-primary/70'
-      : 'border-border-medium bg-surface-primary';
+      ? 'border-primary bg-primary/10 dark:border-primary/70 dark:bg-primary/80'
+      : 'border-border-medium bg-surface-primary bg-white';
 
     return `${baseClasses} ${borderClass}`;
   };
@@ -189,8 +190,12 @@ export default function PricingPage() {
 
   if (subscriptionPlansQuery.isLoading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#f0f8ff' }}>
+      <div className="min-h-screen bg-white dark:bg-gray-900">
         <Header />
+        <div className="absolute bottom-0 left-0 md:m-4">
+          <ThemeSelector />
+        </div>
+
         <div className="flex items-center justify-center py-20">
           <div className="text-lg text-gray-600 dark:text-gray-300">Loading pricing plans...</div>
         </div>
@@ -200,8 +205,12 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f0f8ff' }}>
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
+
+      <div className="absolute bottom-0 left-0 md:m-4">
+        <ThemeSelector />
+      </div>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
