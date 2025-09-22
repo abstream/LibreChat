@@ -134,6 +134,22 @@ export default function PricingPage() {
     </div>
   );
 
+  const renderFreePlanButton = (plan: SubscriptionPlan): JSX.Element => {
+    const isProcessing = processingId === plan.id;
+
+    return (
+      <Button
+        className="bg-[#2f7ff7] text-white hover:bg-[#2f7ff7]/90"
+        style={{ width: '280px' }}
+        onClick={() => handleJoinPlan(plan.id)}
+        disabled={processingId !== null}
+        size="sm"
+      >
+        {isProcessing ? renderProcessingButton() : plan.buttonText}
+      </Button>
+    );
+  };
+
   const renderPlanButton = (plan: SubscriptionPlan): JSX.Element => {
     const isProcessing = processingId === plan.id;
 
@@ -161,21 +177,44 @@ export default function PricingPage() {
 
   const getCardClasses = (plan: SubscriptionPlan): string => {
     const baseClasses =
-      'relative flex flex-col rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md p-4';
+      'relative flex flex-col rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md';
+    const heightClass = plan.isFree ? 'p-4' : 'p-4';
+    const spanClass = plan.isFree ? 'col-span-full' : '';
     const borderClass = plan.recommended
       ? 'border-primary bg-primary/10 dark:border-primary/70 dark:bg-primary/80'
       : 'border-border-medium bg-surface-primary bg-white';
 
-    return `${baseClasses} ${borderClass}`;
+    return `${baseClasses} ${heightClass} ${spanClass} ${borderClass}`;
   };
+
+  const renderFreePlanHeader = (plan: SubscriptionPlan): JSX.Element => (
+    <div className="flex-shrink-1 mr-20">
+      <h3 className="text-base font-semibold">{plan.name}</h3>
+      <div className="mt-1 text-lg font-bold">{plan.price}</div>
+    </div>
+  );
+
+  const renderFreePlanContent = (plan: SubscriptionPlan): JSX.Element => (
+    <div className="flex items-center justify-between gap-4">
+      {renderFreePlanHeader(plan)}
+      <div className="min-w-0 flex-1">{renderFreeFeatures(plan.features)}</div>
+      <div className="flex-shrink-0">{renderFreePlanButton(plan)}</div>
+    </div>
+  );
+
+  const renderPaidPlanContent = (plan: SubscriptionPlan): JSX.Element => (
+    <>
+      <h3 className="text-lg font-semibold">{plan.name}</h3>
+      <div className="mt-2 text-xl font-bold">{plan.price}</div>
+      {renderPlanFeatures(plan.features)}
+      {renderPlanButton(plan)}
+    </>
+  );
 
   const renderPlanCard = (plan: SubscriptionPlan): JSX.Element => (
     <div key={plan.id} className={getCardClasses(plan)}>
       {plan.recommended && renderRecommendedBadge()}
-      <h3 className="text-lg font-semibold">{plan.name}</h3>
-      <div className="mt-2 text-xl font-bold">{plan.price}</div>
-      {plan.isFree ? renderFreeFeatures(plan.features) : renderPlanFeatures(plan.features)}
-      {renderPlanButton(plan)}
+      {plan.isFree ? renderFreePlanContent(plan) : renderPaidPlanContent(plan)}
     </div>
   );
 
