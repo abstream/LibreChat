@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useGetStartupConfig } from '~/data-provider';
 import TagManager from 'react-gtm-module';
+import { useMediaQuery } from '~/hooks';
 
 /**
  * Component for displaying the Privacy Policy page
@@ -8,6 +9,7 @@ import TagManager from 'react-gtm-module';
  */
 export default function Footer() {
   const { data: config } = useGetStartupConfig();
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
   useEffect(() => {
     if (config?.analyticsGtmId != null && typeof window.google_tag_manager === 'undefined') {
       const tagManagerArgs = {
@@ -16,6 +18,14 @@ export default function Footer() {
       TagManager.initialize(tagManagerArgs);
     }
   }, [config?.analyticsGtmId]);
+
+  if (isSmallScreen) {
+    return (
+      <>
+        <div className="h-14"></div>
+      </>
+    );
+  }
 
   return (
     <>
