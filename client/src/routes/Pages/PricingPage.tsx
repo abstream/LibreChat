@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { CheckIcon, Loader2 } from 'lucide-react';
 import { Button } from '~/components/ui';
 import { useSEO } from '~/hooks/useSEO';
+import { useMediaQuery } from '~/hooks';
 import { useGetOmnexioPricingSubscriptionPlans } from '~/data-provider';
 import { SEO_DATA } from '~/seo/seoData';
 import Header from './Header';
@@ -22,6 +23,7 @@ interface SubscriptionPlan {
 export default function PricingPage() {
   const subscriptionPlansQuery = useGetOmnexioPricingSubscriptionPlans();
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
   useSEO(SEO_DATA.pricing);
 
@@ -136,11 +138,13 @@ export default function PricingPage() {
 
   const renderFreePlanButton = (plan: SubscriptionPlan): JSX.Element => {
     const isProcessing = processingId === plan.id;
+    const buttonStyles = isSmallScreen ? 'mt-4 w-full' : '';
+    const inlineStyles = isSmallScreen ? {} : { width: '280px' };
 
     return (
       <Button
-        className="bg-[#2f7ff7] text-white hover:bg-[#2f7ff7]/90"
-        style={{ width: '280px' }}
+        className={`bg-[#2f7ff7] text-white hover:bg-[#2f7ff7]/90 ${buttonStyles}`}
+        style={inlineStyles}
         onClick={() => handleJoinPlan(plan.id)}
         disabled={processingId !== null}
         size="sm"
@@ -178,7 +182,7 @@ export default function PricingPage() {
   const getCardClasses = (plan: SubscriptionPlan): string => {
     const baseClasses =
       'relative flex flex-col rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md';
-    const heightClass = plan.isFree ? 'p-4' : 'p-4';
+    const heightClass = plan.isFree ? 'p-3' : 'p-4';
     const spanClass = plan.isFree ? 'col-span-full' : '';
     const borderClass = plan.recommended
       ? 'border-primary bg-primary/10 dark:border-primary/70 dark:bg-primary/80'
@@ -194,20 +198,28 @@ export default function PricingPage() {
     </div>
   );
 
-  const renderFreePlanContent = (plan: SubscriptionPlan): JSX.Element => (
-    <div className="flex items-center justify-between gap-4">
-      {renderFreePlanHeader(plan)}
-      <div className="min-w-0 flex-1">{renderFreeFeatures(plan.features)}</div>
-      <div className="flex-shrink-0">{renderFreePlanButton(plan)}</div>
-    </div>
-  );
+  const renderFreePlanContent = (plan: SubscriptionPlan): JSX.Element => {
+    if (isSmallScreen) {
+      return renderPaidPlanContent(plan);
+    }
+
+    return (
+      <div className="flex items-center justify-between gap-4">
+        {renderFreePlanHeader(plan)}
+        <div className="min-w-0 flex-1">{renderFreeFeatures(plan.features)}</div>
+        <div className="flex-shrink-0">{renderFreePlanButton(plan)}</div>
+      </div>
+    );
+  };
 
   const renderPaidPlanContent = (plan: SubscriptionPlan): JSX.Element => (
     <>
       <h3 className="text-lg font-semibold">{plan.name}</h3>
       <div className="mt-2 text-xl font-bold">{plan.price}</div>
-      {renderPlanFeatures(plan.features)}
-      {renderPlanButton(plan)}
+      {plan.isFree && isSmallScreen
+        ? renderPlanFeatures(plan.features)
+        : renderPlanFeatures(plan.features)}
+      {plan.isFree ? renderFreePlanButton(plan) : renderPlanButton(plan)}
     </>
   );
 
