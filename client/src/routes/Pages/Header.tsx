@@ -10,6 +10,7 @@ export default function Header() {
   const localize = useLocalize();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const landingPage = 'https://omnexio.ai';
 
   // Debug effect to track state changes
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const handleNavigateHome = () => {
-    window.location.href = '/';
+    window.location.href = landingPage;
   };
 
   const handleNavigateBack = () => {
@@ -30,7 +31,7 @@ export default function Header() {
     }
 
     // If no internal referrer or came from external site, go to home
-    window.location.href = '/';
+    window.location.href = landingPage;
   };
 
   const handleNavigateContactUs = () => {
@@ -59,7 +60,7 @@ export default function Header() {
   const isHomePage = location.pathname === '/';
 
   const menuItems = [
-    { label: 'Home', path: '/' },
+    { label: 'Home', path: landingPage },
     { label: 'Pricing', path: '/pages/pricing' },
     { label: 'Contacts', path: '/pages/contact-us' },
     { label: 'Terms of Service', path: '/pages/tos' },
