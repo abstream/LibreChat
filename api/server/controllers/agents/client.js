@@ -610,7 +610,7 @@ class AgentClient extends BaseClient {
 
   /** @type {sendCompletion} */
   async sendCompletion(payload, opts = {}) {
-    if (this.options.agent.model_parameters.modelKwargs.omnexio) {
+    if (this.options.agent.model_parameters.modelKwargs?.omnexio) {
       payload.unshift({
         role: 'system',
         content: [
