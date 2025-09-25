@@ -38,6 +38,7 @@ const AgentController = async (req, res, next, initializeClient, addTitle) => {
     parentMessageId = null,
     overrideParentMessageId = null,
     responseMessageId: editedResponseMessageId = null,
+    omnexioSearch = null,
   } = req.body;
 
   let sender;
@@ -205,6 +206,7 @@ const AgentController = async (req, res, next, initializeClient, addTitle) => {
       progressOptions: {
         res,
       },
+      omnexioSearch,
     };
 
     let response = await client.sendMessage(text, messageOptions);
