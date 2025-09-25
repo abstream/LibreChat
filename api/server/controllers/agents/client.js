@@ -610,6 +610,21 @@ class AgentClient extends BaseClient {
 
   /** @type {sendCompletion} */
   async sendCompletion(payload, opts = {}) {
+    if (this.options.agent.model_parameters.modelKwargs.omnexio) {
+      payload.unshift({
+        role: 'system',
+        content: [
+          {
+            type: 'omnexio_params',
+            params: {
+              conversation_id: opts.conversationId,
+              omnexio_search: opts.omnexioSearch,
+            },
+          },
+        ],
+      });
+    }
+
     await this.chatCompletion({
       payload,
       onProgress: opts.onProgress,
