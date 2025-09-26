@@ -1,10 +1,10 @@
-import React, { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { Zap } from 'lucide-react';
+import React, { memo, useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { Zap, X } from 'lucide-react';
 import { Constants, LocalStorageKeys } from 'librechat-data-provider';
 import { useLocalize } from '~/hooks';
 import useLocalStorage from '~/hooks/useLocalStorageAlt';
 
-type SearchType = 'fast' | 'deep';
+type SearchType = 'fast' | 'deep' | 'no';
 
 interface SearchOption {
   value: SearchType;
@@ -58,6 +58,16 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
       ),
     },
   ];
+
+  const lastOmnexioModel = JSON.parse(localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_MODEL));
+  // Add "No Search" option if model is not "Omnexio Search"
+  if (lastOmnexioModel !== 'Omnexio Search') {
+    searchOptions.unshift({
+      value: 'no',
+      label: localize('com_omnexio_no_search') || 'No Search',
+      icon: <X className="h-4 w-4" />,
+    });
+  }
 
   const selectedOption = searchOptions.find((opt) => opt.value === searchType) || searchOptions[0];
 
