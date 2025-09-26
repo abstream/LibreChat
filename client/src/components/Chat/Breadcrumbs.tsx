@@ -23,7 +23,7 @@ const createBreadcrumbItems = (
     {
       label: 'All',
       href: '/c/new',
-      isActive: activeTab === 'Chat' && !selectedModel,
+      isActive: activeTab === 'Search' && !selectedModel,
     },
   ];
 
@@ -32,9 +32,8 @@ const createBreadcrumbItems = (
   }
 
   const categoryMap: Record<string, string> = {
-    Chat: 'Chat',
-    Image: 'Image',
-    Video: 'Video',
+    Search: 'Search',
+    Apps: 'Apps',
     Models: 'AI',
   };
 

@@ -14,7 +14,7 @@ interface Agent {
   className: string;
   forYou: boolean;
   url: string;
-  category: 'Chat' | 'Image' | 'Video' | 'Models';
+  category: 'Search' | 'Apps' | 'Models';
 }
 
 interface ChatModel {
@@ -35,7 +35,7 @@ interface ChatModel {
   };
 }
 
-type TabKey = 'Chat' | 'Image' | 'Video' | 'Models';
+type TabKey = 'Search' | 'Apps' | 'Models';
 
 const getPlatformIcon = (platformName: string): string => {
   const platformIconMap: Record<string, string> = {
@@ -68,14 +68,13 @@ const createAgentUrl = (model: ChatModel): string => {
 
 const getCategoryTabKey = (category: string): TabKey => {
   const categoryMap: Record<string, TabKey> = {
-    chat: 'Chat',
-    image: 'Image',
-    video: 'Video',
+    search: 'Search',
+    apps: 'Apps',
     models: 'Models',
   };
 
   const normalizedCategory = category.toLowerCase();
-  return categoryMap[normalizedCategory] || 'Chat';
+  return categoryMap[normalizedCategory] || 'Search';
 };
 
 const getTagStyleClass = (tag: string): string => {
@@ -110,19 +109,19 @@ const LAST_TAB_STORAGE_KEY = 'landing_agents_last_tab';
 const getTabFromUrl = (location: Location): TabKey => {
   const searchParams = new URLSearchParams(location.search);
   const tabParam = searchParams.get('tab') as TabKey;
-  const validTabs: TabKey[] = ['Chat', 'Image', 'Video', 'Models'];
+  const validTabs: TabKey[] = ['Search', 'Apps', 'Models'];
 
   if (validTabs.includes(tabParam)) {
     return tabParam;
   }
 
-  return 'Chat';
+  return 'Search';
 };
 
 const getLastTabFromStorage = (): TabKey => {
   try {
     const storedTab = localStorage.getItem(LAST_TAB_STORAGE_KEY) as TabKey;
-    const validTabs: TabKey[] = ['Chat', 'Image', 'Video', 'Models'];
+    const validTabs: TabKey[] = ['Search', 'Apps', 'Models'];
 
     if (validTabs.includes(storedTab)) {
       return storedTab;
@@ -131,7 +130,7 @@ const getLastTabFromStorage = (): TabKey => {
     console.warn('Failed to read last tab from localStorage:', error);
   }
 
-  return 'Chat';
+  return 'Search';
 };
 
 const saveTabToStorage = (tab: TabKey): void => {
@@ -299,9 +298,8 @@ const createTabNavigationView = (
   setActiveTab: (tab: TabKey) => void,
 ) => {
   const tabs = [
-    { key: 'Chat' as TabKey, label: 'Chat' },
-    { key: 'Image' as TabKey, label: 'Image' },
-    { key: 'Video' as TabKey, label: 'Video' },
+    { key: 'Search' as TabKey, label: 'Search' },
+    { key: 'Apps' as TabKey, label: 'Apps' },
     { key: 'Models' as TabKey, label: 'AI' },
   ];
 
