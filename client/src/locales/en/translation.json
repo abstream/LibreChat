@@ -1,4 +1,8 @@
 {
+  "com_omnexio_no_search": "No Search",
+  "com_omnexio_fast_search": "Fast Search",
+  "com_omnexio_deep_search": "Deep Search",
+
   "com_ui_contact_us": "Contact us",
 
   "com_nav_guest_messages_limit_title": "You have insufficient funds",

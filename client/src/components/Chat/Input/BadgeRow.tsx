@@ -24,6 +24,8 @@ import MCPSelect from './MCPSelect';
 import WebSearch from './WebSearch';
 import store from '~/store';
 import ExportAndShareMenu from '~/components/Chat/ExportAndShareMenu';
+import useLocalStorage from '~/hooks/useLocalStorageAlt';
+import { Constants, LocalStorageKeys } from 'librechat-data-provider';
 
 interface BadgeRowProps {
   showEphemeralBadges?: boolean;
@@ -324,8 +326,65 @@ function BadgeRow({
     };
   }, [dragState.draggedBadge, handleMouseMove, handleMouseUp]);
 
-  // Add this variable to determine if OmnexioSearch should be shown
-  const shouldShowOmnexioSearch = selectedModel?.enableOmnexioSearch === true;
+  const key = conversationId ?? Constants.NEW_CONVO;
+
+  const [searchEnable, setSearchEnable] = useLocalStorage<string>(
+    `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_ENABLE_}${key}`,
+    'none',
+  );
+
+  const [searchEnableNew, setSearchEnableNew] = useLocalStorage<string>(
+    `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_ENABLE_}new`,
+    'none',
+  );
+
+  const [searchType, setSearchType] = useLocalStorage<string>(
+    `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${key}`,
+    'fast',
+  );
+
+  const [searchTypeNew, setSearchTypeNew] = useLocalStorage<string>(
+    `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}new`,
+    'fast',
+  );
+
+  // Computed value for display
+  const shouldShowOmnexioSearch = useMemo(() => {
+    if (searchEnable !== 'none') {
+      return searchEnable === 'on';
+    }
+
+    if (searchEnableNew !== 'none') {
+      return searchEnableNew === 'on';
+    }
+
+    return selectedModel?.enableOmnexioSearch === true;
+  }, [searchEnable, searchEnableNew, selectedModel]);
+
+  // Initialize storage from model default ONLY if not already set
+  useEffect(() => {
+    const isNewConversation = !conversationId || conversationId === Constants.NEW_CONVO;
+    const relevantStorage = isNewConversation ? searchEnableNew : searchEnable;
+
+    // Only initialize if storage is 'none' AND model has a preference
+    if (relevantStorage === 'none' && selectedModel?.enableOmnexioSearch !== undefined) {
+      const valueToStore = selectedModel.enableOmnexioSearch ? 'on' : 'off';
+
+      if (isNewConversation) {
+        setSearchEnableNew(valueToStore);
+      } else {
+        setSearchEnable(valueToStore);
+        setSearchType(searchTypeNew);
+      }
+    }
+  }, [
+    conversationId,
+    searchEnable,
+    searchEnableNew,
+    selectedModel,
+    setSearchEnable,
+    setSearchEnableNew,
+  ]);
 
   return (
     <BadgeRowProvider conversationId={conversationId} isSubmitting={isSubmitting}>

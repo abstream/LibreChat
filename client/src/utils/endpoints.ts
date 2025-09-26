@@ -104,7 +104,7 @@ export function updateLastSelectedModel({
 
   if (lastConversationSetup.endpoint === endpoint) {
     lastConversationSetup.model = model;
-    localStorage.setItem(firstLocalConvoKey, JSON.stringify(lastConversationSetup));
+    localStorage.setItem(LocalStorageKeys.LAST_OMNEXIO_MODEL, JSON.stringify(model));
   }
 
   const lastSelectedModels = JSON.parse(
@@ -112,6 +112,7 @@ export function updateLastSelectedModel({
   );
   lastSelectedModels[endpoint] = model;
   localStorage.setItem(LocalStorageKeys.LAST_MODEL, JSON.stringify(lastSelectedModels));
+  localStorage.setItem(LocalStorageKeys.LAST_OMNEXIO_MODEL, JSON.stringify(model));
 }
 
 interface ConversationInitParams {
