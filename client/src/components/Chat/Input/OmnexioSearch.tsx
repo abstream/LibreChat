@@ -16,7 +16,7 @@ const storageCondition = (value: unknown) => {
   return value !== undefined && value !== null && value !== '';
 };
 
-function OmnexioSearch({ conversationId }: { conversationId?: string | null }) {
+function OmnexioSearch({ conversationId }: { conversationId?: string | null }): JSX.Element {
   const localize = useLocalize();
   const key = conversationId ?? Constants.NEW_CONVO;
   const dropdownRef = useRef<HTMLDivElement>(null);

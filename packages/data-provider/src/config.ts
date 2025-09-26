@@ -1632,6 +1632,7 @@ export enum LocalStorageKeys {
   /** Pin state for Code Interpreter per conversation ID */
   PIN_CODE_INTERPRETER_ = 'PIN_CODE_INTERPRETER_',
   LAST_OMNEXIO_SEARCH_TOGGLE_ = 'LAST_OMNEXIO_SEARCH_TOGGLE_',
+  LAST_OMNEXIO_SEARCH_ENABLE_ = 'LAST_OMNEXIO_SEARCH_ENABLE_',
 }
 
 export enum ForkOptions {
