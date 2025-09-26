@@ -316,6 +316,7 @@ export function storeEndpointSettings(conversation: TConversation | null) {
     lastModel.secondaryModel = agentOptions?.model ?? model ?? '';
   }
   localStorage.setItem(LocalStorageKeys.LAST_MODEL, JSON.stringify(lastModel));
+  localStorage.setItem(LocalStorageKeys.LAST_OMNEXIO_MODEL, JSON.stringify(model));
 }
 
 // Add
