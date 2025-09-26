@@ -197,8 +197,7 @@ export default function useChatFunctions({
     const responseSender = getSender({ model: conversation?.model, ...endpointOption });
 
     const storageKey = `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${conversationId ?? Constants.NEW_CONVO}`;
-    const omnexioSearchValue = localStorage.getItem(storageKey);
-    const omnexioSearch = omnexioSearchValue === 'true';
+    const omnexioSearch = JSON.parse(<string>localStorage.getItem(storageKey));
 
     const currentMsg: TMessage = {
       text,
