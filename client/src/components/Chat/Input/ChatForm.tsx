@@ -2,7 +2,12 @@ import { memo, useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import { useWatch } from 'react-hook-form';
 import { TextareaAutosize } from '@librechat/client';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Constants, isAssistantsEndpoint, isAgentsEndpoint } from 'librechat-data-provider';
+import {
+  Constants,
+  isAssistantsEndpoint,
+  isAgentsEndpoint,
+  LocalStorageKeys,
+} from 'librechat-data-provider';
 import {
   useChatContext,
   useChatFormContext,
@@ -34,6 +39,7 @@ import EditBadges from './EditBadges';
 import BadgeRow from './BadgeRow';
 import Mention from './Mention';
 import store from '~/store';
+import useLocalStorage from '~/hooks/useLocalStorageAlt';
 
 const ChatForm = memo(({ index = 0 }: { index?: number }) => {
   const submitButtonRef = useRef<HTMLButtonElement>(null);
@@ -222,13 +228,26 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     [isCollapsed, isMoreThanThreeRows],
   );
 
+  const [searchType, setSearchType] = useLocalStorage<string>(
+    `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}new`,
+    'fast',
+  );
+
   useEffect(() => {
+    // Check for search_type query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTypeParam = urlParams.get('search_type');
+
+    if (searchTypeParam && (searchTypeParam === 'fast' || searchTypeParam === 'deep')) {
+      setSearchType(searchTypeParam);
+    }
+
     // Log textarea value on component mount if it exists
     const currentTextValue = methods.getValues('text');
     if (currentTextValue && currentTextValue.trim().length > 0) {
       methods.handleSubmit(submitMessage)();
     }
-  }, [methods, submitMessage]);
+  }, [methods, submitMessage, setSearchType]);
 
   return (
     <form
