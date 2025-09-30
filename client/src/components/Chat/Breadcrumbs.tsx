@@ -1,5 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetOmnexioChatModels } from '~/data-provider';
 
 interface BreadcrumbItem {
   label: string;
@@ -15,6 +16,31 @@ interface BreadcrumbsProps {
   };
 }
 
+const LAST_MODEL_KEY = 'LAST_OMNEXIO_MODEL';
+
+const getLastModelFromStorage = (): string | null => {
+  try {
+    return JSON.parse(localStorage.getItem(LAST_MODEL_KEY) || '');
+  } catch {
+    return null;
+  }
+};
+
+const findModelByName = (models: any[], modelName: string) => {
+  if (!models || !modelName) {
+    return null;
+  }
+
+  return models.find(
+    (model) => model.label === modelName || model.name === modelName || model.id === modelName,
+  );
+};
+
+const isConversationPath = (pathname: string): boolean => {
+  const conversationPattern = /^\/c\/[a-f0-9-]{36}$/i;
+  return conversationPattern.test(pathname);
+};
+
 const createBreadcrumbItems = (
   activeTab: string | undefined,
   selectedModel?: { label: string; category: string },
@@ -27,7 +53,7 @@ const createBreadcrumbItems = (
     },
   ];
 
-  if (!activeTab && selectedModel) {
+  if (selectedModel) {
     activeTab = selectedModel.category.charAt(0).toUpperCase() + selectedModel.category.slice(1);
   }
 
@@ -48,7 +74,7 @@ const createBreadcrumbItems = (
   if (selectedModel) {
     items.push({
       label: selectedModel.label,
-      href: '', // No link for model
+      href: '',
       isActive: true,
     });
   }
@@ -162,10 +188,30 @@ const createBreadcrumbStyles = () => {
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedModel }) => {
   const navigate = useNavigate();
-  const breadcrumbItems = createBreadcrumbItems(activeTab, selectedModel);
+  const location = useLocation();
+  const { data: omnexioModels } = useGetOmnexioChatModels();
 
-  if (!selectedModel) {
-    return;
+  const modelFromStorage = useMemo(() => {
+    if (!isConversationPath(location.pathname)) {
+      return null;
+    }
+
+    const lastModelName = getLastModelFromStorage();
+    if (!lastModelName) {
+      return null;
+    }
+
+    return findModelByName(omnexioModels || [], lastModelName);
+  }, [location.pathname, omnexioModels]);
+
+  const effectiveModel = selectedModel || modelFromStorage;
+
+  const breadcrumbItems = useMemo(() => {
+    return createBreadcrumbItems(activeTab, effectiveModel);
+  }, [activeTab, effectiveModel]);
+
+  if (!effectiveModel) {
+    return null;
   }
 
   return (
