@@ -113,6 +113,9 @@ export function updateLastSelectedModel({
   lastSelectedModels[endpoint] = model;
   localStorage.setItem(LocalStorageKeys.LAST_MODEL, JSON.stringify(lastSelectedModels));
   localStorage.setItem(LocalStorageKeys.LAST_OMNEXIO_MODEL, JSON.stringify(model));
+
+  // Dispatch custom event to notify components
+  window.dispatchEvent(new CustomEvent('omnexioModelChanged', { detail: { model } }));
 }
 
 interface ConversationInitParams {

@@ -190,6 +190,19 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
   const navigate = useNavigate();
   const location = useLocation();
   const { data: omnexioModels } = useGetOmnexioChatModels();
+  const [storageUpdate, setStorageUpdate] = React.useState(0);
+
+  // Listen for model changes
+  React.useEffect(() => {
+    const handleModelChange = () => {
+      setStorageUpdate((prev) => prev + 1);
+    };
+
+    window.addEventListener('omnexioModelChanged', handleModelChange);
+    return () => {
+      window.removeEventListener('omnexioModelChanged', handleModelChange);
+    };
+  }, []);
 
   const modelFromStorage = useMemo(() => {
     if (!isConversationPath(location.pathname)) {
@@ -202,7 +215,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
     }
 
     return findModelByName(omnexioModels || [], lastModelName);
-  }, [location.pathname, omnexioModels]);
+  }, [location.pathname, omnexioModels, storageUpdate]); // Add storageUpdate to dependencies
 
   const effectiveModel = selectedModel || modelFromStorage;
 
