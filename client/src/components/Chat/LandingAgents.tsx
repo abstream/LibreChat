@@ -149,7 +149,6 @@ const updateUrlWithTab = (tab: TabKey, navigate: any, location: Location): void 
 };
 
 const navigateToAgent = (agent: Agent, navigate: (path: string) => void): void => {
-  console.log('Selected agent:', agent.title);
   navigate(agent.url);
 };
 

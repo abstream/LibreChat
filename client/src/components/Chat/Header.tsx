@@ -147,8 +147,8 @@ export default function Header() {
       </div>
 
       {/* Breadcrumbs section */}
-      <div className="flex justify-center">
-        <div className="w-full pl-6 md:max-w-3xl xl:max-w-4xl">
+      <div className="flex">
+        <div className="w-full pl-9 md:max-w-3xl xl:max-w-4xl">
           <Breadcrumbs activeTab={activeTab} selectedModel={selectedModel} />
         </div>
       </div>
