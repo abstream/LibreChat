@@ -15,112 +15,696 @@ export default function PrivacyPolicy() {
     <>
       <Header />
       <div className="container mx-auto max-w-4xl px-4 py-8">
-        <h1 className="mb-6 text-3xl font-semibold">Omnexio Privacy Policy</h1>
-        <p className="mb-4 text-sm italic">Last updated: May 11, 2025</p>
+        <h1 className="mb-6 text-3xl font-semibold">OMNEXIO PRIVACY POLICY</h1>
+        <p className="mb-4 text-sm italic">Effective date: October 1, 2025</p>
 
-        <div className="dark:prose-invert">
-          <p className="mb-4">
-            This Omnexio Privacy Policy ("Privacy Policy") describes how your personal information
-            is processed when you use Omnexio, a platform that lets you communicate with bots
-            powered by third-party AI model providers. This Privacy Policy applies to activities by
-            Omnexio, and its affiliates and subsidiaries (collectively "Omnexio," "we" or "us").
-            This Omnexio Privacy Policy supplements the Omnexio Privacy Policy, which is
-            incorporated by reference. Omnexio is the data controller of your personal information
-            and is responsible for providing you with this Privacy Policy.
-          </p>
+        <div className="dark:prose-invert space-y-6">
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">1. Introduction</h2>
+            <p className="mb-4">Welcome to Omnexio</p>
+            <p className="mb-4">
+              Omnexio, ("us", "we", or "our") operates https://omnexio.ai (hereinafter referred to
+              as "Service").
+            </p>
+            <p className="mb-4">
+              Our Privacy Policy governs your visit to https://omnexio.ai, and explains how we
+              collect, safeguard and disclose information that results from your use of our Service.
+            </p>
+            <p className="mb-4">
+              We use your data to provide and improve our AI-powered search engine and related
+              services. By using our Service, you agree to the collection and use of information in
+              accordance with this policy. Unless otherwise defined in this Privacy Policy, the
+              terms used in this Privacy Policy have the same meanings as in our Terms and
+              Conditions.
+            </p>
+            <p className="mb-4">
+              Our Terms and Conditions ("Terms") govern all use of our Service and together with the
+              Privacy Policy constitutes your agreement with us ("agreement").
+            </p>
+          </section>
 
-          <h2 className="mb-4 mt-6 text-xl font-medium">
-            Information We Collect, How It Is Used, & The Legal Basis for Processing
-          </h2>
-          <ul className="mb-4 list-disc space-y-3 pl-6">
-            <li>
-              <span className="font-medium">Account Information.</span> We collect your email
-              address to create an account and verify your identity. We also create a user ID for
-              your Omnexio account. If you are an existing Omnexio user, your name,
-              Omnexio-associated email address, profile photo, and Omnexio user ID will be used to
-              link your Omnexio account to your Omnexio account. Depending on your location, we may
-              also ask you to provide your date of birth to verify your age. We use this information
-              to communicate with you, troubleshoot issues, and provide updates on the latest
-              Omnexio features. This processing is necessary to comply with our legal and
-              contractual obligations to you.
-            </li>
-            <li>
-              <span className="font-medium">Device Information.</span> We collect your device type
-              and operating system details for analytics and to troubleshoot product issues. This is
-              so we can comply with our contractual obligations to you.
-            </li>
-            <li>
-              <span className="font-medium">Third Party Application Login.</span> You can log into
-              your Omnexio account using third-party applications (e.g., Google and Apple). When you
-              log in using this method, we collect your name and email address associated with that
-              third-party application for authentication and identity verification purposes. This
-              processing is necessary to comply with our contractual obligations to you.
-            </li>
-            <li>
-              <span className="font-medium">Subscription Billing Data.</span> We use a third-party
-              service provider to collect and process your billing information when you subscribe to
-              Omnexio. The information our billing provider collects may include your name, billing
-              address, your credit or debit card details, and email address. This processing is
-              necessary to comply with our contractual obligations to you.
-            </li>
-            <li>
-              <span className="font-medium">Content Creator Payments.</span> If you are a content
-              creator on Omnexio, we collect and share your email with our third-party payment
-              processor to help facilitate payments to you. We also collect and share your tax
-              information, such as your tax ID and address, with our tax service provider. This
-              processing is necessary to comply with our legal and contractual obligations to you.
-            </li>
-            <li>
-              <span className="font-medium">Advertising.</span> We collect information about you
-              when you interact with Omnexio ads to measure the effectiveness of our ad campaigns.
-              This information includes your IP address, advertising ID, and ad interaction
-              information. We share your hashed email with our ad platform partners for our paid
-              acquisition campaigns. It is in our legitimate business interest to advertise our
-              platform. Where necessary, we will obtain your consent before engaging in this
-              processing.
-            </li>
-            <li>
-              <span className="font-medium">User Research.</span> We may ask you to help us test new
-              features or participate in surveys to help enhance your Omnexio experience. Your
-              participation is voluntary, and the data we collect is anonymized. With your consent,
-              we may use your personal information to communicate with you. It is in our legitimate
-              business interest to improve our platform.
-            </li>
-            <li>
-              <span className="font-medium">Interactions with Bots on Omnexio.</span> Our
-              third-party AI model LLM providers and third-party bot developers may receive details
-              about your interactions with bots on Omnexio (including the contents of your chats) to
-              provide and generally improve their services, which they may process in their
-              legitimate business interests. Your Omnexio user account information (e.g., username
-              and email) is not shared with our third-party AI model providers or developers.
-              Third-party developers that create bots on Omnexio using APIs may view and store your
-              anonymized chats on their servers to train their models. We may use your interactions
-              on Omnexio to provide you a personalized experience, such as recommending other bots
-              to explore or topics to discuss.
-            </li>
-          </ul>
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">2. Definitions</h2>
+            <p className="mb-4">
+              <span className="font-medium">SERVICE</span> means the https://omnexio.ai website and
+              AI-powered search engine operated by Omnexio.
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">PERSONAL DATA</span> means data about a living
+              individual who can be identified from those data (or from those and other information
+              either in our possession or likely to come into our possession).
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">USAGE DATA</span> is data collected automatically either
+              generated by the use of Service or from Service infrastructure itself (for example,
+              the duration of a page visit, search queries, and interaction patterns).
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">COOKIES</span> are small files stored on your device
+              (computer or mobile device).
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">DATA CONTROLLER</span> means a natural or legal person
+              who (either alone or jointly or in common with other persons) determines the purposes
+              for which and the manner in which any personal data are, or are to be, processed. For
+              the purpose of this Privacy Policy, we are a Data Controller of your data.
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">DATA PROCESSORS (OR SERVICE PROVIDERS)</span> means any
+              natural or legal person who processes the data on behalf of the Data Controller. We
+              may use the services of various Service Providers in order to process your data more
+              effectively.
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">DATA SUBJECT</span> is any living individual who is the
+              subject of Personal Data.
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">THE USER</span> is the individual using our Service. The
+              User corresponds to the Data Subject, who is the subject of Personal Data.
+            </p>
+          </section>
 
-          <p className="mb-4">
-            Keep in mind, any information and files you provide to the bots on Omnexio will be
-            shared with third-party AI model providers and developers powering the bots, and there
-            is no need to share sensitive personal information with the bots (e.g., credit card
-            information, social security information, etc.). For more information about the
-            third-party AI model providers and bot developers, please see the respective bot
-            profiles and visit the Omnexio Privacy Center.
-          </p>
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">3. Information Collection and Use</h2>
+            <p className="mb-4">
+              We collect several different types of information for various purposes to provide and
+              improve our AI search engine and related services to you.
+            </p>
+          </section>
 
-          <p className="mb-4">
-            For more information about our privacy and data protection practices, including how to
-            exercise your privacy rights, please visit the Omnexio Privacy Policy.
-          </p>
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">4. Types of Data Collected</h2>
 
-          <h2 className="mb-4 mt-6 text-xl font-medium">Contact Us</h2>
-          <p className="mb-4">
-            Please contact our Data Protection Officer at admin@omnexio.ai if you have questions
-            about this Privacy Policy. For more information about our privacy and data protection
-            practices, including how to exercise your privacy rights, please visit the Omnexio
-            Privacy Policy.
-          </p>
+            <h3 className="mb-3 text-xl font-medium">Personal Data</h3>
+            <p className="mb-4">
+              While using our Service, we may ask you to provide us with certain personally
+              identifiable information that can be used to contact or identify you ("Personal
+              Data"). Personally identifiable information may include, but is not limited to:
+            </p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>Email address</li>
+              <li>First name and last name</li>
+              <li>Cookies and Usage Data</li>
+            </ul>
+            <p className="mb-4">
+              We may use your Personal Data to contact you with newsletters, marketing or
+              promotional materials and other information that may be of interest to you. You may
+              opt out of receiving any, or all, of these communications from us by following the
+              unsubscribe link.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Usage Data</h3>
+            <p className="mb-4">
+              We may also collect information that your browser sends whenever you visit our Service
+              or when you access Service by or through a mobile device ("Usage Data").
+            </p>
+            <p className="mb-4">
+              This Usage Data may include information such as your computer's Internet Protocol
+              address (e.g. IP address), browser type, browser version, the pages of our Service
+              that you visit, search queries you perform, the time and date of your visit, the time
+              spent on those pages, unique device identifiers and other diagnostic data.
+            </p>
+            <p className="mb-4">
+              When you access Service with a mobile device, this Usage Data may include information
+              such as the type of mobile device you use, your mobile device unique ID, the IP
+              address of your mobile device, your mobile operating system, the type of mobile
+              Internet browser you use, unique device identifiers and other diagnostic data.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Search Query Data</h3>
+            <p className="mb-4">
+              When you use our AI-powered search engine, we collect and process your search queries
+              to provide you with relevant results. This information may be used to improve our
+              search algorithms and provide you with a personalized search experience.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Tracking Cookies Data</h3>
+            <p className="mb-4">
+              We use cookies and similar tracking technologies to track the activity on our Service
+              and we hold certain information.
+            </p>
+            <p className="mb-4">
+              Cookies are files with a small amount of data which may include an anonymous unique
+              identifier. Cookies are sent to your browser from a website and stored on your device.
+              Other tracking technologies are also used such as beacons, tags and scripts to collect
+              and track information and to improve and analyze our Service.
+            </p>
+            <p className="mb-4">
+              You can instruct your browser to refuse all cookies or to indicate when a cookie is
+              being sent. However, if you do not accept cookies, you may not be able to use some
+              portions of our Service.
+            </p>
+            <p className="mb-4">Examples of Cookies we use:</p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>Session Cookies: We use Session Cookies to operate our Service.</li>
+              <li>
+                Preference Cookies: We use Preference Cookies to remember your preferences and
+                various settings.
+              </li>
+              <li>Security Cookies: We use Security Cookies for security purposes.</li>
+              <li>
+                Advertising Cookies: Advertising Cookies are used to serve you with advertisements
+                that may be relevant to you and your interests.
+              </li>
+            </ul>
+
+            <h3 className="mb-3 text-xl font-medium">Account Information</h3>
+            <p className="mb-4">
+              We collect your email address to create an account and verify your identity. We also
+              create a user ID for your Omnexio account. If you are an existing Omnexio user, your
+              name, email address, profile photo, and user ID will be linked to your Omnexio
+              account.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Device Information</h3>
+            <p className="mb-4">
+              We collect your device type and operating system details for analytics and to
+              troubleshoot product issues.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Third Party Application Login</h3>
+            <p className="mb-4">
+              You can log into your Omnexio account using third-party applications (e.g., Google and
+              Apple). When you log in using this method, we collect your name and email address
+              associated with that third-party application for authentication and identity
+              verification purposes.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">5. Use of Data</h2>
+            <p className="mb-4">Omnexio, uses the collected data for various purposes:</p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>to provide and maintain our Service, including our AI-powered search engine;</li>
+              <li>to notify you about changes to our Service;</li>
+              <li>
+                to allow you to participate in interactive features of our Service when you choose
+                to do so;
+              </li>
+              <li>to provide customer support;</li>
+              <li>
+                to gather analysis or valuable information so that we can improve our Service and
+                search algorithms;
+              </li>
+              <li>to monitor the usage of our Service;</li>
+              <li>to detect, prevent and address technical issues;</li>
+              <li>to fulfill any other purpose for which you provide it;</li>
+              <li>
+                to carry out our obligations and enforce our rights arising from any contracts
+                entered into between you and us, including for billing and collection;
+              </li>
+              <li>
+                to provide you with notices about your account and/or subscription, including
+                expiration and renewal notices, email-instructions, etc.;
+              </li>
+              <li>
+                to provide you with news, special offers and general information about other goods,
+                services and events which we offer that are similar to those that you have already
+                purchased or enquired about unless you have opted not to receive such information;
+              </li>
+              <li>
+                to provide you with personalized search results and recommendations based on your
+                search history and preferences;
+              </li>
+              <li>in any other way we may describe when you provide the information;</li>
+              <li>for any other purpose with your consent.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">6. Interactions with AI Models</h2>
+            <p className="mb-4">
+              While our primary focus is our AI-powered search engine, you may also interact with AI
+              models through our Service. When you use these features:
+            </p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>
+                Our third-party AI model providers may receive details about your interactions
+                (including the contents of your conversations) to provide and improve their
+                services.
+              </li>
+              <li>
+                Your Omnexio user account information (e.g., username and email) is not shared with
+                our third-party AI model providers.
+              </li>
+              <li>
+                We may use your interactions to provide you a personalized experience, such as
+                recommending relevant search results or topics.
+              </li>
+            </ul>
+            <p className="mb-4">
+              Keep in mind that any information you provide when using AI model features will be
+              shared with third-party AI model providers, and there is no need to share sensitive
+              personal information (e.g., credit card information, social security information,
+              etc.).
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">7. Advertising</h2>
+            <p className="mb-4">
+              We collect information about you when you interact with Omnexio ads to measure the
+              effectiveness of our ad campaigns. This information includes your IP address,
+              advertising ID, and ad interaction information. We may share your hashed email with
+              our ad platform partners for our paid acquisition campaigns.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">8. Subscription Billing Data</h2>
+            <p className="mb-4">
+              We use a third-party service provider to collect and process your billing information
+              when you subscribe to Omnexio. The information our billing provider collects may
+              include your name, billing address, your credit or debit card details, and email
+              address.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">9. Retention of Data</h2>
+            <p className="mb-4">
+              We will retain your Personal Data only for as long as is necessary for the purposes
+              set out in this Privacy Policy. We will retain and use your Personal Data to the
+              extent necessary to comply with our legal obligations (for example, if we are required
+              to retain your data to comply with applicable laws), resolve disputes, and enforce our
+              legal agreements and policies.
+            </p>
+            <p className="mb-4">
+              We will also retain Usage Data for internal analysis purposes. Usage Data is generally
+              retained for a shorter period, except when this data is used to strengthen the
+              security or to improve the functionality of our Service, or we are legally obligated
+              to retain this data for longer time periods.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">10. Transfer of Data</h2>
+            <p className="mb-4">
+              Your information, including Personal Data, may be transferred to — and maintained on —
+              computers located outside of your state, province, country or other governmental
+              jurisdiction where the data protection laws may differ from those of your
+              jurisdiction.
+            </p>
+            <p className="mb-4">
+              If you are located outside the United States and choose to provide information to us,
+              please note that we transfer the data, including Personal Data, to the United States
+              and process it there.
+            </p>
+            <p className="mb-4">
+              Your consent to this Privacy Policy followed by your submission of such information
+              represents your agreement to that transfer.
+            </p>
+            <p className="mb-4">
+              Omnexio, will take all the steps reasonably necessary to ensure that your data is
+              treated securely and in accordance with this Privacy Policy and no transfer of your
+              Personal Data will take place to an organization or a country unless there are
+              adequate controls in place including the security of your data and other personal
+              information.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">11. Disclosure of Data</h2>
+            <p className="mb-4">
+              We may disclose personal information that we collect, or you provide:
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Disclosure for Law Enforcement</h3>
+            <p className="mb-4">
+              Under certain circumstances, we may be required to disclose your Personal Data if
+              required to do so by law or in response to valid requests by public authorities.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Business Transaction</h3>
+            <p className="mb-4">
+              If we or our subsidiaries are involved in a merger, acquisition or asset sale, your
+              Personal Data may be transferred.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Other cases</h3>
+            <p className="mb-4">
+              We may disclose your information also to our subsidiaries and affiliates.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">12. Security of Data</h2>
+            <p className="mb-4">
+              The security of your data is important to us but remember that no method of
+              transmission over the Internet or method of electronic storage is 100% secure. While
+              we strive to use commercially acceptable means to protect your Personal Data, we
+              cannot guarantee its absolute security.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">
+              13. Your Data Protection Rights Under General Data Protection Regulation (GDPR)
+            </h2>
+            <p className="mb-4">
+              If you are a resident of the European Union (EU) and European Economic Area (EEA), you
+              have certain data protection rights, covered by GDPR.
+            </p>
+            <p className="mb-4">
+              We aim to take reasonable steps to allow you to correct, amend, delete, or limit the
+              use of your Personal Data.
+            </p>
+            <p className="mb-4">
+              If you wish to be informed what Personal Data we hold about you and if you want it to
+              be removed from our systems, please email us at admin@omnexio.ai.
+            </p>
+            <p className="mb-4">
+              In certain circumstances, you have the following data protection rights:
+            </p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>the right to access, update or to delete the information we have on you;</li>
+              <li>
+                the right of rectification. You have the right to have your information rectified if
+                that information is inaccurate or incomplete;
+              </li>
+              <li>
+                the right to object. You have the right to object to our processing of your Personal
+                Data;
+              </li>
+              <li>
+                the right of restriction. You have the right to request that we restrict the
+                processing of your personal information;
+              </li>
+              <li>
+                the right to data portability. You have the right to be provided with a copy of your
+                Personal Data in a structured, machine-readable and commonly used format;
+              </li>
+              <li>
+                the right to withdraw consent. You also have the right to withdraw your consent at
+                any time where we rely on your consent to process your personal information.
+              </li>
+            </ul>
+            <p className="mb-4">
+              Please note that we may ask you to verify your identity before responding to such
+              requests. Please note, we may not be able to provide Service without some necessary
+              data.
+            </p>
+            <p className="mb-4">
+              You have the right to complain to a Data Protection Authority about our collection and
+              use of your Personal Data. For more information, please contact your local data
+              protection authority in the European Economic Area (EEA).
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">
+              14. Your Data Protection Rights under the California Privacy Protection Act (CalOPPA)
+            </h2>
+            <p className="mb-4">
+              CalOPPA is the first state law in the nation to require commercial websites and online
+              services to post a privacy policy. The law's reach stretches well beyond California to
+              require a person or company in the United States (and conceivably the world) that
+              operates websites collecting personally identifiable information from California
+              consumers to post a conspicuous privacy policy on its website stating exactly the
+              information being collected and those individuals with whom it is being shared, and to
+              comply with this policy.
+            </p>
+            <p className="mb-4">According to CalOPPA we agree to the following:</p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>users can visit our site anonymously;</li>
+              <li>
+                our Privacy Policy link includes the word "Privacy", and can easily be found on the
+                page specified above on the home page of our website;
+              </li>
+              <li>
+                users will be notified of any privacy policy changes on our Privacy Policy Page;
+              </li>
+              <li>
+                users are able to change their personal information by emailing us at
+                admin@omnexio.ai.
+              </li>
+            </ul>
+
+            <h3 className="mb-3 text-xl font-medium">Our Policy on "Do Not Track" Signals:</h3>
+            <p className="mb-4">
+              We honor Do Not Track signals and do not track, plant cookies, or use advertising when
+              a Do Not Track browser mechanism is in place. Do Not Track is a preference you can set
+              in your web browser to inform websites that you do not want to be tracked.
+            </p>
+            <p className="mb-4">
+              You can enable or disable Do Not Track by visiting the Preferences or Settings page of
+              your web browser.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">
+              15. Your Data Protection Rights under the California Consumer Privacy Act (CCPA)
+            </h2>
+            <p className="mb-4">
+              If you are a California resident, you are entitled to learn what data we collect about
+              you, ask to delete your data and not to sell (share) it. To exercise your data
+              protection rights, you can make certain requests and ask us:
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">
+              What personal information we have about you.
+            </h3>
+            <p className="mb-4">If you make this request, we will return to you:</p>
+            <ul className="mb-4 list-disc space-y-2 pl-6">
+              <li>The categories of personal information we have collected about you.</li>
+              <li>The categories of sources from which we collect your personal information.</li>
+              <li>
+                The business or commercial purpose for collecting or selling your personal
+                information.
+              </li>
+              <li>The categories of third parties with whom we share personal information.</li>
+              <li>The specific pieces of personal information we have collected about you.</li>
+              <li>
+                A list of categories of personal information that we have sold, along with the
+                category of any other company we sold it to. If we have not sold your personal
+                information, we will inform you of that fact.
+              </li>
+              <li>
+                A list of categories of personal information that we have disclosed for a business
+                purpose, along with the category of any other company we shared it with.
+              </li>
+            </ul>
+            <p className="mb-4">
+              Please note, you are entitled to ask us to provide you with this information up to two
+              times in a rolling twelve-month period. When you make this request, the information
+              provided may be limited to the personal information we collected about you in the
+              previous 12 months.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">To delete your personal information.</h3>
+            <p className="mb-4">
+              If you make this request, we will delete the personal information we hold about you as
+              of the date of your request from our records and direct any service providers to do
+              the same. In some cases, deletion may be accomplished through de-identification of the
+              information. If you choose to delete your personal information, you may not be able to
+              use certain functions that require your personal information to operate.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">To stop selling your personal information.</h3>
+            <p className="mb-4">
+              We don't sell or rent your personal information to any third parties for any purpose.
+              You are the only owner of your Personal Data and can request disclosure or deletion at
+              any time.
+            </p>
+
+            <p className="mb-4">
+              Please note, if you ask us to delete or stop selling your data, it may impact your
+              experience with us, and you may not be able to participate in certain programs or
+              membership services which require the usage of your personal information to function.
+              But in no circumstances, we will discriminate against you for exercising your rights.
+            </p>
+
+            <p className="mb-4">
+              To exercise your California data protection rights described above, please send your
+              request(s) by one of the following means:
+            </p>
+            <p className="mb-4">By email: admin@omnexio.ai</p>
+            <p className="mb-4">By visiting this page on our website: https://omnexio.ai</p>
+
+            <p className="mb-4">
+              Your data protection rights, described above, are covered by the CCPA, short for the
+              California Consumer Privacy Act. To find out more, visit the official California
+              Legislative Information website. The CCPA took effect on 01/01/2020.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">16. Service Providers</h2>
+            <p className="mb-4">
+              We may employ third party companies and individuals to facilitate our Service
+              ("Service Providers"), provide Service on our behalf, perform Service-related services
+              or assist us in analyzing how our Service is used.
+            </p>
+            <p className="mb-4">
+              These third parties have access to your Personal Data only to perform these tasks on
+              our behalf and are obligated not to disclose or use it for any other purpose.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">17. Analytics</h2>
+            <p className="mb-4">
+              We may use third-party Service Providers to monitor and analyze the use of our
+              Service.
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Google Analytics</h3>
+            <p className="mb-4">
+              Google Analytics is a web analytics service offered by Google that tracks and reports
+              website traffic. Google uses the data collected to track and monitor the use of our
+              Service. This data is shared with other Google services. Google may use the collected
+              data to contextualize and personalize the ads of its own advertising network.
+            </p>
+            <p className="mb-4">
+              For more information on the privacy practices of Google, please visit the Google
+              Privacy Terms web page:{' '}
+              <a
+                href="https://policies.google.com/privacy?hl=en"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://policies.google.com/privacy?hl=en
+              </a>
+            </p>
+            <p className="mb-4">
+              We also encourage you to review Google's policy for safeguarding your data:{' '}
+              <a
+                href="https://support.google.com/analytics/answer/6004245"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://support.google.com/analytics/answer/6004245
+              </a>
+              .
+            </p>
+
+            <h3 className="mb-3 text-xl font-medium">Cloudflare Analytics</h3>
+            <p className="mb-4">
+              Cloudflare analytics is a web analytics service operated by Cloudflare Inc. Read the
+              Privacy Policy here:{' '}
+              <a
+                href="https://www.cloudflare.com/privacypolicy/"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://www.cloudflare.com/privacypolicy/
+              </a>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">18. Payments</h2>
+            <p className="mb-4">
+              We may provide paid products and/or services within Service. In that case, we use
+              third-party services for payment processing (e.g. payment processors).
+            </p>
+            <p className="mb-4">
+              We will not store or collect your payment card details. That information is provided
+              directly to our third-party payment processors whose use of your personal information
+              is governed by their Privacy Policy. These payment processors adhere to the standards
+              set by PCI-DSS as managed by the PCI Security Standards Council, which is a joint
+              effort of brands like Visa, Mastercard, American Express and Discover. PCI-DSS
+              requirements help ensure the secure handling of payment information.
+            </p>
+            <p className="mb-4">The payment processors we work with are:</p>
+            <p className="mb-4">
+              <span className="font-medium">Stripe:</span> Their Privacy Policy can be viewed at:{' '}
+              <a
+                href="https://stripe.com/us/privacy"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://stripe.com/us/privacy
+              </a>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">19. Links to Other Sites</h2>
+            <p className="mb-4">
+              Our Service may contain links to other sites that are not operated by us. If you click
+              a third party link, you will be directed to that third party's site. We strongly
+              advise you to review the Privacy Policy of every site you visit.
+            </p>
+            <p className="mb-4">
+              We have no control over and assume no responsibility for the content, privacy policies
+              or practices of any third party sites or services.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">20. Children's Privacy</h2>
+            <p className="mb-4">
+              Our Services are not intended for use by children under the age of 13 ("Children").
+            </p>
+            <p className="mb-4">
+              We do not knowingly collect personally identifiable information from Children under
+              13. If you become aware that a Child has provided us with Personal Data, please
+              contact us. If we become aware that we have collected Personal Data from Children
+              without verification of parental consent, we take steps to remove that information
+              from our servers.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">21. User Research</h2>
+            <p className="mb-4">
+              We may ask you to help us test new features or participate in surveys to help enhance
+              your Omnexio experience. Your participation is voluntary, and the data we collect is
+              anonymized. With your consent, we may use your personal information to communicate
+              with you about research opportunities.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">22. Changes to This Privacy Policy</h2>
+            <p className="mb-4">
+              We may update our Privacy Policy from time to time. We will notify you of any changes
+              by posting the new Privacy Policy on this page.
+            </p>
+            <p className="mb-4">
+              We will let you know via email and/or a prominent notice on our Service, prior to the
+              change becoming effective and update "effective date" at the top of this Privacy
+              Policy.
+            </p>
+            <p className="mb-4">
+              You are advised to review this Privacy Policy periodically for any changes. Changes to
+              this Privacy Policy are effective when they are posted on this page.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-2xl font-medium">23. Contact Us</h2>
+            <p className="mb-4">
+              If you have any questions about this Privacy Policy, please contact us:
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">By email:</span> admin@omnexio.ai
+            </p>
+            <p className="mb-4">
+              <span className="font-medium">Data Protection Officer:</span> admin@omnexio.ai
+            </p>
+            <p className="mb-4">
+              For more information about our privacy and data protection practices, including how to
+              exercise your privacy rights, please visit our Privacy Center at{' '}
+              <a
+                href="https://omnexio.ai/pages/privacy-policy"
+                className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://omnexio.ai/pages/privacy-policy
+              </a>
+            </p>
+          </section>
+
+          <p className="mb-4 mt-8 text-sm italic">Last updated: October 1, 2025</p>
         </div>
       </div>
       <Footer />
