@@ -36,6 +36,7 @@ const {
   AgentCapabilities,
   bedrockInputSchema,
   removeNullishValues,
+  ErrorTypes,
 } = require('librechat-data-provider');
 const { addCacheControl, createContextHandlers } = require('~/app/clients/prompts');
 const { initializeAgent } = require('~/server/services/Endpoints/agents/agent');
@@ -1095,6 +1096,25 @@ class AgentClient extends BaseClient {
           '[api/server/controllers/agents/client.js #sendCompletion] Unhandled error type',
           err,
         );
+
+        if (err?.type === ErrorTypes.INSUFFICIENT_CREDITS_ERROR) {
+          const errorText = `{"type":"${ErrorTypes.INSUFFICIENT_CREDITS_ERROR}"}`;
+          this.contentParts.push({
+            type: ContentTypes.ERROR,
+            [ContentTypes.ERROR]: errorText,
+          });
+          return;
+        }
+
+        if (err?.type === ErrorTypes.FREE_PLAN_LIMITED_ERROR) {
+          const errorText = `{"type":"${ErrorTypes.FREE_PLAN_LIMITED_ERROR}"}`;
+          this.contentParts.push({
+            type: ContentTypes.ERROR,
+            [ContentTypes.ERROR]: errorText,
+          });
+          return;
+        }
+
         this.contentParts.push({
           type: ContentTypes.ERROR,
           [ContentTypes.ERROR]: `An error occurred while processing the request${err?.message ? `: ${err.message}` : ''}`,
