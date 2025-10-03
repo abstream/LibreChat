@@ -198,6 +198,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
   const handlePlanChangeComplete = (): void => {
     setProcessingId(null);
     subscriptionPlansQuery.refetch();
+    onOpenChange(false);
   };
 
   const confirmPlanChange = (): void => {
