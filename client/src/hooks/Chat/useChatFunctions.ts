@@ -198,6 +198,7 @@ export default function useChatFunctions({
 
     const storageKey = `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${conversationId ?? Constants.NEW_CONVO}`;
     const omnexioSearch = JSON.parse(<string>localStorage.getItem(storageKey));
+    localStorage.setItem(LocalStorageKeys.LAST_OMNEXIO_SEARCH_VALUE, omnexioSearch);
 
     const currentMsg: TMessage = {
       text,
