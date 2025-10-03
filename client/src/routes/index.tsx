@@ -8,8 +8,6 @@ import {
   TwoFactorScreen,
   RequestPasswordReset,
 } from '~/components/Auth';
-import { MarketplaceProvider } from '~/components/Agents/MarketplaceContext';
-import AgentMarketplace from '~/components/Agents/Marketplace';
 import { OAuthSuccess, OAuthError } from '~/components/OAuth';
 import { AuthContextProvider } from '~/hooks/AuthContext';
 import RouteErrorBoundary from './RouteErrorBoundary';
@@ -56,6 +54,11 @@ export const router = createBrowserRouter(
     {
       path: 'pages/pricing',
       element: <PricingPage />,
+    },
+    {
+      path: 'agents',
+      element: <AgentsPage />,
+      errorElement: <RouteErrorBoundary />,
     },
     {
       path: 'agents/:agent_name',
@@ -147,22 +150,6 @@ export const router = createBrowserRouter(
             {
               path: 'pages/payment-success',
               element: <PaymentSuccess />,
-            },
-            {
-              path: 'agents',
-              element: (
-                <MarketplaceProvider>
-                  <AgentMarketplace />
-                </MarketplaceProvider>
-              ),
-            },
-            {
-              path: 'agents/:category',
-              element: (
-                <MarketplaceProvider>
-                  <AgentMarketplace />
-                </MarketplaceProvider>
-              ),
             },
           ],
         },
