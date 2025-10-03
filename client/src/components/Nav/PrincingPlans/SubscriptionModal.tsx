@@ -438,7 +438,8 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ open, onOpenChang
   const renderFooterLinks = (): JSX.Element => (
     <div className="border-t border-border-medium pt-2 text-sm text-text-secondary">
       {renderFooterLine(localize('com_subscription_credits_rolling_note'))}
-      {renderFooterLine(localize('com_subscription_omnexio_credit_note'))}
+      {renderFooterLine(localize('com_subscription_omnexio_fast_search_credit_note'))}
+      {renderFooterLine(localize('com_subscription_omnexio_deep_search_credit_note'))}
       {renderPrivacyAndTermsLine()}
     </div>
   );

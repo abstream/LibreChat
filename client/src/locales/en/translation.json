@@ -20,7 +20,8 @@
   "com_subscription_downgrade": "Downgrade Now",
   "com_subscription_recommended": "Recommended",
 
-  "com_subscription_omnexio_credit_note": "Web search charges 1 credit per message",
+  "com_subscription_omnexio_fast_search_credit_note": "Fast search charges 1 credit per message",
+  "com_subscription_omnexio_deep_search_credit_note": "Deep search charges 5 credit per message",
   "com_credits": "credits",
   "com_by_subscribing": "By subscribing, you agree to our",
   "com_and": "and",
