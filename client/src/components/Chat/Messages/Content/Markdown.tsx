@@ -17,6 +17,7 @@ import { unicodeCitation } from '~/components/Web';
 import { code, a, p } from './MarkdownComponents';
 import store from '~/store';
 import { useLocalize } from '~/hooks';
+import { LocalStorageKeys } from 'librechat-data-provider';
 
 type TProgressBarProps = {
   duration: number;
@@ -60,6 +61,28 @@ const GeneratingIndicator = memo(() => {
   const shouldShowProgressBar = progressConfig?.show_progressbar ?? false;
   const duration = progressConfig?.duration ?? 3;
   const text = progressConfig?.text ?? localize('com_ui_thinking');
+
+  const searchValue = localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_SEARCH_VALUE);
+  //TODO if searchValue == 'fast'
+  //TODO change the text with the content for the according time
+  //Understanding Question ...  1.5 sec
+  // Searching ...                         3 sec.
+  // Cleaning Data ...                  1.5 sec
+  // Analysing...                            2.2 sec
+  // Summarizing ..                        till th end of the progress bar
+  // 9 sec progress bar
+
+  //TODO if searchValue == 'deep'
+  //Understanding Question ...     2 sec
+  // Searching...                            15 sec
+  // Cleaning Data ...                     4 sec
+  // Analysing...                             6 sec
+  // Reranking...                             3 sec
+  // Filtering ...                              3 sec
+  // Analysing.....                            5 sec
+  // Answering.....                           what is left
+  //
+  // 50 sec progress bar
 
   if (!shouldShowProgressBar) {
     return (
