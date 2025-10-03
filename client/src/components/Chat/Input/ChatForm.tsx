@@ -233,6 +233,8 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     'fast',
   );
 
+  const autoSubmitRef = useRef(false);
+
   useEffect(() => {
     // Check for search_type query parameter
     const urlParams = new URLSearchParams(window.location.search);
@@ -240,11 +242,13 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
 
     if (searchTypeParam && (searchTypeParam === 'fast' || searchTypeParam === 'deep')) {
       setSearchType(searchTypeParam);
+      autoSubmitRef.current = true;
     }
 
     // Log textarea value on component mount if it exists
     const currentTextValue = methods.getValues('text');
-    if (currentTextValue && currentTextValue.trim().length > 0) {
+    if (currentTextValue && currentTextValue.trim().length > 0 && autoSubmitRef.current) {
+      autoSubmitRef.current = false;
       methods.handleSubmit(submitMessage)();
     }
   }, [methods, submitMessage, setSearchType]);
