@@ -53,52 +53,118 @@ const ProgressBar = memo(({ duration }: TProgressBarProps) => {
   );
 });
 
+type ProgressStage = {
+  text: string;
+  duration: number;
+};
+
+const getProgressStages = (searchValue: string | null): ProgressStage[] => {
+  if (searchValue === 'fast') {
+    return [
+      { text: 'Understanding Question', duration: 1.5 },
+      { text: 'Searching', duration: 3 },
+      { text: 'Cleaning Data', duration: 1.5 },
+      { text: 'Analysing', duration: 2.2 },
+      { text: 'Summarizing', duration: 10 }, // fills remaining time
+    ];
+  }
+
+  if (searchValue === 'deep') {
+    return [
+      { text: 'Understanding Question', duration: 2 },
+      { text: 'Searching', duration: 15 },
+      { text: 'Cleaning Data', duration: 4 },
+      { text: 'Analysing', duration: 6 },
+      { text: 'Reranking', duration: 3 },
+      { text: 'Filtering', duration: 3 },
+      { text: 'Analysing', duration: 5 },
+      { text: 'Answering', duration: 30 }, // fills remaining time
+    ];
+  }
+
+  return [];
+};
+
+const getTotalDuration = (stages: ProgressStage[]): number => {
+  return stages.reduce((sum, stage) => sum + stage.duration, 0);
+};
+
 const GeneratingIndicator = memo(() => {
   const localize = useLocalize();
   const selectedModel = useRecoilValue(store.selectedModelState);
+  const searchValue = localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_SEARCH_VALUE);
+  const useStageProgress = searchValue === 'fast' || searchValue === 'deep';
 
   const progressConfig = selectedModel?.options?._progress;
-  const shouldShowProgressBar = progressConfig?.show_progressbar ?? false;
+  const shouldShowProgressBar = progressConfig?.show_progressbar ?? useStageProgress;
   const duration = progressConfig?.duration ?? 3;
   const text = progressConfig?.text ?? localize('com_ui_thinking');
 
-  const searchValue = localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_SEARCH_VALUE);
-  //TODO if searchValue == 'fast'
-  //TODO change the text with the content for the according time
-  //Understanding Question ...  1.5 sec
-  // Searching ...                         3 sec.
-  // Cleaning Data ...                  1.5 sec
-  // Analysing...                            2.2 sec
-  // Summarizing ..                        till th end of the progress bar
-  // 9 sec progress bar
+  const stages = useMemo(() => getProgressStages(searchValue), [searchValue]);
+  const totalDuration = useMemo(() => getTotalDuration(stages), [stages]);
+  const [currentStageIndex, setCurrentStageIndex] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
-  //TODO if searchValue == 'deep'
-  //Understanding Question ...     2 sec
-  // Searching...                            15 sec
-  // Cleaning Data ...                     4 sec
-  // Analysing...                             6 sec
-  // Reranking...                             3 sec
-  // Filtering ...                              3 sec
-  // Analysing.....                            5 sec
-  // Answering.....                           what is left
-  //
-  // 50 sec progress bar
+  useEffect(() => {
+    if (!shouldShowProgressBar || !useStageProgress || stages.length === 0) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setElapsedTime((prev) => {
+        const newTime = prev + 0.1;
+
+        let accumulatedTime = 0;
+        let newStageIndex = 0;
+
+        for (let i = 0; i < stages.length; i++) {
+          accumulatedTime += stages[i].duration;
+          if (newTime < accumulatedTime) {
+            newStageIndex = i;
+            break;
+          }
+        }
+
+        if (newStageIndex !== currentStageIndex) {
+          setCurrentStageIndex(newStageIndex);
+        }
+
+        return newTime;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [shouldShowProgressBar, useStageProgress, stages, currentStageIndex]);
 
   if (!shouldShowProgressBar) {
     return (
       <div className="absolute">
-        <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-gray-600">
-          <span className="animate-pulse text-sm">{text}</span>
+        <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-blue-100 px-4 py-3 text-black">
+          <span className="animate-pulse text-sm font-bold">{text}</span>
         </div>
       </div>
     );
   }
 
+  if (!useStageProgress) {
+    return (
+      <div className="absolute">
+        <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-blue-100 px-4 py-3 text-black">
+          <span className="animate-pulse text-sm font-bold">{text}</span>
+          <ProgressBar duration={duration} />
+        </div>
+      </div>
+    );
+  }
+
+  const currentStage = stages[currentStageIndex];
+  const displayText = currentStage ? `${currentStage.text}...` : text;
+
   return (
     <div className="absolute">
-      <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-gray-100 px-4 py-3 text-gray-600">
-        <span className="animate-pulse text-sm">{text}</span>
-        <ProgressBar duration={duration} />
+      <div className="inline-flex min-w-[120px] flex-col items-center gap-1 rounded-lg bg-blue-100 px-4 py-3 text-black">
+        <span className="animate-pulse text-sm font-bold">{displayText}</span>
+        <ProgressBar duration={totalDuration} />
       </div>
     </div>
   );
