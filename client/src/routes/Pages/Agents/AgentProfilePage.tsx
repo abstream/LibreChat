@@ -33,7 +33,11 @@ export default function AgentProfilePage() {
   };
 
   const handleBackToAgents = () => {
-    navigate('/?tab=' + agent.category);
+    navigate('/agents?tab=' + agent.category);
+  };
+
+  const handleBackToAgentsHard = () => {
+    window.location.href = '/agents';
   };
 
   const shareData = useMemo(() => {
@@ -65,7 +69,7 @@ export default function AgentProfilePage() {
 
   if (!agent) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-gray-50">
         <Header />
 
         <div className="absolute bottom-0 left-0 md:m-4">
@@ -75,14 +79,14 @@ export default function AgentProfilePage() {
         <div className="container mx-auto max-w-4xl px-4 py-8">
           <div className="text-center">
             <div className="mb-8">
-              <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-4 text-4xl font-bold text-gray-900">
                 Agent Not Found
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-300">
+              <p className="text-lg text-gray-600">
                 The agent you&#39;re looking for doesn&#39;t exist or has been removed.
               </p>
             </div>
-            <Button onClick={handleBackToAgents} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleBackToAgentsHard} className="bg-blue-600 hover:bg-blue-700">
               Back to Agents
             </Button>
           </div>
@@ -101,7 +105,7 @@ export default function AgentProfilePage() {
       </div>
 
       <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="rounded-lg bg-white p-8 shadow-sm dark:bg-gray-800">
+        <div className="rounded-lg bg-white p-8 shadow-sm">
           {/* Agent Header */}
           <div className="mb-8 flex flex-col items-center text-center sm:flex-row sm:text-left">
             <div className="mb-4 sm:mb-0 sm:mr-6">
@@ -131,7 +135,7 @@ export default function AgentProfilePage() {
             </div>
 
             <div className="flex-1">
-              <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
+              <h1 className="mb-2 text-3xl font-bold text-gray-900">
                 {agent.label}
               </h1>
 
