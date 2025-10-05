@@ -32,7 +32,7 @@ function LoadingSpinner() {
 
 function ChatView({ index = 0 }: { index?: number }) {
   const [searchParams] = useSearchParams();
-  const model = searchParams.get('model');
+  const model = searchParams.get('model') || 'Omnexio Search';
   const { conversationId } = useParams();
   const rootSubmission = useRecoilValue(store.submissionByIndex(index));
   const addedSubmission = useRecoilValue(store.submissionByIndex(index + 1));
@@ -54,8 +54,6 @@ function ChatView({ index = 0 }: { index?: number }) {
   const chatHelpers = useChatHelpers(index, conversationId);
   const addedChatHelpers = useAddedResponse({ rootIndex: index });
 
-  console.log(chatHelpers);
-
   useSSE(rootSubmission, chatHelpers, false);
   useSSE(addedSubmission, addedChatHelpers, true);
 
@@ -76,11 +74,7 @@ function ChatView({ index = 0 }: { index?: number }) {
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
   } else {
-    if (model) {
-      content = <Landing centerFormOnLanding={centerFormOnLanding} />;
-    } else {
-      content = <LandingAgents centerFormOnLanding={centerFormOnLanding} />;
-    }
+    content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
 
   return (

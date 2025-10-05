@@ -241,7 +241,7 @@ function renderTitle(
 
 export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: boolean }) {
   const [searchParams] = useSearchParams();
-  const model = searchParams.get('model');
+  const model = searchParams.get('model') || 'Omnexio Search';
   const { conversation } = useChatContext();
   const agentsMap = useAgentsMapContext();
   const assistantMap = useAssistantsMapContext();
