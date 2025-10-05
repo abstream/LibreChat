@@ -60,7 +60,7 @@ const createBreadcrumbItems = (
   const categoryMap: Record<string, string> = {
     Search: 'Search',
     Apps: 'Apps',
-    Models: 'AI',
+    Models: 'Models',
   };
 
   if (activeTab) {

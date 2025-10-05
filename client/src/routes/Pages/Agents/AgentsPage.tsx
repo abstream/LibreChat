@@ -12,7 +12,7 @@ import { ThemeSelector } from '@librechat/client';
 
 const TABS = [
   { id: 'Search', label: 'Search' },
-  { id: 'Models', label: 'AI' },
+  { id: 'Models', label: 'Models' },
 ];
 
 const getCategoryTabKey = (category: string): string => {

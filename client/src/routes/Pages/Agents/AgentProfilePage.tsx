@@ -144,7 +144,7 @@ export default function AgentProfilePage() {
                   onClick={handleBackToAgents}
                   className="inline-flex cursor-pointer items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                 >
-                  {agent.category === 'models' ? 'AI' : agent.category}
+                  {agent.category}
                 </span>
               )}
             </div>
