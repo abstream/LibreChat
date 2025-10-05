@@ -40,12 +40,12 @@ export const getPlaceholder = (
 ): string => {
   // Early return for missing model
   if (!model) {
-    return localize('com_endpoint_ai');
+    return '';
   }
 
   // Early return if no selectedModel provided
   if (!selectedModel) {
-    return localize('com_endpoint_ai');
+    return '';
   }
 
   const isOmnexioSearchModel = selectedModel.label === 'Omnexio Search';
@@ -64,7 +64,7 @@ export const getPlaceholder = (
 
   // Early return if total cost is 0 or undefined
   if (totalCost === 0) {
-    return localize('com_endpoint_ai');
+    return '';
   }
 
   // Generate cost-based placeholder

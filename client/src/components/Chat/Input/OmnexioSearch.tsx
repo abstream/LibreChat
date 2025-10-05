@@ -112,7 +112,7 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
   );
 
   useEffect(() => {
-    handleSelect('fast');
+    handleSelect(searchType);
 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -122,7 +122,7 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [handleSelect, searchType]);
 
   return (
     <div ref={dropdownRef} className="relative inline-block">

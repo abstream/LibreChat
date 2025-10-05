@@ -159,7 +159,7 @@ export default function useTextarea({
         : getPlaceholder(conversation?.model, localize, selectedModel, searchType);
 
     return `${localize('com_endpoint_message_new', {
-      0: sender ? sender : localize('com_endpoint_ai'),
+      0: sender ? sender : '',
     })}`;
   }, [isAssistant, isAgent, entityName, localize, conversation?.model, selectedModel, searchType]);
 
