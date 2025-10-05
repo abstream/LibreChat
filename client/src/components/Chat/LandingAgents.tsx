@@ -298,7 +298,6 @@ const createTabNavigationView = (
 ) => {
   const tabs = [
     { key: 'Search' as TabKey, label: 'Search' },
-    { key: 'Apps' as TabKey, label: 'Apps' },
     { key: 'Models' as TabKey, label: 'AI' },
   ];
 

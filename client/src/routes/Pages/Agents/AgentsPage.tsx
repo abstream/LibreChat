@@ -12,7 +12,6 @@ import { ThemeSelector } from '@librechat/client';
 
 const TABS = [
   { id: 'Search', label: 'Search' },
-  { id: 'Apps', label: 'Apps' },
   { id: 'Models', label: 'AI' },
 ];
 
