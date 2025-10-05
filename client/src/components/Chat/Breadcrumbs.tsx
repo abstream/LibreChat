@@ -227,6 +227,8 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
     return null;
   }
 
+  return null;
+
   return (
     <div className="breadcrumbs-container">
       {createBreadcrumbStyles()}
