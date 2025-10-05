@@ -7,17 +7,36 @@ interface ModelWithCost {
   id?: string;
 }
 
+type SearchType = 'fast' | 'deep' | 'no';
+
 /**
- * Function to get placeholder text based on dynamic model cost
+ * Get search cost based on search type
+ */
+const getSearchCost = (searchType: SearchType): number => {
+  switch (searchType) {
+    case 'fast':
+      return 1;
+    case 'deep':
+      return 5;
+    case 'no':
+    default:
+      return 0;
+  }
+};
+
+/**
+ * Function to get placeholder text based on dynamic model cost and search type
  * @param model - The model name from conversation.model
  * @param localize - The localization function
  * @param selectedModel - The selected model object with cost property
+ * @param searchType - The current search type (fast/deep/no)
  * @returns Placeholder text with cost information or fallback
  */
 export const getPlaceholder = (
   model: string | null | undefined,
   localize: LocalizeFunction,
   selectedModel?: ModelWithCost | null,
+  searchType: SearchType = 'no',
 ): string => {
   // Early return for missing model
   if (!model) {
@@ -29,17 +48,28 @@ export const getPlaceholder = (
     return localize('com_endpoint_ai');
   }
 
-  // Extract cost from selectedModel
-  const cost = selectedModel.cost;
+  const isOmnexioSearchModel = selectedModel.label === 'Omnexio Search';
 
-  // Early return if cost is not defined
-  if (cost === undefined || cost === null) {
+  let totalCost: number;
+
+  if (isOmnexioSearchModel) {
+    // For Omnexio Search model, cost is only based on search type
+    totalCost = getSearchCost(searchType);
+  } else {
+    // For other models, add search cost to base model cost
+    const baseCost = selectedModel.cost ?? 0;
+    const searchCost = getSearchCost(searchType);
+    totalCost = baseCost + searchCost;
+  }
+
+  // Early return if total cost is 0 or undefined
+  if (totalCost === 0) {
     return localize('com_endpoint_ai');
   }
 
   // Generate cost-based placeholder
-  const creditText = cost === 1 ? 'credit' : 'credits';
-  return `[${model}] costs ${cost} ${creditText}`;
+  const creditText = totalCost === 1 ? 'credit' : 'credits';
+  return `[${model}] costs ${totalCost} ${creditText}`;
 };
 
 export default getPlaceholder;

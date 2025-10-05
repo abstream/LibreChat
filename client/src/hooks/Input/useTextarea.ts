@@ -1,8 +1,9 @@
 import debounce from 'lodash/debounce';
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import type { TEndpointOption } from 'librechat-data-provider';
 import type { KeyboardEvent } from 'react';
+import { Constants, LocalStorageKeys } from 'librechat-data-provider';
 import {
   forceResize,
   insertTextAtCursor,
@@ -22,6 +23,7 @@ import store from '~/store';
 import getPlaceholder from '~/utils/getPlaceholder';
 
 type KeyEvent = KeyboardEvent<HTMLTextAreaElement>;
+type SearchType = 'fast' | 'deep' | 'no';
 
 export default function useTextarea({
   textAreaRef,
@@ -50,6 +52,9 @@ export default function useTextarea({
     useChatContext();
   const [activePrompt, setActivePrompt] = useRecoilState(store.activePromptByIndex(index));
 
+  // Track search type with state
+  const [searchType, setSearchType] = useState<SearchType>('no');
+
   const { endpoint = '' } = conversation || {};
   const { entity, isAgent, isAssistant } = getEntity({
     endpoint,
@@ -61,6 +66,32 @@ export default function useTextarea({
   const entityName = entity?.name ?? '';
 
   const isNotAppendable = (latestMessage?.unfinished ?? false) && !isSubmitting && !isAssistant;
+
+  // Listen for search type changes
+  useEffect(() => {
+    const handleSearchTypeChange = (event: CustomEvent) => {
+      setSearchType(event.detail.searchType);
+    };
+
+    window.addEventListener('omnexioSearchTypeChange', handleSearchTypeChange as EventListener);
+
+    // Also read initial value from localStorage
+    const conversationId = conversation?.conversationId ?? Constants.NEW_CONVO;
+    const key = conversationId;
+    const storedSearchType = localStorage.getItem(
+      `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${key}`,
+    );
+    if (storedSearchType) {
+      setSearchType(storedSearchType as SearchType);
+    }
+
+    return () => {
+      window.removeEventListener(
+        'omnexioSearchTypeChange',
+        handleSearchTypeChange as EventListener,
+      );
+    };
+  }, [conversation?.conversationId]);
 
   const insertActivePrompt = useCallback(() => {
     const prompt = activePrompt ?? '';
@@ -125,12 +156,12 @@ export default function useTextarea({
     const sender =
       isAssistant || isAgent
         ? getEntityName({ name: entityName, isAgent, localize })
-        : getPlaceholder(conversation?.model, localize, selectedModel);
+        : getPlaceholder(conversation?.model, localize, selectedModel, searchType);
 
     return `${localize('com_endpoint_message_new', {
       0: sender ? sender : localize('com_endpoint_ai'),
     })}`;
-  }, [isAssistant, isAgent, entityName, localize, conversation?.model, selectedModel]);
+  }, [isAssistant, isAgent, entityName, localize, conversation?.model, selectedModel, searchType]);
 
   const getPlaceholderText = useCallback(() => {
     const disabledPlaceholder = checkDisabledState();
@@ -206,7 +237,8 @@ export default function useTextarea({
     conversation,
     latestMessage,
     isNotAppendable,
-    selectedModel, // Add selectedModel to dependencies
+    selectedModel,
+    searchType, // Add searchType to dependencies
   ]);
 
   const handleKeyDown = useCallback(

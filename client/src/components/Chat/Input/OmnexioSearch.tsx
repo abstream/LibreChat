@@ -1,8 +1,10 @@
-import React, { memo, useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { memo, useState, useCallback, useRef, useEffect } from 'react';
 import { Zap, X } from 'lucide-react';
 import { Constants, LocalStorageKeys } from 'librechat-data-provider';
 import { useLocalize } from '~/hooks';
 import useLocalStorage from '~/hooks/useLocalStorageAlt';
+import { useRecoilValue } from 'recoil';
+import store from '~/store';
 
 type SearchType = 'fast' | 'deep' | 'no';
 
@@ -20,6 +22,9 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
   const localize = useLocalize();
   const key = conversationId ?? Constants.NEW_CONVO;
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Get selected model from Recoil state
+  const selectedModel = useRecoilValue(store.selectedModelState);
 
   const [searchType, setSearchType] = useLocalStorage<SearchType>(
     `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${key}`,
@@ -59,9 +64,11 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
     },
   ];
 
-  const lastOmnexioModel = JSON.parse(localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_MODEL));
+  // Check if current model is Omnexio Search
+  const isOmnexioSearchModel = selectedModel?.label === 'Omnexio Search';
+
   // Add "No Search" option if model is not "Omnexio Search"
-  if (lastOmnexioModel !== 'Omnexio Search') {
+  if (!isOmnexioSearchModel) {
     searchOptions.unshift({
       value: 'no',
       label: localize('com_omnexio_no_search') || 'No Search',
@@ -90,6 +97,16 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
     (value: SearchType) => {
       setSearchType(value);
       setIsOpen(false);
+
+      // Trigger a custom event to notify other components about the search type change
+      setTimeout(() => {
+        // Trigger a custom event to notify other components about the search type change
+        window.dispatchEvent(
+          new CustomEvent('omnexioSearchTypeChange', {
+            detail: { searchType: value },
+          }),
+        );
+      }, 500);
     },
     [setSearchType],
   );
