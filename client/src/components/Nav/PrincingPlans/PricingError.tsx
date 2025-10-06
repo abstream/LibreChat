@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { useAuthContext } from '~/hooks';
 import SubscriptionModal from './SubscriptionModal';
 import GuestLogout from './GuestLogout';
@@ -14,6 +14,15 @@ const isGuestUser = (email?: string): boolean => {
 const PricingError: FC<PricingErrorProps> = ({ message }) => {
   const { user } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
+
+  useEffect(() => {
+    // Auto-open modal once on component mount
+    if (!hasShownModal) {
+      setIsModalOpen(true);
+      setHasShownModal(true);
+    }
+  }, [hasShownModal]);
 
   const handleLinkClick = () => {
     setIsModalOpen(true);
