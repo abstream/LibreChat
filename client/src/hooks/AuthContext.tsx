@@ -86,7 +86,7 @@ const AuthContextProvider = ({
         return;
       }
       setError(undefined);
-      let redirect = '/c/new';
+      let redirect = '/c/new?endpoint=OmnexioSearch&model=Omnexio%20Search';
       const intendedRedirect = sessionStorage.getItem('intendedRedirect');
       if (intendedRedirect) {
         redirect = intendedRedirect;

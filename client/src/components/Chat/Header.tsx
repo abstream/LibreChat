@@ -46,13 +46,13 @@ export default function Header() {
   }
 
   const shouldShowBackButton = (): boolean => {
-    return !!model || location.pathname !== '/c/new';
+    return !!model || location.pathname !== '/c/new?endpoint=OmnexioSearch&model=Omnexio%20Search';
   };
 
   const handleLogoClick = () => {
     queryClient.setQueryData<TMessage[]>([QueryKeys.messages, Constants.NEW_CONVO], []);
     queryClient.invalidateQueries([QueryKeys.messages]);
-    navigate('/c/new');
+    window.location.href = '/c/new?endpoint=OmnexioSearch&model=Omnexio%20Search';
   };
 
   const handleNavigateBack = () => {
