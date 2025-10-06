@@ -18,7 +18,7 @@ export default function Header() {
   }, [isMenuOpen]);
 
   const handleNavigateHome = () => {
-    window.location.href = '/c/new?endpoint=OmnexioSearch&model=Omnexio%20Search';
+    window.location.href = landingPage;
   };
 
   const handleNavigateBack = () => {
