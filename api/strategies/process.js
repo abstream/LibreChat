@@ -19,6 +19,10 @@ const { updateUser, createUser, getUserById } = require('~/models');
  * @throws {Error} Throws an error if there's an issue saving the updated user object.
  */
 const handleExistingUser = async (oldUser, avatarUrl, appConfig) => {
+  if (avatarUrl === null) {
+    return;
+  }
+
   const fileStrategy = appConfig?.fileStrategy ?? process.env.CDN_PROVIDER;
   const isLocal = fileStrategy === FileSources.local;
 
