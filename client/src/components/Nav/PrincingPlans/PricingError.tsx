@@ -14,15 +14,16 @@ const isGuestUser = (email?: string): boolean => {
 const PricingError: FC<PricingErrorProps> = ({ message }) => {
   const { user } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasShownModal, setHasShownModal] = useState(false);
 
   useEffect(() => {
-    // Auto-open modal once on component mount
+    // Check if modal was already shown in this session
+    const hasShownModal = sessionStorage.getItem('pricingModalShown');
+
     if (!hasShownModal) {
       setIsModalOpen(true);
-      setHasShownModal(true);
+      sessionStorage.setItem('pricingModalShown', 'true');
     }
-  }, [hasShownModal]);
+  }, []);
 
   const handleLinkClick = () => {
     setIsModalOpen(true);
