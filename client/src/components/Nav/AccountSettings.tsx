@@ -73,7 +73,7 @@ function AccountSettings() {
             </div>
             <DropdownMenuSeparator />
           </>
-          )}
+        )}
         {omnexioBalanceQuery.data != null && !isNaN(parseFloat(omnexioBalanceQuery.data)) && (
           <>
             <div className="text-token-text-secondary ml-3 mr-2 py-2 text-sm" role="note">
@@ -108,6 +108,14 @@ function AccountSettings() {
         >
           <GearIcon className="icon-md" aria-hidden="true" />
           {localize('com_nav_settings')}
+        </Select.SelectItem>
+        <Select.SelectItem
+          value=""
+          onClick={() => window.open('https://docs.omnexio.ai', '_blank')}
+          className="select-item text-sm"
+        >
+          <LinkIcon aria-hidden="true" />
+          {localize('com_ui_documentation')}
         </Select.SelectItem>
         <Select.SelectItem
           value=""

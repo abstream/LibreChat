@@ -39,7 +39,11 @@ export default function Header() {
   };
 
   const handleNavigateToPage = (path: string) => {
-    window.location.href = path;
+    if (path.startsWith('http')) {
+      window.open(path, '_blank');
+    } else {
+      window.location.href = path;
+    }
     handleMenuClose();
   };
 
@@ -61,6 +65,7 @@ export default function Header() {
 
   const menuItems = [
     { label: 'Home', path: landingPage },
+    { label: 'Documentation', path: 'https://docs.omnexio.ai' },
     { label: 'Pricing', path: '/pages/pricing' },
     { label: 'Contacts', path: '/pages/contact-us' },
     { label: 'Terms of Service', path: '/pages/tos' },
