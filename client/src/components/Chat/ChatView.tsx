@@ -33,6 +33,7 @@ function LoadingSpinner() {
 function ChatView({ index = 0 }: { index?: number }) {
   const [searchParams] = useSearchParams();
   const model = searchParams.get('model') || 'Omnexio Search';
+  const section = searchParams.get('section');
   const { conversationId } = useParams();
   const rootSubmission = useRecoilValue(store.submissionByIndex(index));
   const addedSubmission = useRecoilValue(store.submissionByIndex(index + 1));
@@ -73,6 +74,8 @@ function ChatView({ index = 0 }: { index?: number }) {
     content = <LoadingSpinner />;
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
+  } else if (section === 'ai-studio') {
+    content = <LandingAgents centerFormOnLanding={centerFormOnLanding} />;
   } else {
     content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
