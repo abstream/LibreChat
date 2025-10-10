@@ -33,18 +33,18 @@ export default function AgentProfilePage() {
   };
 
   const handleBackToAgents = () => {
-    navigate('/agents?tab=' + agent.category);
+    navigate('/ai-studio');
   };
 
   const handleBackToAgentsHard = () => {
-    window.location.href = '/agents';
+    window.location.href = '/ai-studio';
   };
 
   const shareData = useMemo(() => {
     if (!agent) return null;
 
     return {
-      title: `${agent.label} - AI Agent on Omnexio`,
+      title: `${agent.label} - AI on Omnexio`,
       text: `Check out ${agent.label} on Omnexio - ${agent.shortDescription || agent.description?.replace(/<[^>]*>/g, '').slice(0, 100) + '...' || 'An AI agent that can help you with various tasks.'}`,
       url: window.location.href,
     };
@@ -79,9 +79,7 @@ export default function AgentProfilePage() {
         <div className="container mx-auto max-w-4xl px-4 py-8">
           <div className="text-center">
             <div className="mb-8">
-              <h1 className="mb-4 text-4xl font-bold text-gray-900">
-                Agent Not Found
-              </h1>
+              <h1 className="mb-4 text-4xl font-bold text-gray-900">Agent Not Found</h1>
               <p className="text-lg text-gray-600">
                 The agent you&#39;re looking for doesn&#39;t exist or has been removed.
               </p>
@@ -135,9 +133,7 @@ export default function AgentProfilePage() {
             </div>
 
             <div className="flex-1">
-              <h1 className="mb-2 text-3xl font-bold text-gray-900">
-                {agent.label}
-              </h1>
+              <h1 className="mb-2 text-3xl font-bold text-gray-900">{agent.label}</h1>
 
               {agent.category && (
                 <span

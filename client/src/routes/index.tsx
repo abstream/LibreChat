@@ -26,6 +26,7 @@ import Root from './Root';
 import Logged from '~/routes/Logged';
 import PaymentSuccess from '~/components/Chat/PaymentSuccess';
 import ContactUs from '~/routes/Pages/ContactUs';
+import { AiStudioPage } from '~/routes/Pages/AiStudio';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -56,12 +57,12 @@ export const router = createBrowserRouter(
       element: <PricingPage />,
     },
     {
-      path: 'agents',
-      element: <AgentsPage />,
+      path: 'ai-studio',
+      element: <AiStudioPage />,
       errorElement: <RouteErrorBoundary />,
     },
     {
-      path: 'agents/:agent_name',
+      path: 'ai-studio/:agent_name',
       element: <AgentProfilePage />,
       errorElement: <RouteErrorBoundary />,
     },
