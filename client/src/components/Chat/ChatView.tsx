@@ -13,12 +13,12 @@ import { useGetMessagesByConvoId } from '~/data-provider';
 import MessagesView from './Messages/MessagesView';
 import Presentation from './Presentation';
 import ChatForm from './Input/ChatForm';
-import LandingAgents from './LandingAgents';
 import Header from './Header';
 import Footer from './Footer';
 import { cn } from '~/utils';
 import store from '~/store';
 import Landing from '~/components/Chat/Landing';
+import LandingAiStudio from '~/components/Chat/LandingAiStudio';
 
 function LoadingSpinner() {
   return (
@@ -33,6 +33,7 @@ function LoadingSpinner() {
 function ChatView({ index = 0 }: { index?: number }) {
   const [searchParams] = useSearchParams();
   const model = searchParams.get('model') || 'Omnexio Search';
+  const section = searchParams.get('section');
   const { conversationId } = useParams();
   const rootSubmission = useRecoilValue(store.submissionByIndex(index));
   const addedSubmission = useRecoilValue(store.submissionByIndex(index + 1));
@@ -73,6 +74,8 @@ function ChatView({ index = 0 }: { index?: number }) {
     content = <LoadingSpinner />;
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
+  } else if (section === 'ai-studio') {
+    content = <LandingAiStudio centerFormOnLanding={centerFormOnLanding} />;
   } else {
     content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
@@ -100,7 +103,9 @@ function ChatView({ index = 0 }: { index?: number }) {
                       isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
                     )}
                   >
-                    {(model || !isLandingPage) && <ChatForm index={index} />}
+                    {(model || !isLandingPage) && section !== 'ai-studio' && (
+                      <ChatForm index={index} />
+                    )}
                     {isLandingPage ? <ConversationStarters /> : <Footer />}
                   </div>
                 </div>

@@ -18,6 +18,7 @@ import NewChat from './NewChat';
 import { cn } from '~/utils';
 import store from '~/store';
 import PricingNav from '~/components/Nav/PrincingPlans/PricingNav';
+import AiStudioNav from '~/components/Nav/AiStudio/AiStudioNav';
 
 const BookmarkNav = lazy(() => import('./Bookmarks/BookmarkNav'));
 const AccountSettings = lazy(() => import('./AccountSettings'));
@@ -231,6 +232,7 @@ const Nav = memo(
                       />
                     </div>
                     <Suspense fallback={null}>
+                      <AiStudioNav isSmallScreen={isSmallScreen} />
                       <PricingNav isSmallScreen={isSmallScreen} />
                       <AccountSettings />
                     </Suspense>

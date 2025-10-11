@@ -27,6 +27,7 @@ import Logged from '~/routes/Logged';
 import PaymentSuccess from '~/components/Chat/PaymentSuccess';
 import ContactUs from '~/routes/Pages/ContactUs';
 import { AiStudioPage } from '~/routes/Pages/AiStudio';
+import LandingAgents from '~/components/Chat/LandingAgents';
 
 const AuthLayout = () => (
   <AuthContextProvider>

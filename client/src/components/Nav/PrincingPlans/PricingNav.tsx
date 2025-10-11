@@ -29,7 +29,7 @@ const PricingNav: FC<PricingNavProps> = ({ isSmallScreen }: PricingNavProps) => 
         }}
         aria-label={localize('com_ui_pricing_plans')}
       >
-        <Gem className="absolute left-3 h-4 w-4 text-white group-focus-within:text-text-primary group-hover:text-text-primary" />
+        <Gem className="absolute left-3 h-5 w-5 text-white group-focus-within:text-text-primary group-hover:text-text-primary" />
         <div className="m-0 mr-0 w-full border-none bg-transparent p-0 pl-7 text-sm leading-tight placeholder-text-secondary focus-visible:outline-none group-focus-within:placeholder-text-primary group-hover:placeholder-text-primary">
           {localize('com_ui_pricing_plans')}
         </div>

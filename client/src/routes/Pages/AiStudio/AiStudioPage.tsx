@@ -86,8 +86,8 @@ export default function AiStudioPage() {
         <div className="mb-8 text-center">
           <h1 className="mb-4 text-4xl font-bold text-gray-900">AI Studio</h1>
           <p className="text-lg text-gray-600">
-            Explore and interact with cutting-edge AI models. Access various AI models through one
-            unified platform.
+            Discover and chat with today’s most popular AI models — all in one place, with real-time
+            web search powered by Omnexio.
           </p>
         </div>
 
