@@ -13,12 +13,12 @@ import { useGetMessagesByConvoId } from '~/data-provider';
 import MessagesView from './Messages/MessagesView';
 import Presentation from './Presentation';
 import ChatForm from './Input/ChatForm';
-import LandingAgents from './LandingAgents';
 import Header from './Header';
 import Footer from './Footer';
 import { cn } from '~/utils';
 import store from '~/store';
 import Landing from '~/components/Chat/Landing';
+import LandingAiStudio from '~/components/Chat/LandingAiStudio';
 
 function LoadingSpinner() {
   return (
@@ -75,7 +75,7 @@ function ChatView({ index = 0 }: { index?: number }) {
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
   } else if (section === 'ai-studio') {
-    content = <LandingAgents centerFormOnLanding={centerFormOnLanding} />;
+    content = <LandingAiStudio centerFormOnLanding={centerFormOnLanding} />;
   } else {
     content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
