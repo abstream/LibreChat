@@ -47,28 +47,14 @@ const createBreadcrumbItems = (
 ): BreadcrumbItem[] => {
   const items: BreadcrumbItem[] = [
     {
-      label: 'All',
-      href: '/c/new',
+      label: 'AI Studio',
+      href: '/c/new?section=ai-studio',
       isActive: activeTab === 'Search' && !selectedModel,
     },
   ];
 
   if (selectedModel) {
     activeTab = selectedModel.category.charAt(0).toUpperCase() + selectedModel.category.slice(1);
-  }
-
-  const categoryMap: Record<string, string> = {
-    Search: 'Search',
-    Apps: 'Apps',
-    Models: 'Models',
-  };
-
-  if (activeTab) {
-    items.push({
-      label: categoryMap[activeTab],
-      href: `/c/new?tab=${activeTab}`,
-      isActive: !selectedModel,
-    });
   }
 
   if (selectedModel) {
@@ -223,11 +209,15 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
     return createBreadcrumbItems(activeTab, effectiveModel);
   }, [activeTab, effectiveModel]);
 
+  console.log(effectiveModel);
+
   if (!effectiveModel) {
     return null;
   }
 
-  return null;
+  if (effectiveModel.category !== 'models') {
+    return null;
+  }
 
   return (
     <div className="breadcrumbs-container">
