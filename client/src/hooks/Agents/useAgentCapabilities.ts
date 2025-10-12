@@ -25,7 +25,10 @@ export default function useAgentCapabilities(
     [capabilities],
   );
 
-  const artifactsEnabled = useMemo(() => false, []);
+  const artifactsEnabled = useMemo(
+    () => capabilities?.includes(AgentCapabilities.artifacts) ?? false,
+    [capabilities],
+  );
 
   const ocrEnabled = useMemo(
     () => capabilities?.includes(AgentCapabilities.ocr) ?? false,
