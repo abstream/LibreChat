@@ -3,10 +3,11 @@ import { Constants, QueryKeys, type TMessage } from 'librechat-data-provider';
 import type { ContextType } from '~/common';
 import { HeaderNewChat, OpenSidebar } from './Menus';
 import { useLocalize, useMediaQuery, useNewConvo } from '~/hooks';
-import { useGetOmnexioChatModels } from '~/data-provider';
+import { useGetOmnexioChatModels, useGetStartupConfig } from '~/data-provider';
 import React, { useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Breadcrumbs } from './Breadcrumbs';
+import ModelSelector from '~/components/Chat/Menus/Endpoints/ModelSelector';
 
 const findModelByName = (models: any[], modelName: string) => {
   if (!models || !modelName) {
@@ -24,6 +25,7 @@ const getActiveTabFromUrl = (): string | undefined => {
 };
 
 export default function Header() {
+  const { data: startupConfig } = useGetStartupConfig();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { newConversation } = useNewConvo();
@@ -83,6 +85,7 @@ export default function Header() {
               <HeaderNewChat />
             </div>
           </div>
+
           <img
             src="/assets/omnexio-logo.png"
             alt="Omnexio Logo"
@@ -152,6 +155,8 @@ export default function Header() {
           <Breadcrumbs activeTab={activeTab} selectedModel={selectedModel} />
         </div>
       </div>
+
+      <ModelSelector startupConfig={startupConfig} />
     </div>
   );
 }
