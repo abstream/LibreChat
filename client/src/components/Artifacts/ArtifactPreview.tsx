@@ -44,9 +44,6 @@ export const ArtifactPreview = memo(function ({
       // Check if index.html exists and contains a URL
       const indexHtml = files['index.html'] || currentCode;
 
-      console.log(3333333333);
-      console.log(files['index.html']);
-
       if (!indexHtml) return;
 
       const trimmedContent = indexHtml.trim();
