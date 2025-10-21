@@ -127,6 +127,7 @@ const SidePanelGroup = memo(
                 minSize={minSizeMain}
                 order={2}
                 id="artifacts-panel"
+                style={{ position: 'absolute', height: '100%', width: '100%', zIndex: '9999999' }}
               >
                 {artifacts}
               </ResizablePanel>
