@@ -19,6 +19,7 @@ import { cn } from '~/utils';
 import store from '~/store';
 import PricingNav from '~/components/Nav/PrincingPlans/PricingNav';
 import AiStudioNav from '~/components/Nav/AiStudio/AiStudioNav';
+import AiReportNav from '~/components/Nav/AiReport/AiReportNav';
 
 const BookmarkNav = lazy(() => import('./Bookmarks/BookmarkNav'));
 const AccountSettings = lazy(() => import('./AccountSettings'));
@@ -232,6 +233,7 @@ const Nav = memo(
                       />
                     </div>
                     <Suspense fallback={null}>
+                      <AiReportNav isSmallScreen={isSmallScreen} />
                       <AiStudioNav isSmallScreen={isSmallScreen} />
                       <PricingNav isSmallScreen={isSmallScreen} />
                       <AccountSettings />
