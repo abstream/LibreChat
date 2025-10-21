@@ -4,10 +4,20 @@ import {
   SandpackProvider,
   SandpackProviderProps,
 } from '@codesandbox/sandpack-react/unstyled';
-import type { SandpackPreviewRef, PreviewProps } from '@codesandbox/sandpack-react/unstyled';
+import type { SandpackPreviewRef } from '@codesandbox/sandpack-react/unstyled';
 import type { TStartupConfig } from 'librechat-data-provider';
 import type { ArtifactFiles } from '~/common';
 import { sharedFiles, sharedOptions } from '~/utils/artifacts';
+
+// Helper function to check if a string is a URL
+const isValidURL = (string: string): boolean => {
+  try {
+    const url = new URL(string.trim());
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
+};
 
 export const ArtifactPreview = memo(function ({
   files,
@@ -26,42 +36,64 @@ export const ArtifactPreview = memo(function ({
   currentCode?: string;
   startupConfig?: TStartupConfig;
 }) {
-  const [externalContent, setExternalContent] = useState<string | null>(null);
+  const [fetchedContent, setFetchedContent] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Fetch the external HTML content
-    fetch('https://cdn.ai-gate.com/static/report-test1.html')
-      .then((response) => response.text())
-      .then((content) => setExternalContent(content))
-      .catch((error) => {
-        console.error('Failed to fetch external content:', error);
-        setExternalContent(''); // Set to empty string on error
-      });
-  }, []); // Empty dependency array means this runs once on mount
+    const fetchURLContent = async () => {
+      // Check if index.html exists and contains a URL
+      const indexHtml = files['index.html'] || currentCode;
+
+      console.log(3333333333);
+      console.log(files['index.html']);
+
+      if (!indexHtml) return;
+
+      const trimmedContent = indexHtml.trim();
+
+      // If the content is a URL, fetch it
+      if (isValidURL(trimmedContent)) {
+        setIsLoading(true);
+        try {
+          const response = await fetch(trimmedContent);
+          const content = await response.text();
+          setFetchedContent({ 'index.html': content });
+        } catch (error) {
+          console.error('Failed to fetch URL content:', error);
+          setFetchedContent({
+            'index.html': `<div style="padding: 20px; color: red;">Failed to load content from URL: ${trimmedContent}</div>`,
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        // If not a URL, clear any previously fetched content
+        setFetchedContent({});
+      }
+    };
+
+    fetchURLContent();
+  }, [files, currentCode]);
 
   const artifactFiles = useMemo(() => {
     if (Object.keys(files).length === 0) {
       return files;
     }
+
     const code = currentCode ?? '';
-    if (!code) {
-      return files;
-    }
 
     const updatedFiles = {
       ...files,
-      [fileKey]: {
-        code,
-      },
+      ...(code && fileKey ? { [fileKey]: { code } } : {}),
     };
 
-    // Add external content if it's been loaded
-    if (externalContent !== null) {
-      updatedFiles['index.html'] = { code: externalContent };
+    // Replace with fetched content if available
+    if (fetchedContent['index.html']) {
+      updatedFiles['index.html'] = { code: fetchedContent['index.html'] };
     }
 
     return updatedFiles;
-  }, [currentCode, files, fileKey, externalContent]);
+  }, [currentCode, files, fileKey, fetchedContent]);
 
   const options: typeof sharedOptions = useMemo(() => {
     if (!startupConfig) {
@@ -79,9 +111,9 @@ export const ArtifactPreview = memo(function ({
     return null;
   }
 
-  // Optionally show loading state while fetching external content
-  if (externalContent === null) {
-    return <div>Loading preview...</div>;
+  // Show loading state while fetching
+  if (isLoading) {
+    return <div>Loading content from URL...</div>;
   }
 
   return (
