@@ -133,10 +133,8 @@ function ModelSelectorContent() {
 
 export default function ModelSelector({ startupConfig }: ModelSelectorProps) {
   return (
-    <ModelSelectorChatProvider>
-      <ModelSelectorProvider startupConfig={startupConfig}>
-        <ModelSelectorContent />
-      </ModelSelectorProvider>
-    </ModelSelectorChatProvider>
+    <ModelSelectorProvider startupConfig={startupConfig}>
+      {false && <ModelSelectorContent />}
+    </ModelSelectorProvider>
   );
 }
