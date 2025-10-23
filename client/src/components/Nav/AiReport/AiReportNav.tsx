@@ -18,7 +18,7 @@ const AiReportNav: FC<AiReportNavProps> = ({ isSmallScreen }: AiReportNavProps) 
           'group relative mt-1 flex h-10 cursor-pointer items-center gap-3 rounded-lg border-border-medium bg-[#2f7ff7] px-3 py-2 text-white transition-colors duration-200',
           isSmallScreen ? 'mb-2 h-14 rounded-2xl' : '',
         )}
-        onClick={() => navigate('/c/new?endpoint=OmnexioReport&model=AI%20Report')}
+        onClick={() => navigate('/c/new?endpoint=OmnexioReport&model=AI+Report')}
         role="button"
         tabIndex={0}
         aria-label={localize('com_ui_ai_report')}
