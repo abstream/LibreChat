@@ -240,8 +240,10 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchTypeParam = urlParams.get('search_type');
 
-    if (searchTypeParam && (searchTypeParam === 'fast' || searchTypeParam === 'deep')) {
-      setSearchType(searchTypeParam);
+    if (searchTypeParam) {
+      if (searchTypeParam === 'fast' || searchTypeParam === 'deep') {
+        setSearchType(searchTypeParam);
+      }
       autoSubmitRef.current = true;
     }
 
