@@ -72,42 +72,6 @@ export default function Artifacts() {
               <h3 className="truncate text-sm text-text-primary">{currentArtifact.title}</h3>
             </div>
             <div className="flex items-center">
-              {/* Refresh button */}
-              {activeTab === 'preview' && (
-                <button
-                  className={cn(
-                    'mr-2 text-text-secondary transition-transform duration-500 ease-in-out',
-                    isRefreshing ? 'rotate-180' : '',
-                  )}
-                  onClick={handleRefresh}
-                  disabled={isRefreshing}
-                  aria-label="Refresh"
-                >
-                  <RefreshCw
-                    size={16}
-                    className={cn('transform', isRefreshing ? 'animate-spin' : '')}
-                  />
-                </button>
-              )}
-              {activeTab !== 'preview' && isMutating && (
-                <RefreshCw size={16} className="mr-2 animate-spin text-text-secondary" />
-              )}
-              {/* Tabs */}
-              <Tabs.List className="mr-2 inline-flex h-7 rounded-full border border-border-medium bg-surface-tertiary">
-                <Tabs.Trigger
-                  value="preview"
-                  disabled={isMutating}
-                  className="border-0.5 flex items-center gap-1 rounded-full border-transparent py-1 pl-2.5 pr-2.5 text-xs font-medium text-text-secondary data-[state=active]:border-border-light data-[state=active]:bg-surface-primary-alt data-[state=active]:text-text-primary"
-                >
-                  {localize('com_ui_preview')}
-                </Tabs.Trigger>
-                <Tabs.Trigger
-                  value="code"
-                  className="border-0.5 flex items-center gap-1 rounded-full border-transparent py-1 pl-2.5 pr-2.5 text-xs font-medium text-text-secondary data-[state=active]:border-border-light data-[state=active]:bg-surface-primary-alt data-[state=active]:text-text-primary"
-                >
-                  {localize('com_ui_code')}
-                </Tabs.Trigger>
-              </Tabs.List>
               <button className="text-text-secondary" onClick={closeArtifacts}>
                 <X className="h-4 w-4" />
               </button>
@@ -131,15 +95,6 @@ export default function Artifacts() {
               <button onClick={() => cycleArtifact('next')} className="ml-2 text-text-secondary">
                 <ChevronRight className="h-4 w-4" />
               </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <CopyCodeButton content={currentArtifact.content ?? ''} />
-              {/* Download Button */}
-              <DownloadArtifact artifact={currentArtifact} />
-              {/* Publish button */}
-              {/* <button className="border-0.5 min-w-[4rem] whitespace-nowrap rounded-md border-border-medium bg-[radial-gradient(ellipse,_var(--tw-gradient-stops))] from-surface-active from-50% to-surface-active px-3 py-1 text-xs font-medium text-text-primary transition-colors hover:bg-surface-active hover:text-text-primary active:scale-[0.985] active:bg-surface-active">
-                Publish
-              </button> */}
             </div>
           </div>
         </div>
