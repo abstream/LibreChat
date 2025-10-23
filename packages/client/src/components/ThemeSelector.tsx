@@ -89,7 +89,7 @@ const ThemeSelector = ({ returnThemeOnly }: { returnThemeOnly?: boolean }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white pt-6 dark:bg-gray-800 sm:pt-0">
+    <div className="flex flex-col items-center justify-center bg-white dark:bg-gray-800 sm:pt-0">
       <div className="">
         <Theme theme={theme} onChange={changeTheme} />
       </div>
