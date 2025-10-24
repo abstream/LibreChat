@@ -109,7 +109,7 @@ export default function MobileNav({
       </div>
 
       {/* Breadcrumbs section for mobile */}
-      <div className="px-4 pb-2">
+      <div className="px-4 pb-2 md:hidden">
         <Breadcrumbs activeTab={activeTab} selectedModel={selectedModel} />
       </div>
     </>
