@@ -11,6 +11,7 @@ import { CopyCodeButton } from './Code';
 import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 import store from '~/store';
+import artifacts from '~/components/Chat/Input/Artifacts';
 
 export default function Artifacts() {
   const localize = useLocalize();
@@ -52,6 +53,13 @@ export default function Artifacts() {
     setTimeout(() => setArtifactsVisible(false), 300);
   };
 
+  const downloadPDF = async () => {
+    const url = currentArtifact.content?.trim();
+    console.log(url);
+    //TODO url: https://cdn.omnexio.ai/data/reports/20251023/f37a899aafba5881d0c04970825c3c6eeccff01c.html
+    //TODO create PDF and download
+  };
+
   return (
     <Tabs.Root value={activeTab} onValueChange={setActiveTab} asChild>
       {/* Main Parent */}
@@ -71,7 +79,30 @@ export default function Artifacts() {
               </button>
               <h3 className="truncate text-sm text-text-primary">{currentArtifact.title}</h3>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <button
+                className="flex items-center justify-between gap-1 text-xs"
+                onClick={downloadPDF}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  data-lucide="download"
+                  className="lucide lucide-download"
+                >
+                  <path d="M12 15V3"></path>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <path d="m7 10 5 5 5-5"></path>
+                </svg>
+                <span>PDF</span>
+              </button>
               <button className="text-text-secondary" onClick={closeArtifacts}>
                 <X className="h-4 w-4" />
               </button>
