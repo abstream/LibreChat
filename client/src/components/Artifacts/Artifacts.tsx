@@ -1,26 +1,21 @@
 import { useRef, useState, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
-import { ArrowLeft, ChevronLeft, ChevronRight, RefreshCw, X } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { SandpackPreviewRef, CodeEditorRef } from '@codesandbox/sandpack-react';
 import useArtifacts from '~/hooks/Artifacts/useArtifacts';
-import DownloadArtifact from './DownloadArtifact';
-import { useEditorContext } from '~/Providers';
 import ArtifactTabs from './ArtifactTabs';
-import { CopyCodeButton } from './Code';
-import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 import store from '~/store';
-import artifacts from '~/components/Chat/Input/Artifacts';
+import { useOmnexioPdf } from '~/data-provider';
+import path from 'path';
 
 export default function Artifacts() {
-  const localize = useLocalize();
-  const { isMutating } = useEditorContext();
   const editorRef = useRef<CodeEditorRef>();
   const previewRef = useRef<SandpackPreviewRef>();
   const [isVisible, setIsVisible] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const setArtifactsVisible = useSetRecoilState(store.artifactsVisibility);
+  const omnexioPdf = useOmnexioPdf();
 
   useEffect(() => {
     setIsVisible(true);
@@ -39,25 +34,60 @@ export default function Artifacts() {
     return null;
   }
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    const client = previewRef.current?.getClient();
-    if (client != null) {
-      client.dispatch({ type: 'refresh' });
-    }
-    setTimeout(() => setIsRefreshing(false), 750);
-  };
-
   const closeArtifacts = () => {
     setIsVisible(false);
     setTimeout(() => setArtifactsVisible(false), 300);
   };
 
+  const extractFilename = (url: string): string => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      const filename = path.basename(pathname);
+
+      if (!filename) {
+        return `document-${Date.now()}.pdf`;
+      }
+
+      return filename.replace(/\.(html|htm)$/i, '.pdf');
+    } catch (_e) {
+      return `document-${Date.now()}.pdf`;
+    }
+  };
+
   const downloadPDF = async () => {
     const url = currentArtifact.content?.trim();
-    console.log(url);
-    //TODO url: https://cdn.omnexio.ai/data/reports/20251023/f37a899aafba5881d0c04970825c3c6eeccff01c.html
-    //TODO create PDF and download
+    if (!url) {
+      return;
+    }
+
+    omnexioPdf.mutate(
+      { url },
+      {
+        onSuccess: (data: any) => {
+          // Convert base64 to blob
+          const base64 = data.pdf; // or just 'data' depending on your response structure
+          const binaryString = window.atob(base64);
+          const bytes = new Uint8Array(binaryString.length);
+
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = extractFilename(url);
+          document.body.appendChild(link);
+          link.click();
+
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(blobUrl);
+        },
+      },
+    );
   };
 
   return (

@@ -12,6 +12,10 @@ interface omnexioNewsletterParams {
   username: string;
 }
 
+interface omnexioPdfParams {
+  url: string;
+}
+
 /**
  * Hook for creating an Omnexio subscription
  */
@@ -70,4 +74,20 @@ export const useOmnexioNewsletter = (): UseMutationResult<
       },
     },
   );
+};
+
+/**
+ * Hook for changing an existing Omnexio subscription
+ */
+export const useOmnexioPdf = (): UseMutationResult<
+  any, // response type
+  unknown, // error type
+  omnexioPdfParams, // variables type (reusing the same interface)
+  unknown // context type
+> => {
+  return useMutation((params: omnexioPdfParams) => dataService.omnexioPdf(params.url), {
+    onError: (error) => {
+      console.error('Error changing subscription:', error);
+    },
+  });
 };

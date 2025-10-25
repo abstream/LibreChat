@@ -132,6 +132,13 @@ export function omnexioNewsletter(code: string, username: string): Promise<strin
   return request.post(endpoints.omnexioNewsletter(), payload);
 }
 
+export function omnexioPdf(url: string): Promise<any> {
+  const payload = {
+    url: url,
+  };
+  return request.post(endpoints.omnexioPdf(), payload);
+}
+
 export function createGuest(): Promise<{ username: string; password: string }> {
   return request.post(endpoints.guest());
 }

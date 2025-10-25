@@ -61,8 +61,6 @@ const processNewsletterOnLoad = (
     {
       onSuccess: (data: any) => {
         setNewsletterMessage(data.message);
-        console.log(data.message);
-        console.log(data);
       },
     },
   );
