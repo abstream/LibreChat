@@ -1,25 +1,22 @@
 import { useRef, useState, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import * as Tabs from '@radix-ui/react-tabs';
-import { ArrowLeft, ChevronLeft, ChevronRight, RefreshCw, X } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { SandpackPreviewRef, CodeEditorRef } from '@codesandbox/sandpack-react';
 import useArtifacts from '~/hooks/Artifacts/useArtifacts';
-import DownloadArtifact from './DownloadArtifact';
-import { useEditorContext } from '~/Providers';
 import ArtifactTabs from './ArtifactTabs';
-import { CopyCodeButton } from './Code';
-import { useLocalize } from '~/hooks';
 import { cn } from '~/utils';
 import store from '~/store';
+import { useOmnexioPdf } from '~/data-provider';
+import path from 'path';
 
 export default function Artifacts() {
-  const localize = useLocalize();
-  const { isMutating } = useEditorContext();
   const editorRef = useRef<CodeEditorRef>();
   const previewRef = useRef<SandpackPreviewRef>();
   const [isVisible, setIsVisible] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const setArtifactsVisible = useSetRecoilState(store.artifactsVisibility);
+  const omnexioPdf = useOmnexioPdf();
 
   useEffect(() => {
     setIsVisible(true);
@@ -38,18 +35,67 @@ export default function Artifacts() {
     return null;
   }
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    const client = previewRef.current?.getClient();
-    if (client != null) {
-      client.dispatch({ type: 'refresh' });
-    }
-    setTimeout(() => setIsRefreshing(false), 750);
-  };
-
   const closeArtifacts = () => {
     setIsVisible(false);
     setTimeout(() => setArtifactsVisible(false), 300);
+  };
+
+  const extractFilename = (url: string): string => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      const filename = path.basename(pathname);
+
+      if (!filename) {
+        return `document-${Date.now()}.pdf`;
+      }
+
+      return filename.replace(/\.(html|htm)$/i, '.pdf');
+    } catch (_e) {
+      return `document-${Date.now()}.pdf`;
+    }
+  };
+
+  const downloadPDF = async () => {
+    const url = currentArtifact.content?.trim();
+    if (!url) {
+      return;
+    }
+
+    setIsDownloading(true);
+
+    omnexioPdf.mutate(
+      { url },
+      {
+        onSuccess: (data: any) => {
+          // Convert base64 to blob
+          const base64 = data.pdf; // or just 'data' depending on your response structure
+          const binaryString = window.atob(base64);
+          const bytes = new Uint8Array(binaryString.length);
+
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = extractFilename(url);
+          document.body.appendChild(link);
+          link.click();
+
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(blobUrl);
+
+          setIsDownloading(false);
+        },
+        onError: () => {
+          setIsDownloading(false);
+        },
+      },
+    );
   };
 
   return (
@@ -71,7 +117,31 @@ export default function Artifacts() {
               </button>
               <h3 className="truncate text-sm text-text-primary">{currentArtifact.title}</h3>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <button
+                className="flex items-center justify-between gap-1 text-xs"
+                onClick={downloadPDF}
+                disabled={isDownloading}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  data-lucide="download"
+                  className="lucide lucide-download"
+                >
+                  <path d="M12 15V3"></path>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <path d="m7 10 5 5 5-5"></path>
+                </svg>
+                <span>{isDownloading ? 'Generating...' : 'PDF'}</span>
+              </button>
               <button className="text-text-secondary" onClick={closeArtifacts}>
                 <X className="h-4 w-4" />
               </button>

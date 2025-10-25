@@ -7,6 +7,7 @@ const omnexioSubscriptionPlans = require('~/server/controllers/omnexio/OmnexioSu
 const omnexioSubscriptionChangeController = require('~/server/controllers/omnexio/OmnexioSubscriptionChange');
 const omnexioChatModels = require('~/server/controllers/omnexio/OmnexioChatModels');
 const omnexioNewsletterController = require('~/server/controllers/omnexio/OmnexioNewsletter');
+const omnexioPdfController = require('~/server/controllers/omnexio/OmnexioPdf');
 
 router.get('/balance', requireJwtAuth, omnexioBalanceController);
 router.post('/subscriptions', requireJwtAuth, omnexioSubscriptionCheckoutController);
@@ -15,5 +16,6 @@ router.get('/pricing-subscription-plans', omnexioSubscriptionPlans);
 router.post('/subscription/change', requireJwtAuth, omnexioSubscriptionChangeController);
 router.get('/chat-models', omnexioChatModels);
 router.post('/newsletter', omnexioNewsletterController);
+router.post('/pdf', omnexioPdfController);
 
 module.exports = router;

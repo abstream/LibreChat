@@ -350,6 +350,10 @@ function BadgeRow({
 
   // Computed value for display
   const shouldShowOmnexioSearch = useMemo(() => {
+    if (key === Constants.NEW_CONVO) {
+      return selectedModel?.enableOmnexioSearch === true;
+    }
+
     if (searchEnable !== 'none') {
       return searchEnable === 'on';
     }
@@ -429,7 +433,7 @@ function BadgeRow({
             />
           </div>
         )}
-        {showEphemeralBadges === true && (
+        {showEphemeralBadges === true && false && (
           <>
             <WebSearch />
             <CodeInterpreter />
