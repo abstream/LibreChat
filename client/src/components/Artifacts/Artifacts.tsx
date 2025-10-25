@@ -14,6 +14,7 @@ export default function Artifacts() {
   const editorRef = useRef<CodeEditorRef>();
   const previewRef = useRef<SandpackPreviewRef>();
   const [isVisible, setIsVisible] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const setArtifactsVisible = useSetRecoilState(store.artifactsVisibility);
   const omnexioPdf = useOmnexioPdf();
 
@@ -61,6 +62,8 @@ export default function Artifacts() {
       return;
     }
 
+    setIsDownloading(true);
+
     omnexioPdf.mutate(
       { url },
       {
@@ -85,6 +88,11 @@ export default function Artifacts() {
 
           document.body.removeChild(link);
           window.URL.revokeObjectURL(blobUrl);
+
+          setIsDownloading(false);
+        },
+        onError: () => {
+          setIsDownloading(false);
         },
       },
     );
@@ -113,6 +121,7 @@ export default function Artifacts() {
               <button
                 className="flex items-center justify-between gap-1 text-xs"
                 onClick={downloadPDF}
+                disabled={isDownloading}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +140,7 @@ export default function Artifacts() {
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <path d="m7 10 5 5 5-5"></path>
                 </svg>
-                <span>PDF</span>
+                <span>{isDownloading ? 'Generating...' : 'PDF'}</span>
               </button>
               <button className="text-text-secondary" onClick={closeArtifacts}>
                 <X className="h-4 w-4" />
