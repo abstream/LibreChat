@@ -209,8 +209,6 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ activeTab, selectedMod
     return createBreadcrumbItems(activeTab, effectiveModel);
   }, [activeTab, effectiveModel]);
 
-  console.log(effectiveModel);
-
   if (!effectiveModel) {
     return null;
   }
