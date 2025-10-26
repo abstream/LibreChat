@@ -23,8 +23,13 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
   const key = conversationId ?? Constants.NEW_CONVO;
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Get selected model from Recoil state
-  const selectedModel = useRecoilValue(store.selectedModelState);
+  const getLastModelFromStorage = (): string => {
+    try {
+      return JSON.parse(localStorage.getItem('LAST_OMNEXIO_MODEL') || 'Omnexio Search');
+    } catch {
+      return 'Omnexio Search';
+    }
+  };
 
   const [searchType, setSearchType] = useLocalStorage<SearchType>(
     `${LocalStorageKeys.LAST_OMNEXIO_SEARCH_TOGGLE_}${key}`,
@@ -88,7 +93,7 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
   ];
 
   // Check if current model is Omnexio Search
-  const isOmnexioSearchModel = selectedModel?.label === 'Omnexio Search';
+  const isOmnexioSearchModel = getLastModelFromStorage() === 'Omnexio Search';
 
   // Add "No Search" option if model is not "Omnexio Search"
   if (!isOmnexioSearchModel) {
