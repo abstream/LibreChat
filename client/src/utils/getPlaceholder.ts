@@ -17,7 +17,7 @@ const getSearchCost = (searchType: SearchType): number => {
     case 'fast':
       return 1;
     case 'deep':
-      return 5;
+      return 10;
     case 'no':
     default:
       return 0;
