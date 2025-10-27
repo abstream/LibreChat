@@ -241,7 +241,11 @@ const ChatForm = memo(({ index = 0 }: { index?: number }) => {
     const searchTypeParam = urlParams.get('search_type');
 
     if (searchTypeParam) {
-      if (searchTypeParam === 'fast' || searchTypeParam === 'deep') {
+      if (
+        searchTypeParam === 'fast' ||
+        searchTypeParam === 'deep' ||
+        searchTypeParam === 'report'
+      ) {
         setSearchType(searchTypeParam);
       }
       autoSubmitRef.current = true;

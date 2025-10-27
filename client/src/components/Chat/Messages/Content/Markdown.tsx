@@ -82,6 +82,19 @@ const getProgressStages = (searchValue: string | null): ProgressStage[] => {
     ];
   }
 
+  if (searchValue === 'report') {
+    return [
+      { text: 'Understanding Question', duration: 2 },
+      { text: 'Searching', duration: 15 },
+      { text: 'Cleaning Data', duration: 4 },
+      { text: 'Analysing', duration: 6 },
+      { text: 'Reranking', duration: 3 },
+      { text: 'Filtering', duration: 3 },
+      { text: 'Analysing', duration: 5 },
+      { text: 'Generating report', duration: 60 }, // fills remaining time
+    ];
+  }
+
   return [];
 };
 
@@ -93,7 +106,7 @@ const GeneratingIndicator = memo(() => {
   const localize = useLocalize();
   const selectedModel = useRecoilValue(store.selectedModelState);
   const searchValue = localStorage.getItem(LocalStorageKeys.LAST_OMNEXIO_SEARCH_VALUE);
-  const useStageProgress = searchValue === 'fast' || searchValue === 'deep';
+  const useStageProgress = searchValue === 'fast' || searchValue === 'deep' || searchValue === 'report';
 
   const progressConfig = selectedModel?.options?._progress;
   const shouldShowProgressBar = progressConfig?.show_progressbar ?? useStageProgress;

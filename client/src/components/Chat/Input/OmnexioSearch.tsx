@@ -123,10 +123,6 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
 
   const handleSelect = useCallback(
     (value: SearchType) => {
-      if (value === 'report') {
-        window.location.href = '/c/new?endpoint=OmnexioReport&model=AI+Report';
-      }
-
       setSearchType(value);
       setIsOpen(false);
 

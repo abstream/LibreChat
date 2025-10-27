@@ -7,7 +7,7 @@ interface ModelWithCost {
   id?: string;
 }
 
-type SearchType = 'fast' | 'deep' | 'no';
+type SearchType = 'fast' | 'deep' | 'no' | 'report';
 
 /**
  * Get search cost based on search type
@@ -18,6 +18,8 @@ const getSearchCost = (searchType: SearchType): number => {
       return 1;
     case 'deep':
       return 10;
+    case 'report':
+      return 20;
     case 'no':
     default:
       return 0;
