@@ -69,12 +69,12 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
     },
     {
       value: 'report',
-      label: localize('com_ui_ai_report') || 'AI Report',
+      label: localize('com_ui_ai_report') + '⠀' || 'AI Report' + '⠀',
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -188,7 +188,7 @@ function OmnexioSearch({ conversationId }: { conversationId?: string | null }): 
               }`}
             >
               {option.icon}
-              {option.label}
+              <span className="text-nowrap">{option.label}</span>
             </div>
           ))}
         </div>
