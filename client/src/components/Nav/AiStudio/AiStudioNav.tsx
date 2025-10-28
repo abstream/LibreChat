@@ -18,7 +18,7 @@ const AiStudioNav: FC<AiStudioNavProps> = ({ isSmallScreen }: AiStudioNavProps) 
           'group relative mt-1 flex h-10 cursor-pointer items-center gap-3 rounded-lg border-border-medium bg-[#2f7ff7] px-3 py-2 text-white transition-colors duration-200',
           isSmallScreen ? 'mb-2 h-14 rounded-2xl' : '',
         )}
-        onClick={() => navigate('/c/new?section=ai-studio')}
+        onClick={() => (window.location.href = '/c/new?section=ai-studio')}
         role="button"
         tabIndex={0}
         aria-label={localize('com_ui_ai_studio')}
